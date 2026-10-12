@@ -1,0 +1,288 @@
+{
+  "$defs": {
+    "AnalyzerName": {
+      "enum": [
+        "slither",
+        "aderyn"
+      ],
+      "title": "AnalyzerName",
+      "type": "string"
+    },
+    "ScanFinding": {
+      "additionalProperties": false,
+      "properties": {
+        "class": {
+          "title": "Class",
+          "type": "string"
+        },
+        "evidence_level": {
+          "const": "E0",
+          "title": "Evidence Level",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "location": {
+          "$ref": "#/$defs/ScanLocation"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "snippet_sha256": {
+          "title": "Snippet Sha256",
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/ScanSource"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "state": {
+          "const": "CANDIDATE",
+          "title": "State",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "class",
+        "state",
+        "status",
+        "evidence_level",
+        "location",
+        "snippet_sha256",
+        "message",
+        "sources"
+      ],
+      "title": "ScanFinding",
+      "type": "object"
+    },
+    "ScanLocation": {
+      "additionalProperties": false,
+      "properties": {
+        "end_line": {
+          "title": "End Line",
+          "type": "integer"
+        },
+        "function": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Function"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "start_line": {
+          "title": "Start Line",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "path",
+        "start_line",
+        "end_line",
+        "function"
+      ],
+      "title": "ScanLocation",
+      "type": "object"
+    },
+    "ScanSource": {
+      "additionalProperties": false,
+      "properties": {
+        "locations": {
+          "items": {
+            "$ref": "#/$defs/ScanLocation"
+          },
+          "title": "Locations",
+          "type": "array"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "severity_reported": {
+          "title": "Severity Reported",
+          "type": "string"
+        },
+        "tool": {
+          "$ref": "#/$defs/AnalyzerName"
+        },
+        "tool_version": {
+          "title": "Tool Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool",
+        "tool_version",
+        "rule_id",
+        "severity_reported",
+        "message",
+        "locations"
+      ],
+      "title": "ScanSource",
+      "type": "object"
+    },
+    "ScanSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "by_class": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "By Class",
+          "type": "object"
+        },
+        "findings": {
+          "title": "Findings",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "findings",
+        "by_class"
+      ],
+      "title": "ScanSummary",
+      "type": "object"
+    },
+    "ScanTool": {
+      "additionalProperties": false,
+      "properties": {
+        "detail": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Detail"
+        },
+        "raw_output_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Raw Output Sha256"
+        },
+        "results": {
+          "title": "Results",
+          "type": "integer"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "failed",
+            "timeout",
+            "out_of_memory",
+            "unusable_output"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "tool": {
+          "$ref": "#/$defs/AnalyzerName"
+        },
+        "unplaced_results": {
+          "title": "Unplaced Results",
+          "type": "integer"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool",
+        "version",
+        "status",
+        "detail",
+        "results",
+        "unplaced_results",
+        "raw_output_sha256"
+      ],
+      "title": "ScanTool",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "`assay scan --json` (or `--format json`).",
+  "properties": {
+    "assay_version": {
+      "title": "Assay Version",
+      "type": "string"
+    },
+    "complete": {
+      "title": "Complete",
+      "type": "boolean"
+    },
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/ScanFinding"
+      },
+      "title": "Findings",
+      "type": "array"
+    },
+    "format": {
+      "const": "assay-scan/1",
+      "default": "assay-scan/1",
+      "title": "Format",
+      "type": "string"
+    },
+    "input_tree_sha256": {
+      "title": "Input Tree Sha256",
+      "type": "string"
+    },
+    "note": {
+      "title": "Note",
+      "type": "string"
+    },
+    "summary": {
+      "$ref": "#/$defs/ScanSummary"
+    },
+    "tools": {
+      "items": {
+        "$ref": "#/$defs/ScanTool"
+      },
+      "title": "Tools",
+      "type": "array"
+    }
+  },
+  "required": [
+    "assay_version",
+    "input_tree_sha256",
+    "complete",
+    "note",
+    "tools",
+    "summary",
+    "findings"
+  ],
+  "title": "ScanDocument",
+  "type": "object"
+}

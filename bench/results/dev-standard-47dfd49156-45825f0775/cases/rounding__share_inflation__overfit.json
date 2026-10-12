@@ -1,0 +1,51 @@
+{
+  "fixture": "rounding/share_inflation",
+  "label": "overfit",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "variant_found",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "variant_found"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "variant_found"
+      ]
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "ff51f4e255f90bd379541f5c009f413d8b86d5a526091902694ff0b4d33bc033",
+  "poc_tree_sha256": "ce10bf4d30c5db727d118fedbf11ea0fecca945e9dadfe77a554d2e68a88f027",
+  "patch_sha256": "495af469797e1446fd19e1d13f5737dabc3e4e89e5ee109747bcbc036f970a84",
+  "seconds": 404.4,
+  "error": null
+}

@@ -1,0 +1,33 @@
+--- a/src/ReferencePool.sol
++++ b/src/ReferencePool.sol
+@@ -16,6 +16,11 @@
+     /// @notice The token the price is quoted in.
+     PlainToken public immutable quote;
+ 
++    /// @notice Base tokens that were deposited, in wei.
++    uint256 public baseReserve;
++    /// @notice Quote tokens that were deposited, in wei.
++    uint256 public quoteReserve;
++
+     event Deposited(address indexed provider, uint256 baseAmount, uint256 quoteAmount);
+ 
+     error ZeroAmount();
+@@ -31,13 +36,14 @@
+         if (baseAmount == 0 && quoteAmount == 0) revert ZeroAmount();
+         if (baseAmount > 0) base.transferFrom(msg.sender, address(this), baseAmount);
+         if (quoteAmount > 0) quote.transferFrom(msg.sender, address(this), quoteAmount);
++        baseReserve += baseAmount;
++        quoteReserve += quoteAmount;
+         emit Deposited(msg.sender, baseAmount, quoteAmount);
+     }
+ 
+-    /// @notice Quote tokens per base token, scaled by 1e18, from the token balances of the pool.
++    /// @notice Quote tokens per base token, scaled by 1e18, from the tokens that were deposited.
+     function price() public view returns (uint256) {
+-        uint256 baseBalance = base.balanceOf(address(this));
+-        if (baseBalance == 0) revert EmptyPool();
+-        return quote.balanceOf(address(this)) * PRICE_SCALE / baseBalance;
++        if (baseReserve == 0) revert EmptyPool();
++        return quoteReserve * PRICE_SCALE / baseReserve;
+     }
+ }

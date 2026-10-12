@@ -1,0 +1,184 @@
+{
+  "$defs": {
+    "Hypothesis": {
+      "additionalProperties": false,
+      "description": "A structured guess about how the candidate can be exploited. Never evidence.",
+      "properties": {
+        "attack_idea": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Attack Idea",
+          "type": "string"
+        },
+        "preconditions": {
+          "default": [],
+          "items": {
+            "maxLength": 300,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 8,
+          "title": "Preconditions",
+          "type": "array"
+        },
+        "predicate_kind": {
+          "enum": [
+            "attacker_profit",
+            "victim_loss",
+            "unauthorized_role_change",
+            "invariant_broken"
+          ],
+          "title": "Predicate Kind",
+          "type": "string"
+        },
+        "target_function": {
+          "pattern": "^[A-Za-z_$][A-Za-z0-9_$.]{0,99}$",
+          "title": "Target Function",
+          "type": "string"
+        },
+        "vuln_class": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "title": "Vuln Class",
+          "type": "string"
+        }
+      },
+      "required": [
+        "vuln_class",
+        "target_function",
+        "attack_idea",
+        "predicate_kind"
+      ],
+      "title": "Hypothesis",
+      "type": "object"
+    },
+    "ProveAttempt": {
+      "additionalProperties": false,
+      "properties": {
+        "codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Codes",
+          "type": "array"
+        },
+        "number": {
+          "title": "Number",
+          "type": "integer"
+        },
+        "outcome": {
+          "title": "Outcome",
+          "type": "string"
+        }
+      },
+      "required": [
+        "number",
+        "outcome",
+        "codes"
+      ],
+      "title": "ProveAttempt",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "`assay prove --json`.",
+  "properties": {
+    "attempts": {
+      "items": {
+        "$ref": "#/$defs/ProveAttempt"
+      },
+      "title": "Attempts",
+      "type": "array"
+    },
+    "evidence_level": {
+      "enum": [
+        "E0",
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "title": "Evidence Level",
+      "type": "string"
+    },
+    "final_state": {
+      "enum": [
+        "HYPOTHESIZED",
+        "POC_DRAFTED",
+        "REPRODUCED",
+        "NOT_REPRODUCED",
+        "INCONCLUSIVE"
+      ],
+      "title": "Final State",
+      "type": "string"
+    },
+    "finding": {
+      "title": "Finding",
+      "type": "integer"
+    },
+    "format": {
+      "const": "assay-prove/1",
+      "default": "assay-prove/1",
+      "title": "Format",
+      "type": "string"
+    },
+    "hypothesis": {
+      "$ref": "#/$defs/Hypothesis"
+    },
+    "max_attempts": {
+      "title": "Max Attempts",
+      "type": "integer"
+    },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    },
+    "poc_dir": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Poc Dir"
+    },
+    "stable_id": {
+      "title": "Stable Id",
+      "type": "string"
+    },
+    "stopped": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Stopped"
+    },
+    "vuln_class": {
+      "title": "Vuln Class",
+      "type": "string"
+    }
+  },
+  "required": [
+    "finding",
+    "stable_id",
+    "vuln_class",
+    "final_state",
+    "evidence_level",
+    "hypothesis",
+    "attempts",
+    "max_attempts",
+    "stopped",
+    "poc_dir",
+    "notes"
+  ],
+  "title": "ProveDocument",
+  "type": "object"
+}

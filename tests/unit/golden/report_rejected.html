@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src &#x27;none&#x27;; style-src &#x27;unsafe-inline&#x27;; img-src data:"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>Assay report: REJECTED</title><style>
+:root{color-scheme:light dark;--bg:#fafaf8;--fg:#1c1d1f;--muted:#5d6166;--card:#fff;--line:#d9dad6;--ok:#1d6b3a;--okbg:#e4f3e9;--bad:#a12622;--badbg:#fbe7e5;--unsure:#8a5a00;--unsurebg:#fbf0d9;--add:#e1f4e4;--del:#fbe3e1;--hunk:#e6eefb;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root{--bg:#141516;--fg:#e8e8e6;--muted:#a0a4a8;--card:#1c1d1f;--line:#34363a;--ok:#7fd49b;--okbg:#14301f;--bad:#f09a94;--badbg:#3a1815;--unsure:#e6bb66;--unsurebg:#35290f;--add:#17301d;--del:#3a1b19;--hunk:#1a2840}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:70rem;margin:0 auto;padding:1.5rem 1rem 3rem}
+h1{font-size:1.15rem;margin:0 0 1rem;color:var(--muted);font-weight:600}
+h2{font-size:1.1rem;margin:2rem 0 .6rem}
+section,.box{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:.9rem 1.1rem}
+section{margin-top:1rem}
+section>h2{margin-top:0}
+.banner{border-radius:6px;padding:1.2rem 1.4rem;border:1px solid var(--line)}
+.banner .verdict{font:700 1.7rem/1.2 var(--mono);overflow-wrap:anywhere}
+.banner p{margin:.4rem 0 0}
+.ok{background:var(--okbg);color:var(--ok);border-color:var(--ok)}
+.bad{background:var(--badbg);color:var(--bad);border-color:var(--bad)}
+.unsure{background:var(--unsurebg);color:var(--unsure);border-color:var(--unsure)}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--muted);white-space:nowrap}
+.tablewrap{overflow-x:auto}
+code,pre,.mono{font-family:var(--mono);font-size:.85rem}
+pre{margin:.4rem 0 0;padding:.6rem .8rem;overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--bg);white-space:pre}
+.ln{display:block;min-height:1.4em;white-space:pre}
+.add{background:var(--add)}.del{background:var(--del)}.hunk{background:var(--hunk)}
+.meta{color:var(--muted)}
+.tag{display:inline-block;padding:0 .45rem;border-radius:3px;font:600 .8rem var(--mono);border:1px solid currentColor}
+.muted{color:var(--muted)}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:.25rem 1rem;margin:0}
+dt{color:var(--muted)}dd{margin:0;overflow-wrap:anywhere}
+ol.timeline{margin:0;padding-left:1.3rem}
+ol.timeline li{margin:.2rem 0}
+ul{margin:.3rem 0;padding-left:1.3rem}
+details{margin-top:.6rem}summary{cursor:pointer;color:var(--muted)}
+</style></head><body><main>
+<h1>Assay evidence report</h1>
+<div class="banner bad" role="status"><div class="verdict">REJECTED</div><p>At least one oracle failed for this patch. Evidence level E1: exploit reproduced on the vulnerable revision.</p><p>Reason: variant_found</p></div>
+<section id="meaning"><h2>What this result means, and what it does not</h2><p>At least one oracle failed. The reasons in the oracle table say which check failed and why. A rejected patch is not a statement about the rest of the code.</p><p><strong>Bounds that ran.</strong> exploit: 3 replays per revision; variant: profile quick</p><p>Oracles run: integrity, exploit, variant, behavior, regression. Oracles not run: none.</p><p><strong>What it is not.</strong></p><ul><li>It is not a proof of absence. It says nothing about inputs, call sequences, seeds, loop bounds or code that the listed checks did not cover, and it does not describe the project as a whole. It is not a replacement for an audit.</li><li>Only deterministic oracles decide. A model may have proposed the patch or the PoC; its output never changed a verdict by itself.</li><li>The bundle is tamper-evident, not signed: whoever can rewrite both the files and the manifest can forge one.</li></ul><details><summary>Bounds as recorded</summary><pre>{
+  &quot;exploit_replays_per_revision&quot;: 3,
+  &quot;fuzz_runs&quot;: 16,
+  &quot;fuzz_seed&quot;: &quot;0x1&quot;,
+  &quot;interface_contracts&quot;: [
+    &quot;src/Vault.sol:Vault&quot;
+  ],
+  &quot;oracles_not_run&quot;: [],
+  &quot;oracles_run&quot;: [
+    &quot;integrity&quot;,
+    &quot;exploit&quot;,
+    &quot;variant&quot;,
+    &quot;behavior&quot;,
+    &quot;regression&quot;
+  ],
+  &quot;profile&quot;: &quot;quick&quot;,
+  &quot;symbolic&quot;: null,
+  &quot;variant&quot;: null
+}</pre></details></section>
+<section id="finding"><h2>Finding summary</h2><dl><dt>final verdict</dt><dd><code>REJECTED</code></dd><dt>evidence level</dt><dd><code>E1</code> exploit reproduced on the vulnerable revision</dd><dt>profile</dt><dd><code>quick</code></dd><dt>fuzz seed</dt><dd><code>0x1</code></dd><dt>symbolic oracle</dt><dd>not requested</dd><dt>base tree sha256</dt><dd><code>1111111111111111111111111111111111111111111111111111111111111111</code></dd><dt>PoC tree sha256</dt><dd><code>2222222222222222222222222222222222222222222222222222222222222222</code></dd><dt>patch sha256</dt><dd><code>3333333333333333333333333333333333333333333333333333333333333333</code></dd><dt>patched tree sha256</dt><dd><code>4444444444444444444444444444444444444444444444444444444444444444</code></dd></dl></section>
+<section id="timeline"><h2>Status timeline</h2><p class="muted">Steps in the order in which they were decided. No clock time is recorded.</p><ol class="timeline"><li>patch proposed for verification</li><li>integrity: PASS</li><li>exploit: PASS</li><li>variant: FAIL</li><li>behavior: PASS</li><li>regression: PASS</li><li>final verdict: REJECTED</li></ol></section>
+<section id="oracles"><h2>Oracle verdicts</h2><div class="tablewrap"><table><thead><tr><th>oracle</th><th>verdict</th><th>reason</th></tr></thead><tbody><tr><td><code>integrity</code></td><td><span class="tag ok">PASS</span></td><td>integrity finished</td></tr><tr><td><code>exploit</code></td><td><span class="tag ok">PASS</span></td><td>exploit finished</td></tr><tr><td><code>variant</code></td><td><span class="tag bad">FAIL</span></td><td>variant finished<ul><li><code>variant_found</code>: a variant of the exploit reproduced on the patched revision [src/Vault.sol:7]</li></ul></td></tr><tr><td><code>behavior</code></td><td><span class="tag ok">PASS</span></td><td>behavior finished</td></tr><tr><td><code>regression</code></td><td><span class="tag ok">PASS</span></td><td>regression finished<p>Warnings (they do not change the verdict):</p><ul><li><code>function_added</code>: a new function</li></ul></td></tr></tbody></table></div></section>
+<section id="poc"><h2>PoC</h2><details open><summary><code>poc/VaultReentrancy.t.sol</code></summary><pre>// INTENTIONALLY VULNERABLE: test fixture, do not deploy
+contract VaultReentrancy is AssayPoC {
+    // reenter once and drain the vault
+    function attack() external {}
+    string constant NOTE = &quot;reenter once and drain the vault&quot;;
+}
+</pre></details><h2>variant_poc</h2><p class="muted">Concrete test written from a variant the search reported; it is evidence of what was found.</p><details open><summary><code>evidence/variant/variant_poc.t.sol</code></summary><pre>// INTENTIONALLY VULNERABLE: test fixture, do not deploy
+contract VariantPoc is AssayPoC {
+    // reenter once and drain the vault
+    function attack() external {}
+    string constant NOTE = &quot;reenter once and drain the vault&quot;;
+}
+</pre></details></section>
+<section id="patch"><h2>Patch</h2><p class="muted">2 line(s) added, 2 line(s) removed. sha256 of the file: <code>c6059819e5f6f705be989ca2b4c7e3f1f52c835e4b28a2f8c49236b1fafa191d</code></p><pre class="diff"><span class="ln meta">--- a/src/Vault.sol</span><span class="ln meta">+++ b/src/Vault.sol</span><span class="ln hunk">@@ -3,5 +3,6 @@ contract Vault {</span><span class="ln ctx">     uint256 public total;</span><span class="ln del">-    // old: guard the external call</span><span class="ln del">--- removed line that starts with dashes</span><span class="ln add">+    // new: guard the external call</span><span class="ln add">+    bool private locked;</span><span class="ln ctx">     function withdraw() external {</span><span class="ln ctx">         total -= 1;</span><span class="ln ctx">     }</span></pre></section>
+<section id="attempts"><h2>Attempt history</h2><p class="muted">This bundle comes from <code>assay verify</code>: one patch, no attempt history.</p></section>
+<section id="provenance"><h2>Manifest and tool versions</h2><dl><dt>manifest sha256</dt><dd><code>e5c83e21bd322604f8203da597d628f1160ed61abe9fa5e6058d2e66ac8ab770</code></dd><dt>Assay version</dt><dd><code>0.0.0-test</code></dd><dt>runner image id</dt><dd><code>sha256:1111111111111111111111111111111111111111111111111111111111111111</code></dd><dt>versions.lock sha256</dt><dd><code>46ead383182de4c79526cfb3552260f199e17532d3172120035f076a9908efde</code></dd><dt>harness sha256</dt><dd><code>5555555555555555555555555555555555555555555555555555555555555555</code></dd><dt>files in the bundle</dt><dd>6</dd></dl><p>Tool versions declared by the runner image:</p><ul><li><code>foundry</code> <code>v1.8.4</code></li><li><code>solc</code> <code>0.8.36</code></li></ul><p class="muted">The manifest hash is the sha256 of <code>manifest.json</code> as stored in the bundle.</p></section>
+<section id="reproduce"><h2>How to reproduce</h2><p>Re-run every oracle offline on the bundle and compare the verdicts with the manifest:</p><pre>assay replay &lt;bundle&gt;</pre><p>The replay first checks the sha256 of every file against the manifest and runs nothing when one differs. It needs Docker and the runner image (<code>make image</code>). It prints <code>REPLAY MATCH</code> when the verdicts are equal.</p></section>
+</main></body></html>

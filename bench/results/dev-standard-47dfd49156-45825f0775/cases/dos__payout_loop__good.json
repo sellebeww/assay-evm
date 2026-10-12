@@ -1,0 +1,47 @@
+{
+  "fixture": "dos/payout_loop",
+  "label": "good",
+  "expected_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "expected_reason": null,
+  "exit_code": 0,
+  "final_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "reasons": [],
+  "evidence_level": "E3",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "d4e304218a88bbe6d1d065af179ad53a1dfccf12721610420ff496579e79924a",
+  "poc_tree_sha256": "56710fd6ca92c002ad85485239af0ff3a08f1d67acb42d6dfdf64db59f5b9c17",
+  "patch_sha256": "febd116cb7bb00a1cae53acfb66250c3b3d0b4774493d9e5ac20643b9cd99c8f",
+  "seconds": 174.7,
+  "error": null
+}

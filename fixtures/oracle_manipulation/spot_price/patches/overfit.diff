@@ -1,0 +1,20 @@
+--- a/src/MiniPool.sol
++++ b/src/MiniPool.sol
+@@ -28,6 +28,7 @@
+     error EmptyPool();
+     error UnbalancedLiquidity();
+     error Slippage(uint256 amountOut, uint256 minimum);
++    error SwapTooLarge(uint256 amountIn, uint256 maximum);
+ 
+     constructor(MockToken base_, MockToken quote_) {
+         base = base_;
+@@ -54,6 +55,9 @@
+         (MockToken tokenIn, MockToken tokenOut, uint256 reserveIn, uint256 reserveOut) =
+             baseIn ? (base, quote, baseReserve, quoteReserve) : (quote, base, quoteReserve, baseReserve);
+         if (reserveIn == 0) revert EmptyPool();
++        // One large swap moves the price too far, so a swap may take at most a tenth of the
++        // reserve it sells into.
++        if (amountIn > reserveIn / 10) revert SwapTooLarge(amountIn, reserveIn / 10);
+         amountOut = getAmountOut(amountIn, reserveIn, reserveOut);
+         if (amountOut < minOut) revert Slippage(amountOut, minOut);
+ 

@@ -1,0 +1,47 @@
+{
+  "fixture": "oracle_manipulation/spot_price",
+  "label": "good",
+  "expected_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "expected_reason": null,
+  "exit_code": 0,
+  "final_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "reasons": [],
+  "evidence_level": "E3",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "f4215a195703e636697e193411e76cbb1cb0bb71e5503214e7816805ed640bbd",
+  "poc_tree_sha256": "9b5fbede8305d0ed9be43d6800382c00728271977baf1897694d426c16f7cb76",
+  "patch_sha256": "0662f33f568c6974bc078374988544b9b2531b0d20c4011a87bba39832a266dc",
+  "seconds": 92.4,
+  "error": null
+}

@@ -1,0 +1,31 @@
+{
+  "assay_version": "0.1.0.dev0",
+  "cases": 32,
+  "exploit_replays": 3,
+  "fixtures_tree_sha256": "e1439c5fbc01af45738acb40543fbe787d71b94906d24e1034b4ee7332466e9a",
+  "fuzz_runs": 256,
+  "fuzz_seed": "0x1",
+  "git_commit": null,
+  "image_digest": "sha256:a2209e37ccdf894aa1d7c6b76b9d06a7806a035517a03f0cb4023a61d4ec8bf7",
+  "invariant_depth": 25,
+  "invariant_runs": 64,
+  "machine": "arm64",
+  "oracle_tree_sha256": "47dfd491563ccff2ea2e8d13c1bf721b6aecc715fff76d035f0661aacb17f4e0",
+  "profile": "standard",
+  "run_id": "heldout-standard-47dfd49156-e1439c5fbc",
+  "schema_version": 1,
+  "split": "heldout",
+  "split_file_sha256": "cbb82f53c6fa313bce75886ec50db13aff8d87d2abc0d0ad046461507d1b8c74",
+  "symbolic": false,
+  "tool_versions": {
+    "aderyn": "v0.6.8",
+    "forge-std": "v1.17.0",
+    "foundry": "v1.8.4",
+    "python": "3.12.15",
+    "slither": "0.11.6",
+    "solc": "0.8.36"
+  },
+  "total_seconds": 1026.8,
+  "variant_seeds": 3,
+  "versions_lock_sha256": "33ce0a91c77fc73f95bb8b9c5ee92e2dc43caf7b2837a76b44b2756bd6b71d60"
+}

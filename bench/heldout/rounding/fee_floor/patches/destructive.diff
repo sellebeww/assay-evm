@@ -1,0 +1,25 @@
+--- a/src/FeePool.sol
++++ b/src/FeePool.sol
+@@ -27,6 +27,7 @@
+     error ZeroAddress();
+     error InsufficientBalance(uint256 requested, uint256 available);
+     error TransferFailed();
++    error WithdrawalsPaused();
+ 
+     constructor(address treasury_) {
+         if (treasury_ == address(0)) revert ZeroAddress();
+@@ -52,13 +53,7 @@
+         uint256 available = balanceOf[msg.sender];
+         if (amount > available) revert InsufficientBalance(amount, available);
+ 
+-        uint256 fee = feeOn(amount);
+-        balanceOf[msg.sender] = available - amount;
+-        totalDeposits -= amount;
+-        feesAccrued += fee;
+-        (bool sent,) = msg.sender.call{value: amount - fee}("");
+-        if (!sent) revert TransferFailed();
+-        emit Withdrawn(msg.sender, amount, fee);
++        revert WithdrawalsPaused();
+     }
+ 
+     /// @notice Sends the fees that were charged to the treasury.

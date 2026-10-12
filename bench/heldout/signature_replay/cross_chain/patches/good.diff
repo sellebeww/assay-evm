@@ -1,0 +1,11 @@
+--- a/src/ClaimDesk.sol
++++ b/src/ClaimDesk.sol
+@@ -36,7 +36,7 @@
+ 
+     /// @notice The digest that the issuer signs for a claim.
+     function claimDigest(address to, uint256 amount, uint256 nonce) public view returns (bytes32) {
+-        return keccak256(abi.encode(issuer, to, amount, nonce));
++        return keccak256(abi.encode(block.chainid, address(this), issuer, to, amount, nonce));
+     }
+ 
+     /// @notice Pays `amount` wei to `to` against the issuer's signature on the claim.

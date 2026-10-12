@@ -1,0 +1,51 @@
+{
+  "fixture": "delegatecall/strategy_registry",
+  "label": "overfit",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "variant_found",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "variant_found"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "variant_found"
+      ]
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "09481a5895bee5347ff8ac98892fd3b8ceb26dd4474dac9db1c35db2bf491f54",
+  "poc_tree_sha256": "a2be19c5c903d09b08dae6184e35b41763a9387719ac7b731fe58549450ae996",
+  "patch_sha256": "3912d0200d0d08dc597a7dd64b4a9e35d0e9f4bb8a3f91d23188a87c1d860dc1",
+  "seconds": 38.2,
+  "error": null
+}

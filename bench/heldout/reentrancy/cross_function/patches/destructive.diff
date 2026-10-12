@@ -1,0 +1,23 @@
+--- a/src/CreditVault.sol
++++ b/src/CreditVault.sol
+@@ -19,6 +19,7 @@
+     error ZeroAddress();
+     error InsufficientCredit(uint256 requested, uint256 available);
+     error TransferFailed();
++    error CashOutPaused();
+ 
+     /// @notice Credits the ether sent with the call to the sender.
+     function deposit() external payable {
+@@ -54,11 +55,6 @@
+         uint256 amount = creditOf[msg.sender];
+         if (amount == 0) revert ZeroAmount();
+ 
+-        (bool sent,) = msg.sender.call{value: amount}("");
+-        if (!sent) revert TransferFailed();
+-
+-        creditOf[msg.sender] = 0;
+-        totalCredit -= amount;
+-        emit CashedOut(msg.sender, amount);
++        revert CashOutPaused();
+     }
+ }

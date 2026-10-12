@@ -1,0 +1,47 @@
+{
+  "fixture": "delegatecall/user_controlled_target",
+  "label": "good",
+  "expected_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "expected_reason": null,
+  "exit_code": 0,
+  "final_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "reasons": [],
+  "evidence_level": "E3",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "f39de9e82f5d2ac1a5d12c55a2971df1560af242a5fe48a9bd1317611a06a61d",
+  "poc_tree_sha256": "08af4060ec9839b2e6b3c2f39564723118609cf6400de419a116ed4f1c2bc566",
+  "patch_sha256": "5b7351636241f17656258a775ef236576e3825bc66d09688bdd6bbfb800d0141",
+  "seconds": 26.2,
+  "error": null
+}

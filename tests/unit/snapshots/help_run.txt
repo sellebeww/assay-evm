@@ -1,0 +1,69 @@
+                                                                                                    
+ Usage: assay run [OPTIONS] {project}                                                               
+                                                                                                    
+ Run the whole flow for one class: scan, prove, fix and bundle.                                     
+                                                                                                    
+ A thin wrapper over the other commands: `assay scan` records the candidate findings, `assay        
+ prove` reproduces the first candidate of --class with a model-written PoC, and `assay fix`         
+ asks for a patch and verifies it (see `assay fix --help`). The stages are listed on standard       
+ error; the final result is printed as `assay fix` prints it. Modes `record` and `live` send        
+ redacted code to the configured endpoint and need --allow-llm. --max-attempts applies to both      
+ loops; the budget covers the whole flow.                                                           
+                                                                                                    
+                                                                                                    
+ Example:                                                                                           
+   assay run fixtures/reentrancy/single_function --class reentrancy --bundle-out out/run            
+                                                                                                    
+ Exit codes as for `assay fix`; a finding that is not reproduced ends the flow: 1                   
+ NOT_REPRODUCED, 3 INCONCLUSIVE or still HYPOTHESIZED, 2 when the project has no candidate of       
+ the class.                                                                                         
+                                                                                                    
+╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────╮
+│ *    project      <directory>  Foundry project directory. [required]                             │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────╮
+│ *  --class                    <str>                      Class of the candidate finding to prove │
+│                                                          and fix.                                │
+│                                                          [required]                              │
+│    --mode                     <replay|record|live>       replay (default), record or live.       │
+│                                                          [default: replay]                       │
+│    --allow-llm                                           Allow sending redacted code to the      │
+│                                                          endpoint.                               │
+│    --max-attempts             <int>                      Attempts of the PoC loop and of the     │
+│                                                          patch loop, 1 to 5.                     │
+│                                                          [default: 3]                            │
+│    --profile                  <quick|standard|thorough>  Campaign profile of the variant search  │
+│                                                          (see docs/oracles.md).                  │
+│                                                          [default: standard]                     │
+│    --symbolic                                            Also run the symbolic oracle (Halmos)   │
+│                                                          per attempt.                            │
+│    --bundle-out               <path>                     Write the evidence bundle of the final  │
+│                                                          verification, with the attempt history, │
+│                                                          into this directory, which must be      │
+│                                                          empty or absent.                        │
+│    --poc-dir                  <directory>                Where the PoC is written; outside the   │
+│                                                          project.                                │
+│    --seed                     <str>                      Base seed of the fix loop (0x and 1 to  │
+│                                                          16 hex digits).                         │
+│                                                          [default: 0x1]                          │
+│    --max-changed-lines        <int>                      Most added plus removed lines of a      │
+│                                                          patch.                                  │
+│                                                          [default: 200]                          │
+│    --max-files                <int>                      Most files a patch may change.          │
+│                                                          [default: 5]                            │
+│    --max-diff-bytes           <int>                      Largest patch, in bytes.                │
+│                                                          [default: 49152]                        │
+│    --cassette-dir             <directory>                Directory of the cassettes.             │
+│                                                          [default: tests/data/cassettes]         │
+│    --budget-calls             <int>                      Most requests of the whole flow.        │
+│                                                          [default: 24]                           │
+│    --budget-tokens            <int>                      Most tokens (in plus out) of the whole  │
+│                                                          flow.                                   │
+│                                                          [default: 400000]                       │
+│    --json                                                Print the final result as JSON instead  │
+│                                                          of text.                                │
+│    --ledger                   <file>                     Ledger database.                        │
+│                                                          [default: .assay/ledger.db]             │
+│    --help                                                Show this message and exit.             │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+

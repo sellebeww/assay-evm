@@ -1,0 +1,47 @@
+{
+  "fixture": "rounding/share_inflation",
+  "label": "good",
+  "expected_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "expected_reason": null,
+  "exit_code": 0,
+  "final_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "reasons": [],
+  "evidence_level": "E3",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "ff51f4e255f90bd379541f5c009f413d8b86d5a526091902694ff0b4d33bc033",
+  "poc_tree_sha256": "ce10bf4d30c5db727d118fedbf11ea0fecca945e9dadfe77a554d2e68a88f027",
+  "patch_sha256": "a1ee6ac3c4cac67bc10f42a50bdedb950b523c0cacb9cf38a5980409d95aa645",
+  "seconds": 181.1,
+  "error": null
+}

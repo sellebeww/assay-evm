@@ -1,0 +1,39 @@
+--- a/src/Payroll.sol
++++ b/src/Payroll.sol
+@@ -45,13 +45,19 @@
+         emit WageBooked(payee, amount);
+     }
+ 
+-    /// @notice Pays everything booked for `payee`. Anyone may call it.
+-    function pay(address payee) external {
++    /// @notice Pays everything booked for `payee`. Anyone may call it. Returns false, and
++    ///         keeps the wage booked, when the payee refuses the ether.
++    function pay(address payee) external returns (bool paid) {
+         uint256 amount = owed[payee];
+         if (amount == 0) revert NothingOwed(payee);
+         owed[payee] = 0;
+         totalOwed -= amount;
+-        payable(payee).call{value: amount}("");
++        (paid,) = payable(payee).call{value: amount}("");
++        if (!paid) {
++            owed[payee] = amount;
++            totalOwed += amount;
++            return false;
++        }
+         emit Paid(payee, amount);
+     }
+ 
+@@ -64,7 +70,12 @@
+             if (amount == 0) continue;
+             owed[payee] = 0;
+             totalOwed -= amount;
+-            payable(payee).call{value: amount}("");
++            (bool sent,) = payable(payee).call{value: amount}("");
++            if (!sent) {
++                owed[payee] = amount;
++                totalOwed += amount;
++                continue;
++            }
+             emit Paid(payee, amount);
+         }
+     }

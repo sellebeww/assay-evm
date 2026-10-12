@@ -1,0 +1,23 @@
+--- a/src/LoanDesk.sol
++++ b/src/LoanDesk.sol
+@@ -32,6 +32,7 @@
+     error NotEnoughLocked(uint256 requested, uint256 available);
+     error RepayTooMuch(uint256 requested, uint256 owed);
+     error LoanTooLarge(uint256 owed, uint256 maximum);
++    error BorrowingPaused();
+ 
+     constructor(ReferencePool pool_) {
+         pool = pool_;
+@@ -63,11 +64,7 @@
+ 
+     function borrow(uint256 amount) external {
+         if (amount == 0) revert ZeroAmount();
+-        uint256 owed = owedBy[msg.sender] + amount;
+-        _requireWithinLimit(msg.sender, owed);
+-        owedBy[msg.sender] = owed;
+-        debt.transfer(msg.sender, amount);
+-        emit Borrowed(msg.sender, amount);
++        revert BorrowingPaused();
+     }
+ 
+     function repay(uint256 amount) external {

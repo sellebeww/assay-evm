@@ -1,0 +1,43 @@
+                                                                                                    
+ Usage: assay prove [OPTIONS] {project}                                                             
+                                                                                                    
+ Try to reproduce a candidate finding with a model-written PoC, within bounds.                      
+                                                                                                    
+ The model proposes a hypothesis and PoC files; a static checker and the ExploitOracle decide.      
+ A PoC the checker rejects never runs. The finding ends REPRODUCED (exploit run PASS),              
+ NOT_REPRODUCED, INCONCLUSIVE, or stays HYPOTHESIZED when no PoC passed the checker. Modes          
+ `record` and `live` send redacted code to the configured endpoint and need --allow-llm (see        
+ docs/llm.md).                                                                                      
+                                                                                                    
+                                                                                                    
+ Example:                                                                                           
+   assay scan fixtures/reentrancy/single_function                                                   
+   assay prove fixtures/reentrancy/single_function --class reentrancy                               
+                                                                                                    
+ Exit codes: 0 REPRODUCED; 1 NOT_REPRODUCED; 2 usage error; 3 INCONCLUSIVE,                         
+ HYPOTHESIZED, a budget limit or an unusable model reply; 4 infrastructure problem (Docker,         
+ runner image, ledger, no cassette, endpoint failure); 5 the project or the target was              
+ rejected, or a cassette is damaged.                                                                
+                                                                                                    
+╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────╮
+│ *    project      <directory>  Foundry project directory. [required]                             │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────╮
+│ --finding              <int>                 Ledger id of the candidate finding.                 │
+│ --class                <str>                 Class of the finding; the first candidate of it is  │
+│                                              used.                                               │
+│ --mode                 <replay|record|live>  replay (default), record or live. [default: replay] │
+│ --allow-llm                                  Allow sending redacted code to the endpoint.        │
+│ --json                                       Print the result as JSON instead of text.           │
+│ --llm-dry-run                                Print size and hash of the first payload; send      │
+│                                              nothing.                                            │
+│ --max-attempts         <int>                 PoC attempts, 1 to 5. [default: 3]                  │
+│ --poc-dir              <directory>           Where the PoC is written; outside the project.      │
+│ --cassette-dir         <directory>           Directory of the cassettes.                         │
+│                                              [default: tests/data/cassettes]                     │
+│ --budget-calls         <int>                 Most requests. [default: 12]                        │
+│ --budget-tokens        <int>                 Most tokens (in plus out). [default: 100000]        │
+│ --ledger               <file>                Ledger database. [default: .assay/ledger.db]        │
+│ --help                                       Show this message and exit.                         │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+

@@ -1,0 +1,51 @@
+{
+  "fixture": "unchecked_call/ignored_return",
+  "label": "regressing",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "abi_changed",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "abi_changed"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "abi_changed"
+      ]
+    }
+  ],
+  "base_tree_sha256": "e900f7b66695e4ab868ef5555dcfcf801c68ecc0dccd79dcd5b8660ba9d31196",
+  "poc_tree_sha256": "8933d2e1cd3a603bf10c04f96278d64f7cf96f027c66e1efaa53d52c2b79550e",
+  "patch_sha256": "89ff15a824070b2b21a532e5143c06d6ccf11a602af6f09e02bc4549e873c5b0",
+  "seconds": 27.9,
+  "error": null
+}

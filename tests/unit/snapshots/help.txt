@@ -1,0 +1,38 @@
+                                                                                                    
+ Usage: assay [OPTIONS] COMMAND [ARGS]...                                                           
+                                                                                                    
+ Check whether a Solidity patch closes an exploit, within recorded bounds.                          
+                                                                                                    
+                                                                                                    
+ Typical flow:                                                                                      
+   assay scan PROJECT                  candidate findings from static analysis                      
+   assay prove PROJECT --class CLASS   reproduce a candidate with a PoC                             
+   assay verify --base DIR --patch FILE --poc DIR --bundle-out OUT                                  
+   assay report OUT --out report.html  self-contained HTML report of a bundle                       
+   assay replay OUT                    re-check a bundle offline                                    
+   assay ci verify --project DIR --poc-dir DIR --base REF --head REF                                
+                                       verify a pull request without a model or secrets             
+   assay doctor                        check Docker, the runner image and the disk                  
+                                                                                                    
+ Output is plain text without color when it is not a terminal or NO_COLOR is set. scan, verify,     
+ prove, fix, run, replay and doctor print stable JSON with --json. Exit codes are listed in         
+ docs/cli.md: 0 success, 1 negative result, 2 usage error, 3 INCONCLUSIVE, 4 infrastructure         
+ problem, 5 integrity violation.                                                                    
+                                                                                                    
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────╮
+│ --version          Print the Assay version and exit.                                             │
+│ --help             Show this message and exit.                                                   │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────────────────────────╮
+│ verify   Check whether PATCH closes the exploit of POC on BASE, within recorded bounds.          │
+│ replay   Re-check the evidence bundle BUNDLE offline and compare its verdicts.                   │
+│ scan     Run Slither and Aderyn on PROJECT and record their results as candidate findings.       │
+│ prove    Try to reproduce a candidate finding with a model-written PoC, within bounds.           │
+│ fix      Ask a model for a patch for a REPRODUCED finding and verify it, within bounds.          │
+│ run      Run the whole flow for one class: scan, prove, fix and bundle.                          │
+│ report   Write a self-contained HTML report of the evidence bundle BUNDLE.                       │
+│ doctor   Check that this machine can run Assay.                                                  │
+│ version  Print the Assay version (the same as `assay --version`).                                │
+│ ci       Continuous integration: verify the patch of a pull request without a model or secrets.  │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+

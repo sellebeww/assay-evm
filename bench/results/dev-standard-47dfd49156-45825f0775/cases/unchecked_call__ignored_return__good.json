@@ -1,0 +1,47 @@
+{
+  "fixture": "unchecked_call/ignored_return",
+  "label": "good",
+  "expected_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "expected_reason": null,
+  "exit_code": 0,
+  "final_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "reasons": [],
+  "evidence_level": "E3",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "e900f7b66695e4ab868ef5555dcfcf801c68ecc0dccd79dcd5b8660ba9d31196",
+  "poc_tree_sha256": "8933d2e1cd3a603bf10c04f96278d64f7cf96f027c66e1efaa53d52c2b79550e",
+  "patch_sha256": "202e3e81ab86f7bc3d6cf20c47d524492e1aad8b23238a4c16948608a8fa1aba",
+  "seconds": 70.7,
+  "error": null
+}

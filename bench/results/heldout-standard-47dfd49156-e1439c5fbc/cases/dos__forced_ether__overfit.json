@@ -1,0 +1,51 @@
+{
+  "fixture": "dos/forced_ether",
+  "label": "overfit",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "variant_found",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "variant_found"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "variant_found"
+      ]
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "a2572b485cf641482958eeb4bb0a1a1d9a38add4cd5f46fe7d0dc4f03000b4f6",
+  "poc_tree_sha256": "5e8ee7c69e7a8dd16b93ab99a26cc9137fc8109d46b81c538af4cd124b0e46ff",
+  "patch_sha256": "e911463284a4ae8ae7de146049c292ca5c60a2b4e93cfc34814c91d10358e3cf",
+  "seconds": 27.8,
+  "error": null
+}

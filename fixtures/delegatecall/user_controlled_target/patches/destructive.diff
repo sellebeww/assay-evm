@@ -1,0 +1,12 @@
+--- a/src/ModuleVault.sol
++++ b/src/ModuleVault.sol
+@@ -68,7 +68,8 @@
+ 
+     function _run(address module, bytes calldata data) private returns (bytes memory result) {
+         bool ok;
+-        (ok, result) = module.delegatecall(data);
++        // A plain call runs the module in its own context, so it cannot touch the vault.
++        (ok, result) = module.call(data);
+         if (!ok) revert ModuleFailed(module);
+         upkeepRuns += 1;
+         emit UpkeepRun(module, msg.sender);

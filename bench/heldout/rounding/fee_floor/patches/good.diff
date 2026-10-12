@@ -1,0 +1,14 @@
+--- a/src/FeePool.sol
++++ b/src/FeePool.sol
+@@ -41,9 +41,9 @@
+         emit Deposited(msg.sender, msg.value);
+     }
+ 
+-    /// @notice The fee charged on a withdrawal of `amount` wei.
++    /// @notice The fee charged on a withdrawal of `amount` wei, rounded up.
+     function feeOn(uint256 amount) public pure returns (uint256) {
+-        return amount * FEE_BPS / BPS;
++        return (amount * FEE_BPS + BPS - 1) / BPS;
+     }
+ 
+     /// @notice Pays `amount` wei of the sender's balance to the sender, minus the fee.

@@ -1,0 +1,27 @@
+--- a/src/DepositPool.sol
++++ b/src/DepositPool.sol
+@@ -27,12 +27,13 @@
+     }
+ 
+     /// @notice Pulls `amount` tokens from the sender and credits them to the sender.
+-    function deposit(uint256 amount) external {
++    function deposit(uint256 amount) external returns (uint256 credited) {
+         if (amount == 0) revert ZeroAmount();
+-        token.transferFrom(msg.sender, address(this), amount);
++        if (!token.transferFrom(msg.sender, address(this), amount)) revert TransferFailed();
+         creditOf[msg.sender] += amount;
+         totalCredit += amount;
+         emit Deposited(msg.sender, amount);
++        return amount;
+     }
+ 
+     /// @notice Makes one deposit per entry of `amounts`.
+@@ -40,7 +41,7 @@
+         for (uint256 i = 0; i < amounts.length; i++) {
+             uint256 amount = amounts[i];
+             if (amount == 0) revert ZeroAmount();
+-            token.transferFrom(msg.sender, address(this), amount);
++            if (!token.transferFrom(msg.sender, address(this), amount)) revert TransferFailed();
+             creditOf[msg.sender] += amount;
+             totalCredit += amount;
+             emit Deposited(msg.sender, amount);

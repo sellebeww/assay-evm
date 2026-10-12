@@ -1,0 +1,47 @@
+{
+  "fixture": "signature_replay/cross_chain",
+  "label": "good",
+  "expected_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "expected_reason": null,
+  "exit_code": 0,
+  "final_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "reasons": [],
+  "evidence_level": "E3",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "49271763f9978b5b4c4816a5f37be869cc99a278005c71b42a372e06b81021a8",
+  "poc_tree_sha256": "4a3af9b9325af3f85af9af95764cd1b4e96797a9e6c0fb1dff88235fb0b5b3fe",
+  "patch_sha256": "112ab78482f2ea6dfc519fc0dbd6b0e44d5090512f6ecb7750deed58186ea7e0",
+  "seconds": 29.2,
+  "error": null
+}

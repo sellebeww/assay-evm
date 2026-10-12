@@ -1,0 +1,26 @@
+                                                                                                    
+ Usage: assay replay [OPTIONS] {bundle}                                                             
+                                                                                                    
+ Re-check the evidence bundle BUNDLE offline and compare its verdicts.                              
+                                                                                                    
+ Checks the sha256 of every file against manifest.json (nothing runs when one differs),             
+ checks the runner image, runs every oracle again in the sandbox without network, and               
+ compares the verdicts with the manifest. Prints REPLAY MATCH when they are equal.                  
+                                                                                                    
+                                                                                                    
+ Example:                                                                                           
+   assay replay out/good                                                                            
+   assay replay out/good --json                                                                     
+                                                                                                    
+ Exit codes: 0 REPLAY MATCH; 1 the verdicts differ; 2 usage error, or a bundle of another           
+ format version; 4 infrastructure problem (Docker or the runner image missing: run make             
+ image); 5 the bundle does not match its manifest.                                                  
+                                                                                                    
+╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────╮
+│ *    bundle      <path>  Evidence bundle written by `assay verify --bundle-out`. [required]      │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────╮
+│ --json          Print the comparison as JSON.                                                    │
+│ --help          Show this message and exit.                                                      │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+

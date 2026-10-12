@@ -1,0 +1,22 @@
+--- a/src/StrategyHub.sol
++++ b/src/StrategyHub.sol
+@@ -35,6 +35,7 @@
+ 
+     error NotOwner(address caller);
+     error NoStrategy(address account);
++    error HarvestPaused();
+     error StrategyFailed(address strategy);
+     error ZeroAmount();
+     error InsufficientFunds(uint256 requested, uint256 available);
+@@ -67,10 +68,7 @@
+     function harvest() external {
+         address strategy = strategyOf[msg.sender];
+         if (strategy == address(0)) revert NoStrategy(msg.sender);
+-        (bool ok,) = strategy.delegatecall(abi.encodeCall(IStrategy.harvest, ()));
+-        if (!ok) revert StrategyFailed(strategy);
+-        harvests += 1;
+-        emit Harvested(msg.sender, strategy);
++        revert HarvestPaused();
+     }
+ 
+     /// @notice Sends `amount` wei of the hub to `to`.

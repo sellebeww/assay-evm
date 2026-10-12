@@ -1,0 +1,20 @@
+--- a/src/ShareVault.sol
++++ b/src/ShareVault.sol
+@@ -33,14 +33,13 @@
+ 
+     /// @notice Shares that a deposit of `assets` mints, rounded down.
+     function convertToShares(uint256 assets) public view returns (uint256) {
+-        uint256 supply = totalSupply;
+-        return supply == 0 ? assets : assets * supply / totalAssets();
++        // One share per asset, always: a donation can no longer change the price of a share.
++        return assets;
+     }
+ 
+     /// @notice Assets that a redemption of `shares` pays out, rounded down.
+     function convertToAssets(uint256 shares) public view returns (uint256) {
+-        uint256 supply = totalSupply;
+-        return supply == 0 ? shares : shares * totalAssets() / supply;
++        return shares;
+     }
+ 
+     /// @notice Takes `assets` from the caller and mints the matching shares to `receiver`.

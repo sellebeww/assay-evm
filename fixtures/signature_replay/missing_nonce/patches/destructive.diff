@@ -1,0 +1,29 @@
+--- a/src/VoucherRedeemer.sol
++++ b/src/VoucherRedeemer.sol
+@@ -10,6 +10,8 @@
+     address public immutable issuer;
+     /// @notice Sum of all vouchers paid out, in wei.
+     uint256 public totalRedeemed;
++    /// @notice Recipients that have redeemed a voucher.
++    mapping(address account => bool) public redeemed;
+ 
+     event Funded(address indexed from, uint256 amount);
+     event Redeemed(address indexed to, uint256 amount);
+@@ -19,6 +21,7 @@
+     error InvalidSignature();
+     error InsufficientFunds(uint256 requested, uint256 available);
+     error TransferFailed();
++    error AlreadyRedeemed(address to);
+ 
+     constructor(address issuer_) {
+         if (issuer_ == address(0)) revert ZeroAddress();
+@@ -42,6 +45,9 @@
+         if (amount == 0) revert ZeroAmount();
+         address signer = ecrecover(voucherDigest(to, amount), v, r, s);
+         if (signer == address(0) || signer != issuer) revert InvalidSignature();
++        // One voucher per recipient, so a voucher cannot pay twice.
++        if (redeemed[to]) revert AlreadyRedeemed(to);
++        redeemed[to] = true;
+         uint256 available = address(this).balance;
+         if (amount > available) revert InsufficientFunds(amount, available);
+ 

@@ -1,0 +1,51 @@
+{
+  "fixture": "dos/forced_ether",
+  "label": "regressing",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "layout_changed",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "layout_changed"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "layout_changed"
+      ]
+    }
+  ],
+  "base_tree_sha256": "a2572b485cf641482958eeb4bb0a1a1d9a38add4cd5f46fe7d0dc4f03000b4f6",
+  "poc_tree_sha256": "5e8ee7c69e7a8dd16b93ab99a26cc9137fc8109d46b81c538af4cd124b0e46ff",
+  "patch_sha256": "04d09e6432dcf8e7a5474bd9a8be7cabe2eab2eeac3ec20c1bc7d97db3885f53",
+  "seconds": 73.3,
+  "error": null
+}

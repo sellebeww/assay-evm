@@ -1,0 +1,51 @@
+{
+  "fixture": "delegatecall/user_controlled_target",
+  "label": "regressing",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "layout_changed",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "layout_changed"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "layout_changed"
+      ]
+    }
+  ],
+  "base_tree_sha256": "f39de9e82f5d2ac1a5d12c55a2971df1560af242a5fe48a9bd1317611a06a61d",
+  "poc_tree_sha256": "08af4060ec9839b2e6b3c2f39564723118609cf6400de419a116ed4f1c2bc566",
+  "patch_sha256": "d8c798c69bd52e601ae4b65d3211b2b56ca2eeceef056841598d58ad9e0c3792",
+  "seconds": 41.8,
+  "error": null
+}

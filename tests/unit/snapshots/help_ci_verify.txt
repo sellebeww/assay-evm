@@ -1,0 +1,53 @@
+                                                                                                    
+ Usage: assay ci verify [OPTIONS]                                                                   
+                                                                                                    
+ Verify the Solidity changes of a pull request against the PoCs of the project.                     
+                                                                                                    
+ Computes the diff from BASE to HEAD limited to the scope, as text only: binary files,              
+ symlinks, submodules, renames across the scope boundary and unsafe paths are refused (exit         
+ code 5). Then runs `assay verify` for every PoC, writes a bundle per PoC to OUT/bundles/, a        
+ Markdown summary to OUT/summary.md and OUT/result.json. Without changes in the scope it            
+ prints "no changes in scope" and exits 0. The command uses no model and reads no secret.           
+                                                                                                    
+                                                                                                    
+ Example:                                                                                           
+   assay ci verify --project . --poc-dir poc --base origin/main --head HEAD \                       
+     --scope src --fail-on inconclusive --out assay-out                                             
+                                                                                                    
+ Exit codes: 0 nothing failed under --fail-on (or no changes in scope); 1 REJECTED;                 
+ 2 usage error; 3 INCONCLUSIVE; 4 infrastructure problem; 5 integrity violation.                    
+                                                                                                    
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────╮
+│ *  --project             <directory>                    Directory of the Foundry project inside  │
+│                                                         a git work tree.                         │
+│                                                         [required]                               │
+│ *  --poc-dir             <directory>                    Directory with the PoCs: either one PoC  │
+│                                                         (Solidity files directly inside) or one  │
+│                                                         subdirectory per PoC. Read from the      │
+│                                                         checked-out head.                        │
+│                                                         [required]                               │
+│ *  --base                <str>                          Base revision (the vulnerable one).      │
+│                                                         [required]                               │
+│ *  --head                <str>                          Head revision (with the patch).          │
+│                                                         [required]                               │
+│    --scope               <str>                          Directory of the project whose changes   │
+│                                                         are the patch.                           │
+│                                                         [default: src]                           │
+│    --profile             <quick|standard|thorough>      Campaign profile of the variant search.  │
+│                                                         [default: standard]                      │
+│    --symbolic                                           Also run the symbolic oracle (see        │
+│                                                         docs/symbolic.md).                       │
+│    --fail-on             <rejected|inconclusive|never>  Which results give a non-zero exit code: │
+│                                                         rejected (REJECTED and integrity         │
+│                                                         violations), inconclusive (also          │
+│                                                         INCONCLUSIVE) or never. Usage and        │
+│                                                         infrastructure problems always fail.     │
+│                                                         [default: inconclusive]                  │
+│    --out                 <path>                         Output directory (empty or absent):      │
+│                                                         bundles, summary, result.                │
+│                                                         [default: assay-out]                     │
+│    --summary-file        <file>                         Also append the Markdown summary to this │
+│                                                         file (for example $GITHUB_STEP_SUMMARY). │
+│    --help                                               Show this message and exit.              │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+

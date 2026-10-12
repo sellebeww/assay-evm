@@ -1,0 +1,28 @@
+--- a/src/Presale.sol
++++ b/src/Presale.sol
+@@ -11,10 +11,10 @@
+     address public immutable beneficiary;
+     /// @notice Ether the pledges must reach before the presale can be finalized, in wei.
+     uint256 public immutable target;
++    /// @notice Whether the presale has been finalized.
++    bool public finalized;
+     /// @notice Sum of all pledges, in wei.
+     uint256 public totalPledged;
+-    /// @notice Whether the presale has been finalized.
+-    bool public finalized;
+     /// @notice Ether each account has pledged, in wei.
+     mapping(address account => uint256 amount) public pledgeOf;
+ 
+@@ -65,9 +65,9 @@
+     function finalize() external {
+         if (finalized) revert AlreadyFinalized();
+         if (totalPledged < target) revert TargetNotReached(totalPledged, target);
+-        // The presale must hold exactly what was pledged: any difference means that the
+-        // accounting is wrong, and nothing is sent.
+-        if (address(this).balance != totalPledged) {
++        // The presale must hold at least what was pledged. Ether that was sent to it in other ways
++        // stays in the contract.
++        if (address(this).balance < totalPledged) {
+             revert BalanceMismatch(address(this).balance, totalPledged);
+         }
+         finalized = true;

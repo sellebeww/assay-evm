@@ -1,0 +1,80 @@
+{
+  "$defs": {
+    "Check": {
+      "additionalProperties": false,
+      "description": "One line of the report. `fix` is set for a problem and for an optional part to set up.",
+      "properties": {
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        },
+        "fix": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fix"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "problem",
+            "info",
+            "skipped"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "status",
+        "detail"
+      ],
+      "title": "Check",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Result of `assay doctor`. `ok` is true when no check is a problem; the exit code is then\n0, otherwise 4.",
+  "properties": {
+    "checks": {
+      "items": {
+        "$ref": "#/$defs/Check"
+      },
+      "title": "Checks",
+      "type": "array"
+    },
+    "format": {
+      "const": "assay-doctor/1",
+      "default": "assay-doctor/1",
+      "title": "Format",
+      "type": "string"
+    },
+    "ok": {
+      "title": "Ok",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "ok",
+    "checks"
+  ],
+  "title": "DoctorReport",
+  "type": "object"
+}

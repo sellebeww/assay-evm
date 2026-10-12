@@ -1,0 +1,7 @@
+# Smoke project for the runner image (`make image-check`).
+# solc and forge-std are provided by the image; nothing is downloaded.
+[profile.default]
+src = "src"
+test = "test"
+libs = []
+remappings = ["forge-std/=/opt/assay/lib/forge-std/src/"]

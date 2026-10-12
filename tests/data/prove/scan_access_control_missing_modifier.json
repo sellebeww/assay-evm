@@ -1,0 +1,137 @@
+{
+  "findings": [
+    {
+      "id": "8043db177ef17dd37c5b2dbfd55cbaddd8b5427379a5d5076675cc2c2738657e",
+      "observations": [
+        {
+          "locations": [
+            {
+              "end_line": 25,
+              "path": "src/FeeCollector.sol",
+              "start_line": 25
+            }
+          ],
+          "message": "Modifier Invoked Only Once\n\nConsider removing the modifier or inlining the logic into the calling function.",
+          "rule_id": "modifier-used-only-once",
+          "severity": "Low"
+        }
+      ],
+      "vuln_class": "other"
+    },
+    {
+      "id": "529dd3b5cd34f94d4ff444aea60f6fbdcda12d73a199f4f200ad36f50ac1ec49",
+      "observations": [
+        {
+          "locations": [
+            {
+              "end_line": 44,
+              "path": "src/FeeCollector.sol",
+              "start_line": 44
+            }
+          ],
+          "message": "Centralization Risk\n\nContracts have owners with privileged rights to perform admin tasks and need to be trusted to not perform malicious updates or drain funds.",
+          "rule_id": "centralization-risk",
+          "severity": "Low"
+        }
+      ],
+      "vuln_class": "other"
+    },
+    {
+      "id": "176a7eed24446a4383d2850117a9261079e89e4fd24061d8b4abeb81a802dfb0",
+      "observations": [
+        {
+          "locations": [
+            {
+              "end_line": 61,
+              "path": "src/FeeCollector.sol",
+              "start_line": 57
+            },
+            {
+              "end_line": 59,
+              "path": "src/FeeCollector.sol",
+              "start_line": 59
+            }
+          ],
+          "message": "FeeCollector.payOutAll(address) (src/FeeCollector.sol#57-61) uses a dangerous strict equality:\n\t- amount == 0 (src/FeeCollector.sol#59)",
+          "rule_id": "incorrect-equality",
+          "severity": "Medium (confidence High)"
+        }
+      ],
+      "vuln_class": "other"
+    },
+    {
+      "id": "497eebd9b3514cf3016ed5b3a873a78e0fe5a48ea5bd8599417b1485758157ad",
+      "observations": [
+        {
+          "locations": [
+            {
+              "end_line": 71,
+              "path": "src/FeeCollector.sol",
+              "start_line": 63
+            },
+            {
+              "end_line": 68,
+              "path": "src/FeeCollector.sol",
+              "start_line": 68
+            }
+          ],
+          "message": "FeeCollector._send(address,uint256) (src/FeeCollector.sol#63-71) sends eth to arbitrary user\n\tDangerous calls:\n\t- (sent,None) = to.call{value: amount}() (src/FeeCollector.sol#68)",
+          "rule_id": "arbitrary-send-eth",
+          "severity": "High (confidence Medium)"
+        }
+      ],
+      "vuln_class": "access_control"
+    },
+    {
+      "id": "17786b9124bfcdf46538409b587ad0639ade0a8ce74873e9d12b45d875ca9091",
+      "observations": [
+        {
+          "locations": [
+            {
+              "end_line": 71,
+              "path": "src/FeeCollector.sol",
+              "start_line": 63
+            },
+            {
+              "end_line": 68,
+              "path": "src/FeeCollector.sol",
+              "start_line": 68
+            }
+          ],
+          "message": "Low level call in FeeCollector._send(address,uint256) (src/FeeCollector.sol#63-71):\n\t- (sent,None) = to.call{value: amount}() (src/FeeCollector.sol#68)",
+          "rule_id": "low-level-calls",
+          "severity": "Informational (confidence High)"
+        }
+      ],
+      "vuln_class": "other"
+    },
+    {
+      "id": "943256f4a9fab541d817111aa31207cb335152720f27ce5135aae791ca2cc32f",
+      "observations": [
+        {
+          "locations": [
+            {
+              "end_line": 71,
+              "path": "src/FeeCollector.sol",
+              "start_line": 63
+            },
+            {
+              "end_line": 68,
+              "path": "src/FeeCollector.sol",
+              "start_line": 68
+            },
+            {
+              "end_line": 70,
+              "path": "src/FeeCollector.sol",
+              "start_line": 70
+            }
+          ],
+          "message": "Reentrancy in FeeCollector._send(address,uint256) (src/FeeCollector.sol#63-71):\n\tExternal calls:\n\t- (sent,None) = to.call{value: amount}() (src/FeeCollector.sol#68)\n\tEvent emitted after the call(s):\n\t- PaidOut(to,amount) (src/FeeCollector.sol#70)",
+          "rule_id": "reentrancy-events",
+          "severity": "Low (confidence Medium)"
+        }
+      ],
+      "vuln_class": "reentrancy"
+    }
+  ]
+}

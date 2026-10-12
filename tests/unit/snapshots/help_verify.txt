@@ -1,0 +1,60 @@
+                                                                                                    
+ Usage: assay verify [OPTIONS]                                                                      
+                                                                                                    
+ Check whether PATCH closes the exploit of POC on BASE, within recorded bounds.                     
+                                                                                                    
+ Runs the oracles integrity, exploit, variant, behavior and regression, prints a verdict per        
+ oracle, the final verdict and the bounds that ran, and records every oracle run in the             
+ ledger. VERIFIED_WITHIN_BOUNDS needs a PASS from all five oracles and is not a proof of            
+ absence. With --symbolic the symbolic oracle (Halmos) runs after the variant search and must       
+ pass as well; a symbolic timeout or unknown result makes the verdict INCONCLUSIVE. The             
+ variant search runs the campaigns of --profile (quick, standard or thorough),                      
+ with seeds derived from --seed, and fails a patch only for a variant that a generated test         
+ reproduced three times. With --bundle-out, the inputs, the evidence and a manifest are             
+ written so that `assay replay` can re-check them offline.                                          
+                                                                                                    
+                                                                                                    
+ Example:                                                                                           
+   assay verify --base fixtures/reentrancy/single_function \                                        
+     --patch fixtures/reentrancy/single_function/patches/good.diff \                                
+     --poc fixtures/reentrancy/single_function/poc --profile quick --bundle-out out/good            
+                                                                                                    
+ Exit codes: 0 VERIFIED_WITHIN_BOUNDS; 1 REJECTED; 2 usage error; 3 INCONCLUSIVE;                   
+ 4 infrastructure problem (Docker, runner image, harness, ledger, out of memory);                   
+ 5 integrity violation (traversal, symlink, binary file, protected or out-of-scope path,            
+ or inputs rejected at ingest).                                                                     
+                                                                                                    
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────╮
+│ *  --base              <directory>                  Directory of the vulnerable Foundry project  │
+│                                                     (its src/ is patched).                       │
+│                                                     [required]                                   │
+│ *  --patch             <file>                       Unified diff to verify, with a/ and b/ path  │
+│                                                     prefixes as git writes them.                 │
+│                                                     [required]                                   │
+│ *  --poc               <directory>                  Directory with the PoC: one contract         │
+│                                                     deriving from AssayPoC.                      │
+│                                                     [required]                                   │
+│    --profile           <quick|standard|thorough>    Campaign profile of the variant search:      │
+│                                                     seeds, runs per seed, invariant runs and     │
+│                                                     depth, time limit per campaign (see          │
+│                                                     docs/oracles.md).                            │
+│                                                     [default: standard]                          │
+│    --seed              <str>                        Base seed (0x and 1 to 16 hex digits). Every │
+│                                                     campaign seed is derived from it.            │
+│                                                     [default: 0x1]                               │
+│    --fuzz-runs         <int range> [1<=x<=1000000]  Runs of every fuzz campaign (variant search, │
+│                                                     fuzz tests of the project); replaces the     │
+│                                                     profile's runs per seed.                     │
+│    --symbolic                                       Also run the symbolic oracle (Halmos) on the │
+│                                                     properties in the PoC directory's symbolic/  │
+│                                                     subdirectory, after the variant search;      │
+│                                                     needs the symbolic runner image (see         │
+│                                                     docs/symbolic.md).                           │
+│    --bundle-out        <path>                       Write an evidence bundle into this           │
+│                                                     directory, which must be empty or absent.    │
+│    --json                                           Print the report as JSON instead of a table. │
+│    --ledger            <file>                       Ledger database; created if missing.         │
+│                                                     [default: .assay/ledger.db]                  │
+│    --help                                           Show this message and exit.                  │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+

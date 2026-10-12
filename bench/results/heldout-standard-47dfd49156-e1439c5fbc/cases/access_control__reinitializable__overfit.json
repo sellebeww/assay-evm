@@ -1,0 +1,51 @@
+{
+  "fixture": "access_control/reinitializable",
+  "label": "overfit",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "variant_found",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "variant_found"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "variant_found"
+      ]
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "77a9f154105e8dc5df890358268d76f2a89ba09e194bde784c66f3fd38fc5c10",
+  "poc_tree_sha256": "592247511834c1090ae3b6a5f3114388f58960a34ca1d861a14ecb8ac5e49aa3",
+  "patch_sha256": "acfc5002726f8c73b9144bbc30968d7091b6268db331012d83ee5ed391e15cf4",
+  "seconds": 22.6,
+  "error": null
+}

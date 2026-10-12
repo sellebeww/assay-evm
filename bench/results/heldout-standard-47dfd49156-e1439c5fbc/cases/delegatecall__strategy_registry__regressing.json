@@ -1,0 +1,51 @@
+{
+  "fixture": "delegatecall/strategy_registry",
+  "label": "regressing",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "layout_changed",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "layout_changed"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "layout_changed"
+      ]
+    }
+  ],
+  "base_tree_sha256": "09481a5895bee5347ff8ac98892fd3b8ceb26dd4474dac9db1c35db2bf491f54",
+  "poc_tree_sha256": "a2be19c5c903d09b08dae6184e35b41763a9387719ac7b731fe58549450ae996",
+  "patch_sha256": "3ef6e677d6428926bd2e40c20e9b053a8dd9c044a6af69474cd1f32d7c96b6f6",
+  "seconds": 31.4,
+  "error": null
+}

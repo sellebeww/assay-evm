@@ -1,0 +1,32 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Secrets and credentials
+.env
+.env.*
+*.pem
+*.key
+
+# Assay working data (ledger, blobs) and demo output
+.assay/
+demo-out/
+assay-out/
+
+# Foundry build output
+out/
+cache/
+
+# Node
+node_modules/

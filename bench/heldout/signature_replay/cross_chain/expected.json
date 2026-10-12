@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "fixture": "signature_replay/cross_chain",
+  "class": "signature_replay",
+  "solc": "0.8.36",
+  "contract": "ClaimDesk.sol:ClaimDesk",
+  "variants": {
+    "vulnerable": {
+      "applies": true,
+      "replay": "EXPLOITED",
+      "fuzz_variants": "EXPLOITED",
+      "benign": "pass",
+      "interface": {
+        "status": "baseline",
+        "kinds": []
+      }
+    },
+    "good": {
+      "applies": true,
+      "replay": "BLOCKED",
+      "fuzz_variants": "BLOCKED",
+      "benign": "pass",
+      "interface": {
+        "status": "same",
+        "kinds": []
+      },
+      "verdict": "VERIFIED_WITHIN_BOUNDS",
+      "reason": null
+    },
+    "overfit": {
+      "applies": true,
+      "replay": "BLOCKED",
+      "fuzz_variants": "EXPLOITED",
+      "benign": "pass",
+      "interface": {
+        "status": "same",
+        "kinds": []
+      },
+      "verdict": "REJECTED",
+      "reason": "variant_found"
+    },
+    "destructive": {
+      "applies": true,
+      "replay": "BLOCKED",
+      "fuzz_variants": "BLOCKED",
+      "benign": "FAIL",
+      "interface": {
+        "status": "same",
+        "kinds": []
+      },
+      "verdict": "REJECTED",
+      "reason": "benign_test_failed"
+    },
+    "regressing": {
+      "applies": true,
+      "replay": "BLOCKED",
+      "fuzz_variants": "BLOCKED",
+      "benign": "pass",
+      "interface": {
+        "status": "changed",
+        "kinds": [
+          "events"
+        ]
+      },
+      "verdict": "REJECTED",
+      "reason": "event_changed"
+    }
+  }
+}

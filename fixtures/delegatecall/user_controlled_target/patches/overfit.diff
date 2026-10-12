@@ -1,0 +1,18 @@
+--- a/src/ModuleVault.sol
++++ b/src/ModuleVault.sol
+@@ -25,6 +25,7 @@
+     error ModuleFailed(address module);
+     error InsufficientFunds(uint256 requested, uint256 available);
+     error TransferFailed();
++    error ModuleNotApproved(address module);
+ 
+     modifier onlyOwner() {
+         if (msg.sender != owner) revert NotOwner(msg.sender);
+@@ -45,6 +46,7 @@
+ 
+     /// @notice Runs `data` on the approved upkeep module `module`, in the vault's context.
+     function runUpkeep(address module, bytes calldata data) external returns (bytes memory) {
++        if (!approvedModule[module]) revert ModuleNotApproved(module);
+         return _run(module, data);
+     }
+ 

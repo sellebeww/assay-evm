@@ -1,0 +1,27 @@
+--- a/src/FeePool.sol
++++ b/src/FeePool.sol
+@@ -7,6 +7,8 @@
+ ///         which stays in the pool and can be sent to the treasury.
+ contract FeePool {
+     uint256 private constant BPS = 10_000;
++    /// @dev Smallest withdrawal. Dust withdrawals would round the fee down to nothing.
++    uint256 private constant MIN_WITHDRAWAL = 1_000;
+ 
+     /// @notice The fee on a withdrawal, in basis points.
+     uint256 public constant FEE_BPS = 30;
+@@ -27,6 +29,7 @@
+     error ZeroAddress();
+     error InsufficientBalance(uint256 requested, uint256 available);
+     error TransferFailed();
++    error WithdrawalTooSmall(uint256 amount, uint256 minimum);
+ 
+     constructor(address treasury_) {
+         if (treasury_ == address(0)) revert ZeroAddress();
+@@ -49,6 +52,7 @@
+     /// @notice Pays `amount` wei of the sender's balance to the sender, minus the fee.
+     function withdraw(uint256 amount) external {
+         if (amount == 0) revert ZeroAmount();
++        if (amount < MIN_WITHDRAWAL) revert WithdrawalTooSmall(amount, MIN_WITHDRAWAL);
+         uint256 available = balanceOf[msg.sender];
+         if (amount > available) revert InsufficientBalance(amount, available);
+ 

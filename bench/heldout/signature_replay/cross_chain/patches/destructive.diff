@@ -1,0 +1,22 @@
+--- a/src/ClaimDesk.sol
++++ b/src/ClaimDesk.sol
+@@ -22,6 +22,7 @@
+     error NonceUsed(uint256 nonce);
+     error InsufficientFunds(uint256 requested, uint256 available);
+     error TransferFailed();
++    error ClaimsPaused();
+ 
+     constructor(address issuer_) {
+         if (issuer_ == address(0)) revert ZeroAddress();
+@@ -49,10 +50,6 @@
+         uint256 available = address(this).balance;
+         if (amount > available) revert InsufficientFunds(amount, available);
+ 
+-        used[nonce] = true;
+-        totalClaimed += amount;
+-        (bool sent,) = payable(to).call{value: amount}("");
+-        if (!sent) revert TransferFailed();
+-        emit Claimed(to, amount);
++        revert ClaimsPaused();
+     }
+ }

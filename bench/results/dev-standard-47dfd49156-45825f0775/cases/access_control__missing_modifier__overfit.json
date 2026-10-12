@@ -1,0 +1,51 @@
+{
+  "fixture": "access_control/missing_modifier",
+  "label": "overfit",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "variant_found",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "variant_found"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "variant_found"
+      ]
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "5f9c5df78b9c690b1522d000b6002b4dca0d7fb0db3ea4a5fd56158f4988d34f",
+  "poc_tree_sha256": "0b37190ae0d15061cb7129614025763584e1bb57fcce3d6c12eb2f17409518e4",
+  "patch_sha256": "18933cfae84e2301aef11b5e8d65a4d7b571a571f30da1a09aa92f3542a1a8a5",
+  "seconds": 62.6,
+  "error": null
+}

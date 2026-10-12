@@ -1,0 +1,28 @@
+--- a/src/ClaimDesk.sol
++++ b/src/ClaimDesk.sol
+@@ -14,7 +14,7 @@
+     uint256 public totalClaimed;
+ 
+     event Funded(address indexed from, uint256 amount);
+-    event Claimed(address indexed to, uint256 amount);
++    event Claimed(address indexed to, uint256 amount, uint256 nonce);
+ 
+     error ZeroAmount();
+     error ZeroAddress();
+@@ -36,7 +36,7 @@
+ 
+     /// @notice The digest that the issuer signs for a claim.
+     function claimDigest(address to, uint256 amount, uint256 nonce) public view returns (bytes32) {
+-        return keccak256(abi.encode(issuer, to, amount, nonce));
++        return keccak256(abi.encode(block.chainid, address(this), issuer, to, amount, nonce));
+     }
+ 
+     /// @notice Pays `amount` wei to `to` against the issuer's signature on the claim.
+@@ -53,6 +53,6 @@
+         totalClaimed += amount;
+         (bool sent,) = payable(to).call{value: amount}("");
+         if (!sent) revert TransferFailed();
+-        emit Claimed(to, amount);
++        emit Claimed(to, amount, nonce);
+     }
+ }

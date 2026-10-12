@@ -1,0 +1,51 @@
+{
+  "fixture": "reentrancy/cross_function",
+  "label": "regressing",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "layout_changed",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "layout_changed"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "layout_changed"
+      ]
+    }
+  ],
+  "base_tree_sha256": "be9c85209c340b51487f9a7deb6ee8488f49bcc01d74a6b39cb38d420f3df988",
+  "poc_tree_sha256": "6754e53b3ece4c8570ccc90db0bcd8ba36570624f457448d3ec01f50ff79cb76",
+  "patch_sha256": "a82777ceec7d4be99ed36977dd080d20c0eeeb9940277a608d603bc0ce1e9281",
+  "seconds": 35.8,
+  "error": null
+}

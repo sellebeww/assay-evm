@@ -1,0 +1,106 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: make check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Lint, type check and unit tests
+        run: make check
+
+  # actionlint reads the workflows and, wrapped, the steps of action.yml (tools/lint_actions.py).
+  lint-actions:
+    name: make lint-actions
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Lint the workflows and the action
+        run: make lint-actions
+
+  integration:
+    name: integration
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Build the runner image
+        id: image
+        run: make image
+
+      - name: Integration tests
+        run: make test-integration
+
+      # Runs even when the integration tests failed, as long as the image was built.
+      - name: Security tests
+        if: ${{ !cancelled() && steps.image.outcome == 'success' }}
+        run: make test-security
+
+  # A job of its own, in parallel with the integration job, so that a pull request is checked in
+  # about 15 minutes. The classification matrix is not run here; it runs only by hand
+  # (matrix.yml).
+  fixtures:
+    name: fixture ground truth
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Build the runner image
+        run: make image
+
+      - name: Fixture ground truth
+        run: make fixtures-check

@@ -1,0 +1,19 @@
+--- a/src/FeeCollector.sol
++++ b/src/FeeCollector.sol
+@@ -21,6 +21,7 @@
+     error ZeroAddress();
+     error InsufficientFunds(uint256 requested, uint256 available);
+     error TransferFailed();
++    error RecipientNotOwner(address to);
+ 
+     modifier onlyOwner() {
+         if (msg.sender != owner) revert NotOwner(msg.sender);
+@@ -62,6 +63,8 @@
+ 
+     function _send(address payable to, uint256 amount) private {
+         if (to == address(0)) revert ZeroAddress();
++        // Fees may only go to the owner, so nobody else can take them.
++        if (to != owner) revert RecipientNotOwner(to);
+         uint256 available = address(this).balance;
+         if (amount > available) revert InsufficientFunds(amount, available);
+         totalPaidOut += amount;

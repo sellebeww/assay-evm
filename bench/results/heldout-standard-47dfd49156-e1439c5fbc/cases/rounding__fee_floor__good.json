@@ -1,0 +1,47 @@
+{
+  "fixture": "rounding/fee_floor",
+  "label": "good",
+  "expected_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "expected_reason": null,
+  "exit_code": 0,
+  "final_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "reasons": [],
+  "evidence_level": "E3",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "59252004bf0f96106b1fd7f7f8cf7e5039e020a086e6ce9766d1a1aa7448a49a",
+  "poc_tree_sha256": "ef5a0c6bb3cc4f75206e9faaf4779625eb1e39c9d4b08de5d66d62693e890036",
+  "patch_sha256": "e2d8ad6c27733c0f084174f6c5867193d6745480c3d3c7e7a7539218600293c2",
+  "seconds": 28.6,
+  "error": null
+}

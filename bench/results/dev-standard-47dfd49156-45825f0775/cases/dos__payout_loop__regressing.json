@@ -1,0 +1,51 @@
+{
+  "fixture": "dos/payout_loop",
+  "label": "regressing",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "abi_changed",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "abi_changed"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "abi_changed"
+      ]
+    }
+  ],
+  "base_tree_sha256": "d4e304218a88bbe6d1d065af179ad53a1dfccf12721610420ff496579e79924a",
+  "poc_tree_sha256": "56710fd6ca92c002ad85485239af0ff3a08f1d67acb42d6dfdf64db59f5b9c17",
+  "patch_sha256": "0eb2a178c2fc6e70c7c2b8de482b54067352f870c98e65414ca12cbeb48ed16a",
+  "seconds": 110.2,
+  "error": null
+}

@@ -1,0 +1,28 @@
+--- a/src/ModuleVault.sol
++++ b/src/ModuleVault.sol
+@@ -9,7 +9,8 @@
+ ///         can do it.
+ contract ModuleVault {
+     /// @notice The account that approves modules and withdraws ether.
+-    address public owner;
++    /// @dev Immutable, so that no module can overwrite it.
++    address public immutable owner;
+     /// @notice Modules the owner approved for upkeep.
+     mapping(address module => bool approved) public approvedModule;
+     /// @notice Number of upkeep runs so far.
+@@ -25,6 +26,7 @@
+     error ModuleFailed(address module);
+     error InsufficientFunds(uint256 requested, uint256 available);
+     error TransferFailed();
++    error ModuleNotApproved(address module);
+ 
+     modifier onlyOwner() {
+         if (msg.sender != owner) revert NotOwner(msg.sender);
+@@ -67,6 +69,7 @@
+     }
+ 
+     function _run(address module, bytes calldata data) private returns (bytes memory result) {
++        if (!approvedModule[module]) revert ModuleNotApproved(module);
+         bool ok;
+         (ok, result) = module.delegatecall(data);
+         if (!ok) revert ModuleFailed(module);

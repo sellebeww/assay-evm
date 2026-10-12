@@ -1,0 +1,12 @@
+# Smoke project for Halmos in the symbolic runner image (`make image-check`).
+# solc and forge-std are provided by the image; nothing is downloaded. The project is mounted
+# read-only, so build output goes to the scratch mount. Dynamic test linking is off: it rewrites
+# `new C()` in tests into a cheat code that Halmos does not support.
+[profile.default]
+src = "src"
+test = "test"
+libs = []
+out = "/work/scratch/out"
+cache_path = "/work/scratch/cache"
+remappings = ["forge-std/=/opt/assay/lib/forge-std/src/"]
+dynamic_test_linking = false

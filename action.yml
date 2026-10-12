@@ -1,0 +1,297 @@
+name: Assay patch verification
+description: >-
+  Verify the Solidity changes of a pull request against known exploits (PoCs) in a sandbox, with
+  deterministic oracles and without a model or any secret. A verdict is valid within recorded
+  bounds only.
+
+inputs:
+  project-dir:
+    description: Directory of the Foundry project, inside the checked-out repository.
+    required: false
+    default: "."
+  poc-dir:
+    description: >-
+      Directory with the PoCs (one PoC with Solidity files directly inside, or one subdirectory
+      per PoC), relative to the repository root.
+    required: true
+  scope:
+    description: Directory of the project whose changes are the patch.
+    required: false
+    default: src
+  base-ref:
+    description: >-
+      Base revision, the one without the patch. The default is the base commit of the pull
+      request. The checkout must contain it (fetch-depth 0).
+    required: false
+    default: ${{ github.event.pull_request.base.sha }}
+  profile:
+    description: Campaign profile of the variant search (quick, standard or thorough).
+    required: false
+    default: standard
+  symbolic:
+    description: Also run the symbolic oracle (true or false); builds a second image.
+    required: false
+    default: "false"
+  fail-on:
+    description: >-
+      Which results fail the job: rejected (REJECTED and integrity violations), inconclusive
+      (also INCONCLUSIVE) or never. Infrastructure problems always fail.
+    required: false
+    default: inconclusive
+  comment:
+    description: >-
+      Post the summary as one pull request comment (true or false). Only for pull requests from
+      the same repository; the job needs pull-requests write permission.
+    required: false
+    default: "false"
+  upload-sarif:
+    description: >-
+      Also scan the project with the static analyzers and upload SARIF to code scanning (true or
+      false). Skipped with a message for forks and for private repositories without code
+      scanning; the job needs security-events write permission.
+    required: false
+    default: "false"
+
+outputs:
+  verdict:
+    description: >-
+      VERIFIED_WITHIN_BOUNDS, REJECTED, INCONCLUSIVE, ERROR or NO_CHANGES_IN_SCOPE.
+    value: ${{ steps.verify.outputs.verdict }}
+  exit-code:
+    description: Exit code of `assay ci verify` (0 to 5, see docs/cli.md).
+    value: ${{ steps.verify.outputs.exit-code }}
+  bundle-path:
+    description: Directory with the evidence bundles, the summary and result.json.
+    value: ${{ steps.verify.outputs.bundle-path }}
+
+runs:
+  using: composite
+  steps:
+    - name: Check the inputs
+      shell: bash
+      env:
+        POC_DIR: ${{ inputs.poc-dir }}
+        BASE_REF: ${{ inputs.base-ref }}
+        PROFILE: ${{ inputs.profile }}
+        FAIL_ON: ${{ inputs.fail-on }}
+        SYMBOLIC: ${{ inputs.symbolic }}
+        COMMENT: ${{ inputs.comment }}
+        UPLOAD_SARIF: ${{ inputs.upload-sarif }}
+      run: |
+        set -euo pipefail
+        fail() { echo "::error::$1"; exit 2; }
+        [ -n "$POC_DIR" ] || fail "input poc-dir is required"
+        [ -n "$BASE_REF" ] || fail "input base-ref is empty: set it, or run on a pull_request event"
+        case "$PROFILE" in quick | standard | thorough) ;; *) fail "profile must be quick, standard or thorough" ;; esac
+        case "$FAIL_ON" in rejected | inconclusive | never) ;; *) fail "fail-on must be rejected, inconclusive or never" ;; esac
+        for flag in "$SYMBOLIC" "$COMMENT" "$UPLOAD_SARIF"; do
+          case "$flag" in true | false) ;; *) fail "symbolic, comment and upload-sarif must be true or false" ;; esac
+        done
+
+    # uv comes from a pinned Action; its cache is off because the cache key would come from files
+    # of the pull request.
+    - name: Set up uv
+      uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+      with:
+        enable-cache: false
+
+    # Assay is installed from the code of this Action, never from the project of the pull request.
+    - name: Install Assay
+      id: install
+      shell: bash
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+        UV_PROJECT_ENVIRONMENT: ${{ runner.temp }}/assay-venv
+      run: |
+        set -euo pipefail
+        uv --no-config sync --project "$ACTION_PATH" --locked --no-dev --no-editable --no-progress
+        echo "assay=$UV_PROJECT_ENVIRONMENT/bin/assay" >> "$GITHUB_OUTPUT"
+        echo "python=$UV_PROJECT_ENVIRONMENT/bin/python" >> "$GITHUB_OUTPUT"
+
+    - name: Read the pinned image inputs
+      id: lock
+      shell: bash
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+      run: |
+        set -euo pipefail
+        {
+          echo "args<<ASSAY_BUILD_ARGS_END"
+          grep -E '^[A-Z0-9_]+=' "$ACTION_PATH/docker/runner/versions.lock"
+          echo "ASSAY_BUILD_ARGS_END"
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+
+    # github.action_path is the directory of this Action's own code, not pull-request input, so the
+    # expansions below are safe; zizmor's template-injection note on them is a false positive.
+    - name: Build the sandbox image
+      uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+      with:
+        context: ${{ github.action_path }}/docker/runner
+        file: ${{ github.action_path }}/docker/runner/Dockerfile
+        target: runner
+        tags: assay-runner:dev
+        build-args: ${{ steps.lock.outputs.args }}
+        load: true
+        push: false
+        cache-from: type=gha,scope=assay-runner
+        cache-to: type=gha,scope=assay-runner,mode=max
+
+    - name: Build the symbolic sandbox image
+      if: ${{ inputs.symbolic == 'true' }}
+      uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+      with:
+        context: ${{ github.action_path }}/docker/runner
+        file: ${{ github.action_path }}/docker/runner/Dockerfile
+        target: runner-symbolic
+        platforms: linux/amd64
+        tags: assay-runner-symbolic:dev
+        build-args: ${{ steps.lock.outputs.args }}
+        load: true
+        push: false
+        cache-from: type=gha,scope=assay-runner-symbolic
+        cache-to: type=gha,scope=assay-runner-symbolic,mode=max
+
+    # No token and no secret reach this step. The result is kept in outputs, so that the summary,
+    # the artifact and the comment are produced before the job fails.
+    - name: Verify the patch
+      id: verify
+      shell: bash
+      env:
+        ASSAY: ${{ steps.install.outputs.assay }}
+        PYTHON: ${{ steps.install.outputs.python }}
+        PROJECT_DIR: ${{ inputs.project-dir }}
+        POC_DIR: ${{ inputs.poc-dir }}
+        SCOPE: ${{ inputs.scope }}
+        BASE_REF: ${{ inputs.base-ref }}
+        PROFILE: ${{ inputs.profile }}
+        FAIL_ON: ${{ inputs.fail-on }}
+        SYMBOLIC: ${{ inputs.symbolic }}
+        OUT_DIR: ${{ runner.temp }}/assay-out
+      run: |
+        set -uo pipefail
+        flags=()
+        if [ "$SYMBOLIC" = "true" ]; then flags+=(--symbolic); fi
+        "$ASSAY" ci verify --project "$PROJECT_DIR" --poc-dir "$POC_DIR" \
+          --base "$BASE_REF" --head HEAD --scope "$SCOPE" --profile "$PROFILE" \
+          --fail-on "$FAIL_ON" --out "$OUT_DIR" --summary-file "$GITHUB_STEP_SUMMARY" \
+          ${flags[@]+"${flags[@]}"}
+        code=$?
+        verdict=ERROR
+        if [ -f "$OUT_DIR/result.json" ]; then
+          verdict=$("$PYTHON" -I -c 'import json, sys; print(json.load(open(sys.argv[1]))["verdict"])' "$OUT_DIR/result.json") || verdict=ERROR
+        fi
+        {
+          echo "verdict=$verdict"
+          echo "exit-code=$code"
+          echo "bundle-path=$OUT_DIR"
+        } >> "$GITHUB_OUTPUT"
+        exit 0
+
+    # Only for a pull request from this repository: the token of a fork cannot write, and a
+    # comment must never be a way for a fork to post text through this repository's token.
+    - name: Comment on the pull request
+      if: >-
+        ${{ !cancelled() && inputs.comment == 'true'
+        && github.event_name == 'pull_request'
+        && github.event.pull_request.head.repo.full_name == github.repository
+        && steps.verify.outputs.bundle-path != '' }}
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        REPO: ${{ github.repository }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        OUT_DIR: ${{ steps.verify.outputs.bundle-path }}
+        RUNNER_TEMP_DIR: ${{ runner.temp }}
+      run: |
+        set -euo pipefail
+        marker='<!-- assay-ci-verify -->'
+        body="$RUNNER_TEMP_DIR/assay-comment.md"
+        if [ ! -f "$OUT_DIR/summary.md" ]; then
+          echo "::warning::no summary to post"
+          exit 0
+        fi
+        { printf '%s\n\n' "$marker"; cat "$OUT_DIR/summary.md"; } > "$body"
+        post() {
+          ids=$(gh api --paginate "repos/$REPO/issues/$PR_NUMBER/comments?per_page=100" \
+            --jq '.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- assay-ci-verify -->"))) | .id')
+          id=${ids%%$'\n'*}
+          if [ -n "$id" ]; then
+            gh api --method PATCH "repos/$REPO/issues/comments/$id" -F "body=@$body" > /dev/null
+          else
+            gh api --method POST "repos/$REPO/issues/$PR_NUMBER/comments" -F "body=@$body" > /dev/null
+          fi
+        }
+        if ! post; then
+          echo "::warning::could not post the comment; the job needs the permission pull-requests: write"
+        fi
+
+    - name: Decide whether to upload SARIF
+      id: sarif
+      if: ${{ !cancelled() && inputs.upload-sarif == 'true' }}
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+        REPO: ${{ github.repository }}
+        PRIVATE: ${{ github.event.repository.private }}
+        FORK: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
+      run: |
+        set -uo pipefail
+        if [ "$FORK" = "true" ]; then
+          echo "::notice::SARIF upload skipped: a pull request from a fork has no permission to write code scanning results"
+          echo "run=false" >> "$GITHUB_OUTPUT"
+        elif [ "$PRIVATE" = "true" ] && ! gh api "repos/$REPO/code-scanning/alerts?per_page=1" > /dev/null 2>&1; then
+          echo "::notice::SARIF upload skipped: this is a private repository and code scanning is not available (GitHub Advanced Security) or the token cannot read it"
+          echo "run=false" >> "$GITHUB_OUTPUT"
+        else
+          echo "run=true" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Scan the project for SARIF
+      id: scan
+      if: ${{ !cancelled() && steps.sarif.outputs.run == 'true' }}
+      shell: bash
+      env:
+        ASSAY: ${{ steps.install.outputs.assay }}
+        PROJECT_DIR: ${{ inputs.project-dir }}
+        OUT_DIR: ${{ steps.verify.outputs.bundle-path }}
+        LEDGER: ${{ runner.temp }}/assay-scan-ledger.db
+      run: |
+        set -uo pipefail
+        if "$ASSAY" scan "$PROJECT_DIR" --format sarif --out "$OUT_DIR/scan.sarif" --ledger "$LEDGER"; then
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "::warning::the static analysis failed, so no SARIF is uploaded"
+          echo "ready=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Upload SARIF
+      if: ${{ !cancelled() && steps.scan.outputs.ready == 'true' }}
+      uses: github/codeql-action/upload-sarif@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
+      with:
+        sarif_file: ${{ steps.verify.outputs.bundle-path }}/scan.sarif
+        category: assay
+
+    - name: Upload the evidence bundles
+      if: ${{ !cancelled() && steps.verify.outputs.bundle-path != '' }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: assay-evidence-${{ github.job }}
+        path: ${{ steps.verify.outputs.bundle-path }}
+        if-no-files-found: warn
+        retention-days: 14
+
+    - name: Apply the result
+      if: ${{ !cancelled() && steps.verify.outputs.exit-code != '' }}
+      shell: bash
+      env:
+        EXIT_CODE: ${{ steps.verify.outputs.exit-code }}
+        VERDICT: ${{ steps.verify.outputs.verdict }}
+      run: |
+        set -euo pipefail
+        if [ "$EXIT_CODE" != "0" ]; then
+          echo "::error::Assay verdict $VERDICT, exit code $EXIT_CODE"
+          exit "$EXIT_CODE"
+        fi

@@ -1,0 +1,42 @@
+--- a/src/VoucherRedeemer.sol
++++ b/src/VoucherRedeemer.sol
+@@ -10,9 +10,11 @@
+     address public immutable issuer;
+     /// @notice Sum of all vouchers paid out, in wei.
+     uint256 public totalRedeemed;
++    /// @notice Number of vouchers redeemed per recipient; part of the next voucher's digest.
++    mapping(address account => uint256 nonce) public nonces;
+ 
+     event Funded(address indexed from, uint256 amount);
+-    event Redeemed(address indexed to, uint256 amount);
++    event Redeemed(address indexed to, uint256 amount, uint256 nonce);
+ 
+     error ZeroAmount();
+     error ZeroAddress();
+@@ -31,9 +33,11 @@
+         emit Funded(msg.sender, msg.value);
+     }
+ 
+-    /// @notice The digest the issuer signs for a voucher of `amount` wei payable to `to`.
++    /// @notice The digest the issuer signs for the next voucher of `amount` wei payable to `to`.
++    ///         It binds the voucher to this chain, this contract and the recipient's current
++    ///         nonce, so that it pays once.
+     function voucherDigest(address to, uint256 amount) public view returns (bytes32) {
+-        return keccak256(abi.encode(issuer, to, amount));
++        return keccak256(abi.encode(block.chainid, address(this), issuer, to, amount, nonces[to]));
+     }
+ 
+     /// @notice Pays the voucher signed by the issuer (`v`, `r`, `s`) for `amount` wei to `to`.
+@@ -45,9 +49,11 @@
+         uint256 available = address(this).balance;
+         if (amount > available) revert InsufficientFunds(amount, available);
+ 
++        uint256 nonce = nonces[to];
++        nonces[to] = nonce + 1;
+         totalRedeemed += amount;
+         (bool sent,) = payable(to).call{value: amount}("");
+         if (!sent) revert TransferFailed();
+-        emit Redeemed(to, amount);
++        emit Redeemed(to, amount, nonce);
+     }
+ }

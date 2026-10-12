@@ -1,0 +1,46 @@
+--- a/src/ShareVault.sol
++++ b/src/ShareVault.sol
+@@ -9,6 +9,11 @@
+ ///         proportion to the assets the vault holds, and a redemption pays out the same
+ ///         proportion, so that yield paid into the vault raises the value of every share.
+ contract ShareVault {
++    /// @dev One virtual share and one virtual asset take part in every conversion, so that a
++    ///      donation to an almost empty vault goes mostly to a share that nobody can redeem.
++    uint256 private constant VIRTUAL_SHARES = 1;
++    uint256 private constant VIRTUAL_ASSETS = 1;
++
+     /// @notice The token the vault holds.
+     MockToken public immutable asset;
+     /// @notice Sum of all shares.
+@@ -21,6 +26,7 @@
+ 
+     error ZeroAmount();
+     error InsufficientShares(uint256 requested, uint256 available);
++    error ZeroShares(uint256 assets);
+ 
+     constructor(MockToken asset_) {
+         asset = asset_;
+@@ -33,20 +39,19 @@
+ 
+     /// @notice Shares that a deposit of `assets` mints, rounded down.
+     function convertToShares(uint256 assets) public view returns (uint256) {
+-        uint256 supply = totalSupply;
+-        return supply == 0 ? assets : assets * supply / totalAssets();
++        return assets * (totalSupply + VIRTUAL_SHARES) / (totalAssets() + VIRTUAL_ASSETS);
+     }
+ 
+     /// @notice Assets that a redemption of `shares` pays out, rounded down.
+     function convertToAssets(uint256 shares) public view returns (uint256) {
+-        uint256 supply = totalSupply;
+-        return supply == 0 ? shares : shares * totalAssets() / supply;
++        return shares * (totalAssets() + VIRTUAL_ASSETS) / (totalSupply + VIRTUAL_SHARES);
+     }
+ 
+     /// @notice Takes `assets` from the caller and mints the matching shares to `receiver`.
+     function deposit(uint256 assets, address receiver) external returns (uint256 shares) {
+         if (assets == 0) revert ZeroAmount();
+         shares = convertToShares(assets);
++        if (shares == 0) revert ZeroShares(assets);
+         asset.transferFrom(msg.sender, address(this), assets);
+         totalSupply += shares;
+         balanceOf[receiver] += shares;

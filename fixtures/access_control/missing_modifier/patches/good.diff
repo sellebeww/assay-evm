@@ -1,0 +1,18 @@
+--- a/src/FeeCollector.sol
++++ b/src/FeeCollector.sol
+@@ -48,13 +48,13 @@
+     }
+ 
+     /// @notice Pays `amount` wei of the collected fees to `to`. Owner only.
+-    function payOut(address payable to, uint256 amount) external {
++    function payOut(address payable to, uint256 amount) external onlyOwner {
+         if (amount == 0) revert ZeroAmount();
+         _send(to, amount);
+     }
+ 
+     /// @notice Pays everything the contract holds to `to`. Owner only.
+-    function payOutAll(address payable to) external {
++    function payOutAll(address payable to) external onlyOwner {
+         uint256 amount = address(this).balance;
+         if (amount == 0) revert ZeroAmount();
+         _send(to, amount);

@@ -1,0 +1,14 @@
+--- a/src/Lender.sol
++++ b/src/Lender.sol
+@@ -11,8 +11,9 @@
+ contract Lender {
+     uint256 private constant BPS = 10_000;
+     uint256 private constant PRICE_SCALE = 1e18;
+-    /// @notice Share of the collateral value that may be borrowed, in basis points.
+-    uint256 public constant LOAN_TO_VALUE_BPS = 7_500;
++    /// @notice Share of the collateral value that may be borrowed, in basis points. Zero:
++    ///         the pool price can be moved within one transaction, so nothing is lent against it.
++    uint256 public constant LOAN_TO_VALUE_BPS = 0;
+ 
+     /// @notice The market whose price values the collateral.
+     MiniPool public immutable pool;

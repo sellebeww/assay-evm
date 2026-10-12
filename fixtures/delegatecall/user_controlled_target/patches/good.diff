@@ -1,0 +1,18 @@
+--- a/src/ModuleVault.sol
++++ b/src/ModuleVault.sol
+@@ -25,6 +25,7 @@
+     error ModuleFailed(address module);
+     error InsufficientFunds(uint256 requested, uint256 available);
+     error TransferFailed();
++    error ModuleNotApproved(address module);
+ 
+     modifier onlyOwner() {
+         if (msg.sender != owner) revert NotOwner(msg.sender);
+@@ -67,6 +68,7 @@
+     }
+ 
+     function _run(address module, bytes calldata data) private returns (bytes memory result) {
++        if (!approvedModule[module]) revert ModuleNotApproved(module);
+         bool ok;
+         (ok, result) = module.delegatecall(data);
+         if (!ok) revert ModuleFailed(module);

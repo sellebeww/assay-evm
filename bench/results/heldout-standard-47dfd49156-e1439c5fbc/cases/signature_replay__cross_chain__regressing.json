@@ -1,0 +1,51 @@
+{
+  "fixture": "signature_replay/cross_chain",
+  "label": "regressing",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "event_changed",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "event_changed"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "event_changed"
+      ]
+    }
+  ],
+  "base_tree_sha256": "49271763f9978b5b4c4816a5f37be869cc99a278005c71b42a372e06b81021a8",
+  "poc_tree_sha256": "4a3af9b9325af3f85af9af95764cd1b4e96797a9e6c0fb1dff88235fb0b5b3fe",
+  "patch_sha256": "1c3ce2bafd67006b68c62e7485b296567d9bfaf911d1b88f6ccf51acc74e089f",
+  "seconds": 23.4,
+  "error": null
+}

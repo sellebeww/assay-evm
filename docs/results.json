@@ -1,0 +1,1214 @@
+{
+  "corrections": [],
+  "findings": [],
+  "result_version": "v1",
+  "schema_version": 1,
+  "splits": {
+    "dev": {
+      "ablations": {
+        "V0": {
+          "bad_accepted": {
+            "count": 16,
+            "of": 24,
+            "wilson95": [
+              0.467063,
+              0.820278
+            ]
+          },
+          "destructive_accepted": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "good_rejected": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "not_computed": 0,
+          "overfit_accepted": {
+            "count": 8,
+            "of": 8,
+            "wilson95": [
+              0.675592,
+              1.0
+            ]
+          },
+          "regressing_accepted": {
+            "count": 8,
+            "of": 8,
+            "wilson95": [
+              0.675592,
+              1.0
+            ]
+          }
+        },
+        "V1": {
+          "bad_accepted": {
+            "count": 16,
+            "of": 24,
+            "wilson95": [
+              0.467063,
+              0.820278
+            ]
+          },
+          "destructive_accepted": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "good_rejected": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "not_computed": 0,
+          "overfit_accepted": {
+            "count": 8,
+            "of": 8,
+            "wilson95": [
+              0.675592,
+              1.0
+            ]
+          },
+          "regressing_accepted": {
+            "count": 8,
+            "of": 8,
+            "wilson95": [
+              0.675592,
+              1.0
+            ]
+          }
+        },
+        "V2": {
+          "bad_accepted": {
+            "count": 8,
+            "of": 24,
+            "wilson95": [
+              0.179722,
+              0.532937
+            ]
+          },
+          "destructive_accepted": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "good_rejected": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "not_computed": 0,
+          "overfit_accepted": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "regressing_accepted": {
+            "count": 8,
+            "of": 8,
+            "wilson95": [
+              0.675592,
+              1.0
+            ]
+          }
+        },
+        "V3": {
+          "bad_accepted": {
+            "count": 0,
+            "of": 24,
+            "wilson95": [
+              0.0,
+              0.137976
+            ]
+          },
+          "destructive_accepted": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "good_rejected": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "not_computed": 0,
+          "overfit_accepted": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "regressing_accepted": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          }
+        }
+      },
+      "cases": [
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "reentrancy/single_function/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "reentrancy/single_function/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (vacuous_patch, benign_test_failed, test_suite_failed)",
+          "case": "reentrancy/single_function/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (layout_changed)",
+          "case": "reentrancy/single_function/regressing",
+          "expected": "REJECTED (layout_changed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "access_control/missing_modifier/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "access_control/missing_modifier/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (benign_test_failed, test_suite_failed)",
+          "case": "access_control/missing_modifier/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (layout_changed)",
+          "case": "access_control/missing_modifier/regressing",
+          "expected": "REJECTED (layout_changed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "unchecked_call/ignored_return/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "unchecked_call/ignored_return/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (benign_test_failed, test_suite_failed)",
+          "case": "unchecked_call/ignored_return/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (abi_changed)",
+          "case": "unchecked_call/ignored_return/regressing",
+          "expected": "REJECTED (abi_changed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "signature_replay/missing_nonce/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "signature_replay/missing_nonce/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (benign_test_failed, test_suite_failed)",
+          "case": "signature_replay/missing_nonce/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (event_changed)",
+          "case": "signature_replay/missing_nonce/regressing",
+          "expected": "REJECTED (event_changed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "delegatecall/user_controlled_target/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "delegatecall/user_controlled_target/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (benign_test_failed, test_suite_failed)",
+          "case": "delegatecall/user_controlled_target/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (layout_changed)",
+          "case": "delegatecall/user_controlled_target/regressing",
+          "expected": "REJECTED (layout_changed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "oracle_manipulation/spot_price/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "oracle_manipulation/spot_price/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (benign_test_failed, test_suite_failed)",
+          "case": "oracle_manipulation/spot_price/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (event_changed)",
+          "case": "oracle_manipulation/spot_price/regressing",
+          "expected": "REJECTED (event_changed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "dos/payout_loop/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "dos/payout_loop/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (benign_test_failed, test_suite_failed)",
+          "case": "dos/payout_loop/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (abi_changed)",
+          "case": "dos/payout_loop/regressing",
+          "expected": "REJECTED (abi_changed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "rounding/share_inflation/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "rounding/share_inflation/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (benign_test_failed, test_suite_failed)",
+          "case": "rounding/share_inflation/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (layout_changed)",
+          "case": "rounding/share_inflation/regressing",
+          "expected": "REJECTED (layout_changed)",
+          "match": true
+        }
+      ],
+      "held_out": null,
+      "match": {
+        "count": 32,
+        "of": 32,
+        "wilson95": [
+          0.892821,
+          1.0
+        ]
+      },
+      "run": {
+        "assay_version": "0.1.0.dev0",
+        "cases": 32,
+        "exploit_replays": 3,
+        "fixtures_tree_sha256": "45825f07753841cf3c409fe056995bd2da1bc2bb7677079b99f3ccdb763771d9",
+        "fuzz_runs": 256,
+        "fuzz_seed": "0x1",
+        "git_commit": null,
+        "image_digest": "sha256:a2209e37ccdf894aa1d7c6b76b9d06a7806a035517a03f0cb4023a61d4ec8bf7",
+        "invariant_depth": 25,
+        "invariant_runs": 64,
+        "machine": "arm64",
+        "oracle_tree_sha256": "47dfd491563ccff2ea2e8d13c1bf721b6aecc715fff76d035f0661aacb17f4e0",
+        "profile": "standard",
+        "run_id": "dev-standard-47dfd49156-45825f0775",
+        "schema_version": 1,
+        "split": "dev",
+        "split_file_sha256": "727616ac39e45cdbf87020f409cf4b1d288088b7d1956a1bd6c4daa8acc3f376",
+        "symbolic": false,
+        "tool_versions": {
+          "aderyn": "v0.6.8",
+          "forge-std": "v1.17.0",
+          "foundry": "v1.8.4",
+          "python": "3.12.15",
+          "slither": "0.11.6",
+          "solc": "0.8.36"
+        },
+        "total_seconds": 3823.3,
+        "variant_seeds": 3,
+        "versions_lock_sha256": "33ce0a91c77fc73f95bb8b9c5ee92e2dc43caf7b2837a76b44b2756bd6b71d60"
+      },
+      "status": "development split; not held-out by definition"
+    },
+    "heldout": {
+      "ablations": {
+        "V0": {
+          "bad_accepted": {
+            "count": 16,
+            "of": 24,
+            "wilson95": [
+              0.467063,
+              0.820278
+            ]
+          },
+          "destructive_accepted": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "good_rejected": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "not_computed": 0,
+          "overfit_accepted": {
+            "count": 8,
+            "of": 8,
+            "wilson95": [
+              0.675592,
+              1.0
+            ]
+          },
+          "regressing_accepted": {
+            "count": 8,
+            "of": 8,
+            "wilson95": [
+              0.675592,
+              1.0
+            ]
+          }
+        },
+        "V1": {
+          "bad_accepted": {
+            "count": 16,
+            "of": 24,
+            "wilson95": [
+              0.467063,
+              0.820278
+            ]
+          },
+          "destructive_accepted": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "good_rejected": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "not_computed": 0,
+          "overfit_accepted": {
+            "count": 8,
+            "of": 8,
+            "wilson95": [
+              0.675592,
+              1.0
+            ]
+          },
+          "regressing_accepted": {
+            "count": 8,
+            "of": 8,
+            "wilson95": [
+              0.675592,
+              1.0
+            ]
+          }
+        },
+        "V2": {
+          "bad_accepted": {
+            "count": 8,
+            "of": 24,
+            "wilson95": [
+              0.179722,
+              0.532937
+            ]
+          },
+          "destructive_accepted": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "good_rejected": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "not_computed": 0,
+          "overfit_accepted": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "regressing_accepted": {
+            "count": 8,
+            "of": 8,
+            "wilson95": [
+              0.675592,
+              1.0
+            ]
+          }
+        },
+        "V3": {
+          "bad_accepted": {
+            "count": 0,
+            "of": 24,
+            "wilson95": [
+              0.0,
+              0.137976
+            ]
+          },
+          "destructive_accepted": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "good_rejected": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "not_computed": 0,
+          "overfit_accepted": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          },
+          "regressing_accepted": {
+            "count": 0,
+            "of": 8,
+            "wilson95": [
+              0.0,
+              0.324408
+            ]
+          }
+        }
+      },
+      "cases": [
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "reentrancy/cross_function/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "reentrancy/cross_function/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (vacuous_patch, benign_test_failed, test_suite_failed)",
+          "case": "reentrancy/cross_function/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (layout_changed)",
+          "case": "reentrancy/cross_function/regressing",
+          "expected": "REJECTED (layout_changed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "access_control/reinitializable/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "access_control/reinitializable/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (vacuous_patch, benign_test_failed, test_suite_failed)",
+          "case": "access_control/reinitializable/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (layout_changed)",
+          "case": "access_control/reinitializable/regressing",
+          "expected": "REJECTED (layout_changed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "unchecked_call/token_return/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "unchecked_call/token_return/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (vacuous_patch, benign_test_failed, test_suite_failed)",
+          "case": "unchecked_call/token_return/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (abi_changed)",
+          "case": "unchecked_call/token_return/regressing",
+          "expected": "REJECTED (abi_changed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "signature_replay/cross_chain/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "signature_replay/cross_chain/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (vacuous_patch, benign_test_failed, test_suite_failed)",
+          "case": "signature_replay/cross_chain/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (event_changed)",
+          "case": "signature_replay/cross_chain/regressing",
+          "expected": "REJECTED (event_changed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "delegatecall/strategy_registry/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "delegatecall/strategy_registry/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (vacuous_patch, benign_test_failed, test_suite_failed)",
+          "case": "delegatecall/strategy_registry/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (layout_changed)",
+          "case": "delegatecall/strategy_registry/regressing",
+          "expected": "REJECTED (layout_changed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "oracle_manipulation/donation_price/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "oracle_manipulation/donation_price/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (vacuous_patch, benign_test_failed, test_suite_failed)",
+          "case": "oracle_manipulation/donation_price/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (abi_changed)",
+          "case": "oracle_manipulation/donation_price/regressing",
+          "expected": "REJECTED (abi_changed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "dos/forced_ether/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "dos/forced_ether/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (vacuous_patch, benign_test_failed, test_suite_failed)",
+          "case": "dos/forced_ether/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (layout_changed)",
+          "case": "dos/forced_ether/regressing",
+          "expected": "REJECTED (layout_changed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": true
+          },
+          "actual": "VERIFIED_WITHIN_BOUNDS",
+          "case": "rounding/fee_floor/good",
+          "expected": "VERIFIED_WITHIN_BOUNDS",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (variant_found)",
+          "case": "rounding/fee_floor/overfit",
+          "expected": "REJECTED (variant_found)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": false,
+            "V1": false,
+            "V2": false,
+            "V3": false
+          },
+          "actual": "REJECTED (vacuous_patch, benign_test_failed, test_suite_failed)",
+          "case": "rounding/fee_floor/destructive",
+          "expected": "REJECTED (benign_test_failed)",
+          "match": true
+        },
+        {
+          "accepted_by": {
+            "V0": true,
+            "V1": true,
+            "V2": true,
+            "V3": false
+          },
+          "actual": "REJECTED (abi_changed)",
+          "case": "rounding/fee_floor/regressing",
+          "expected": "REJECTED (abi_changed)",
+          "match": true
+        }
+      ],
+      "held_out": true,
+      "match": {
+        "count": 32,
+        "of": 32,
+        "wilson95": [
+          0.892821,
+          1.0
+        ]
+      },
+      "run": {
+        "assay_version": "0.1.0.dev0",
+        "cases": 32,
+        "exploit_replays": 3,
+        "fixtures_tree_sha256": "e1439c5fbc01af45738acb40543fbe787d71b94906d24e1034b4ee7332466e9a",
+        "fuzz_runs": 256,
+        "fuzz_seed": "0x1",
+        "git_commit": null,
+        "image_digest": "sha256:a2209e37ccdf894aa1d7c6b76b9d06a7806a035517a03f0cb4023a61d4ec8bf7",
+        "invariant_depth": 25,
+        "invariant_runs": 64,
+        "machine": "arm64",
+        "oracle_tree_sha256": "47dfd491563ccff2ea2e8d13c1bf721b6aecc715fff76d035f0661aacb17f4e0",
+        "profile": "standard",
+        "run_id": "heldout-standard-47dfd49156-e1439c5fbc",
+        "schema_version": 1,
+        "split": "heldout",
+        "split_file_sha256": "cbb82f53c6fa313bce75886ec50db13aff8d87d2abc0d0ad046461507d1b8c74",
+        "symbolic": false,
+        "tool_versions": {
+          "aderyn": "v0.6.8",
+          "forge-std": "v1.17.0",
+          "foundry": "v1.8.4",
+          "python": "3.12.15",
+          "slither": "0.11.6",
+          "solc": "0.8.36"
+        },
+        "total_seconds": 1026.8,
+        "variant_seeds": 3,
+        "versions_lock_sha256": "33ce0a91c77fc73f95bb8b9c5ee92e2dc43caf7b2837a76b44b2756bd6b71d60"
+      },
+      "status": "HELD-OUT: the oracle hash of the run equals bench/FROZEN_HASH"
+    }
+  }
+}

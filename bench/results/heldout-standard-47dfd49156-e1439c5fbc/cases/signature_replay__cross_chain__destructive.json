@@ -1,0 +1,57 @@
+{
+  "fixture": "signature_replay/cross_chain",
+  "label": "destructive",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "benign_test_failed",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "vacuous_patch",
+    "benign_test_failed",
+    "test_suite_failed"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "vacuous_patch"
+      ]
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "benign_test_failed"
+      ]
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "test_suite_failed"
+      ]
+    }
+  ],
+  "base_tree_sha256": "49271763f9978b5b4c4816a5f37be869cc99a278005c71b42a372e06b81021a8",
+  "poc_tree_sha256": "4a3af9b9325af3f85af9af95764cd1b4e96797a9e6c0fb1dff88235fb0b5b3fe",
+  "patch_sha256": "78f76c0caa7232075dd6f7ca74fa61716db0da124d32b4fb2696712561e566bb",
+  "seconds": 31.6,
+  "error": null
+}

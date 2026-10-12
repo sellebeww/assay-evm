@@ -1,0 +1,31 @@
+--- a/src/StrategyHub.sol
++++ b/src/StrategyHub.sol
+@@ -19,10 +19,10 @@
+ contract StrategyHub {
+     /// @notice The account that may approve strategies and sweep the hub.
+     address public owner;
++    /// @notice Number of harvests, over all accounts.
++    uint256 public harvests;
+     /// @notice The strategy each account has registered.
+     mapping(address account => address strategy) public strategyOf;
+-    /// @notice Number of harvests, over all accounts.
+-    uint256 public harvests;
+     /// @notice Rewards that strategies have credited, in units of the hub.
+     uint256 public rewardsAccrued;
+     /// @notice Strategies that the owner has approved.
+@@ -35,6 +35,7 @@
+ 
+     error NotOwner(address caller);
+     error NoStrategy(address account);
++    error NotApproved(address strategy);
+     error StrategyFailed(address strategy);
+     error ZeroAmount();
+     error InsufficientFunds(uint256 requested, uint256 available);
+@@ -59,6 +60,7 @@
+ 
+     /// @notice Registers `strategy` for the sender.
+     function setStrategy(address strategy) external {
++        if (!approved[strategy]) revert NotApproved(strategy);
+         strategyOf[msg.sender] = strategy;
+         emit StrategySet(msg.sender, strategy);
+     }

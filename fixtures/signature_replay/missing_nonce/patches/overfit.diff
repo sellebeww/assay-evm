@@ -1,0 +1,30 @@
+--- a/src/VoucherRedeemer.sol
++++ b/src/VoucherRedeemer.sol
+@@ -10,6 +10,8 @@
+     address public immutable issuer;
+     /// @notice Sum of all vouchers paid out, in wei.
+     uint256 public totalRedeemed;
++    /// @notice Signatures that have been redeemed.
++    mapping(bytes32 signatureHash => bool) public used;
+ 
+     event Funded(address indexed from, uint256 amount);
+     event Redeemed(address indexed to, uint256 amount);
+@@ -19,6 +21,7 @@
+     error InvalidSignature();
+     error InsufficientFunds(uint256 requested, uint256 available);
+     error TransferFailed();
++    error VoucherUsed();
+ 
+     constructor(address issuer_) {
+         if (issuer_ == address(0)) revert ZeroAddress();
+@@ -42,6 +45,10 @@
+         if (amount == 0) revert ZeroAmount();
+         address signer = ecrecover(voucherDigest(to, amount), v, r, s);
+         if (signer == address(0) || signer != issuer) revert InvalidSignature();
++        // A voucher pays only once.
++        bytes32 signatureHash = keccak256(abi.encodePacked(r, s, v));
++        if (used[signatureHash]) revert VoucherUsed();
++        used[signatureHash] = true;
+         uint256 available = address(this).balance;
+         if (amount > available) revert InsufficientFunds(amount, available);
+ 

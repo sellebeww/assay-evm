@@ -1,0 +1,11 @@
+--- a/src/FeeCollector.sol
++++ b/src/FeeCollector.sol
+@@ -54,7 +54,7 @@
+     }
+ 
+     /// @notice Pays everything the contract holds to `to`. Owner only.
+-    function payOutAll(address payable to) external {
++    function payOutAll(address payable to) external onlyOwner {
+         uint256 amount = address(this).balance;
+         if (amount == 0) revert ZeroAmount();
+         _send(to, amount);

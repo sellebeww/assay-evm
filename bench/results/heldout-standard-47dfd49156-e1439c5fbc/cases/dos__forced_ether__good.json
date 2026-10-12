@@ -1,0 +1,47 @@
+{
+  "fixture": "dos/forced_ether",
+  "label": "good",
+  "expected_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "expected_reason": null,
+  "exit_code": 0,
+  "final_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "reasons": [],
+  "evidence_level": "E3",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "a2572b485cf641482958eeb4bb0a1a1d9a38add4cd5f46fe7d0dc4f03000b4f6",
+  "poc_tree_sha256": "5e8ee7c69e7a8dd16b93ab99a26cc9137fc8109d46b81c538af4cd124b0e46ff",
+  "patch_sha256": "d815135f4dea29355efd05c498d30a77a8d0f8b235d9632f430eafbe966be1b9",
+  "seconds": 34.7,
+  "error": null
+}

@@ -1,0 +1,29 @@
+--- a/src/Payroll.sol
++++ b/src/Payroll.sol
+@@ -22,6 +22,7 @@
+     error ZeroAddress();
+     error Underfunded(uint256 needed, uint256 available);
+     error NothingOwed(address payee);
++    error NotPayee(address caller);
+ 
+     constructor() {
+         employer = msg.sender;
+@@ -45,8 +46,9 @@
+         emit WageBooked(payee, amount);
+     }
+ 
+-    /// @notice Pays everything booked for `payee`. Anyone may call it.
++    /// @notice Pays everything booked for `payee`. Only the payee may call it.
+     function pay(address payee) external {
++        if (msg.sender != payee) revert NotPayee(msg.sender);
+         uint256 amount = owed[payee];
+         if (amount == 0) revert NothingOwed(payee);
+         owed[payee] = 0;
+@@ -60,6 +62,7 @@
+     function payMany(address[] calldata payees) external {
+         for (uint256 i = 0; i < payees.length; i++) {
+             address payee = payees[i];
++            if (payee != msg.sender) revert NotPayee(msg.sender);
+             uint256 amount = owed[payee];
+             if (amount == 0) continue;
+             owed[payee] = 0;

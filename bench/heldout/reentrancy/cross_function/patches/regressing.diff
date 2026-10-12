@@ -1,0 +1,29 @@
+--- a/src/CreditVault.sol
++++ b/src/CreditVault.sol
+@@ -7,9 +7,9 @@
+ ///         as a whole, and an account can cash out all of its credit.
+ contract CreditVault {
+     /// @notice Ether credited to each account, in wei.
++    uint256 public totalCredit;
++    /// @notice Ether credited to each account, in wei.
+     mapping(address account => uint256 amount) public creditOf;
+-    /// @notice Sum of all credit, in wei.
+-    uint256 public totalCredit;
+ 
+     event Deposited(address indexed account, uint256 amount);
+     event CreditMoved(address indexed from, address indexed to, uint256 amount);
+@@ -54,11 +54,12 @@
+         uint256 amount = creditOf[msg.sender];
+         if (amount == 0) revert ZeroAmount();
+ 
++        creditOf[msg.sender] = 0;
++        totalCredit -= amount;
++
+         (bool sent,) = msg.sender.call{value: amount}("");
+         if (!sent) revert TransferFailed();
+ 
+-        creditOf[msg.sender] = 0;
+-        totalCredit -= amount;
+         emit CashedOut(msg.sender, amount);
+     }
+ }

@@ -1,0 +1,23 @@
+                                                                                                    
+ Usage: assay doctor [OPTIONS]                                                                      
+                                                                                                    
+ Check that this machine can run Assay.                                                             
+                                                                                                    
+ Checks that the docker command exists and the daemon answers, that the runner image (and the       
+ optional symbolic image) exists and declares the tool versions pinned in versions.lock, the        
+ platform of the image and whether it runs natively or under emulation, free disk space, and        
+ whether the model variables ASSAY_LLM_* are set. Variables show only as SET or NOT SET,            
+ never their values. Every problem comes with a one-line fix. Nothing is built or changed.          
+                                                                                                    
+                                                                                                    
+ Example:                                                                                           
+   assay doctor                                                                                     
+   assay doctor --json                                                                              
+                                                                                                    
+ Exit codes: 0 every check passed; 4 infrastructure problem (Docker, image, disk space).            
+                                                                                                    
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────╮
+│ --json          Print the report as JSON instead of text.                                        │
+│ --help          Show this message and exit.                                                      │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+

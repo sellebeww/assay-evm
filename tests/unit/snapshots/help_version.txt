@@ -1,0 +1,13 @@
+                                                                                                    
+ Usage: assay version [OPTIONS]                                                                     
+                                                                                                    
+ Print the Assay version (the same as `assay --version`).                                           
+                                                                                                    
+                                                                                                    
+ Example:                                                                                           
+   assay version                                                                                    
+                                                                                                    
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                                      │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+

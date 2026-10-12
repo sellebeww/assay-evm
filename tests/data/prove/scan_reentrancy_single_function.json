@@ -1,0 +1,129 @@
+{
+  "findings": [
+    {
+      "id": "3921349a93b4987f5aa8135d256621983c0e1116a25649a543bf2384ceb6a1c2",
+      "observations": [
+        {
+          "locations": [
+            {
+              "end_line": 29,
+              "path": "src/Vault.sol",
+              "start_line": 29
+            }
+          ],
+          "message": "ETH transferred without address checks\n\nConsider introducing checks for `msg.sender` to ensure the recipient of the money is as intended.",
+          "rule_id": "eth-send-unchecked-address",
+          "severity": "High"
+        }
+      ],
+      "vuln_class": "access_control"
+    },
+    {
+      "id": "09ca1105461f3296cd4ddd460e6eb43291d599c7525d3caf909bbdd7b5315f63",
+      "observations": [
+        {
+          "locations": [
+            {
+              "end_line": 40,
+              "path": "src/Vault.sol",
+              "start_line": 29
+            },
+            {
+              "end_line": 34,
+              "path": "src/Vault.sol",
+              "start_line": 34
+            }
+          ],
+          "message": "Low level call in Vault.withdraw(uint256) (src/Vault.sol#29-40):\n\t- (sent,None) = msg.sender.call{value: amount}() (src/Vault.sol#34)",
+          "rule_id": "low-level-calls",
+          "severity": "Informational (confidence High)"
+        }
+      ],
+      "vuln_class": "other"
+    },
+    {
+      "id": "9968f9503fcd4418696dd732064a758bc84759b4d4f7c2cfe88c5cde5c11057d",
+      "observations": [
+        {
+          "locations": [
+            {
+              "end_line": 40,
+              "path": "src/Vault.sol",
+              "start_line": 29
+            },
+            {
+              "end_line": 34,
+              "path": "src/Vault.sol",
+              "start_line": 34
+            },
+            {
+              "end_line": 37,
+              "path": "src/Vault.sol",
+              "start_line": 37
+            }
+          ],
+          "message": "Reentrancy in Vault.withdraw(uint256) (src/Vault.sol#29-40):\n\tExternal calls:\n\t- (sent,None) = msg.sender.call{value: amount}() (src/Vault.sol#34)\n\tState variables written after the call(s):\n\t- balanceOf[msg.sender] = available - amount (src/Vault.sol#37)\n\tVault.balanceOf (src/Vault.sol#9) can be used in cross function reentrancies:\n\t- Vault.balanceOf (src/Vault.sol#9)\n\t- Vault.deposit() (src/Vault.sol#21-26)\n\t- Vault.withdraw(uint256) (src/Vault.sol#29-40)",
+          "rule_id": "reentrancy-eth",
+          "severity": "High (confidence Medium)"
+        },
+        {
+          "locations": [
+            {
+              "end_line": 40,
+              "path": "src/Vault.sol",
+              "start_line": 29
+            },
+            {
+              "end_line": 34,
+              "path": "src/Vault.sol",
+              "start_line": 34
+            },
+            {
+              "end_line": 38,
+              "path": "src/Vault.sol",
+              "start_line": 38
+            }
+          ],
+          "message": "Reentrancy in Vault.withdraw(uint256) (src/Vault.sol#29-40):\n\tExternal calls:\n\t- (sent,None) = msg.sender.call{value: amount}() (src/Vault.sol#34)\n\tState variables written after the call(s):\n\t- totalDeposits -= amount (src/Vault.sol#38)",
+          "rule_id": "reentrancy-benign",
+          "severity": "Low (confidence Medium)"
+        },
+        {
+          "locations": [
+            {
+              "end_line": 40,
+              "path": "src/Vault.sol",
+              "start_line": 29
+            },
+            {
+              "end_line": 34,
+              "path": "src/Vault.sol",
+              "start_line": 34
+            },
+            {
+              "end_line": 39,
+              "path": "src/Vault.sol",
+              "start_line": 39
+            }
+          ],
+          "message": "Reentrancy in Vault.withdraw(uint256) (src/Vault.sol#29-40):\n\tExternal calls:\n\t- (sent,None) = msg.sender.call{value: amount}() (src/Vault.sol#34)\n\tEvent emitted after the call(s):\n\t- Withdrawn(msg.sender,amount) (src/Vault.sol#39)",
+          "rule_id": "reentrancy-events",
+          "severity": "Low (confidence Medium)"
+        },
+        {
+          "locations": [
+            {
+              "end_line": 34,
+              "path": "src/Vault.sol",
+              "start_line": 34
+            }
+          ],
+          "message": "Reentrancy: State change after external call\n\nChanging state after an external call can lead to re-entrancy attacks.Use the checks-effects-interactions pattern to avoid this issue.\n\nHint: State is changed at: `balanceOf[msg.sender] = available - amount`, `totalDeposits -= amount`",
+          "rule_id": "reentrancy-state-change",
+          "severity": "High"
+        }
+      ],
+      "vuln_class": "reentrancy"
+    }
+  ]
+}

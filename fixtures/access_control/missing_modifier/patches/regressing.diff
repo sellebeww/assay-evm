@@ -1,0 +1,65 @@
+--- a/src/FeeCollector.sol
++++ b/src/FeeCollector.sol
+@@ -2,31 +2,37 @@
+ // SPDX-License-Identifier: MIT
+ pragma solidity 0.8.36;
+ 
++/// @title Owned
++/// @notice Ownership shared by the contracts of this project.
++abstract contract Owned {
++    /// @notice The account that controls payouts and ownership.
++    address public owner;
++
++    error NotOwner(address caller);
++
++    modifier onlyOwner() {
++        if (msg.sender != owner) revert NotOwner(msg.sender);
++        _;
++    }
++}
++
+ /// @title FeeCollector
+ /// @notice Collects fees in ether. The owner pays them out, for example to suppliers.
+-contract FeeCollector {
++contract FeeCollector is Owned {
+     /// @notice Sum of all fees collected, in wei.
+     uint256 public totalCollected;
+     /// @notice Sum of all payouts, in wei.
+     uint256 public totalPaidOut;
+-    /// @notice The account that controls payouts and ownership.
+-    address public owner;
+ 
+     event Collected(address indexed from, uint256 amount);
+     event PaidOut(address indexed to, uint256 amount);
+     event OwnerChanged(address indexed previousOwner, address indexed newOwner);
+ 
+-    error NotOwner(address caller);
+     error ZeroAmount();
+     error ZeroAddress();
+     error InsufficientFunds(uint256 requested, uint256 available);
+     error TransferFailed();
+ 
+-    modifier onlyOwner() {
+-        if (msg.sender != owner) revert NotOwner(msg.sender);
+-        _;
+-    }
+-
+     constructor(address owner_) {
+         if (owner_ == address(0)) revert ZeroAddress();
+         owner = owner_;
+@@ -48,13 +54,13 @@
+     }
+ 
+     /// @notice Pays `amount` wei of the collected fees to `to`. Owner only.
+-    function payOut(address payable to, uint256 amount) external {
++    function payOut(address payable to, uint256 amount) external onlyOwner {
+         if (amount == 0) revert ZeroAmount();
+         _send(to, amount);
+     }
+ 
+     /// @notice Pays everything the contract holds to `to`. Owner only.
+-    function payOutAll(address payable to) external {
++    function payOutAll(address payable to) external onlyOwner {
+         uint256 amount = address(this).balance;
+         if (amount == 0) revert ZeroAmount();
+         _send(to, amount);

@@ -1,0 +1,12 @@
+--- a/src/Crowdfund.sol
++++ b/src/Crowdfund.sol
+@@ -69,6 +69,9 @@
+         uint256 count = contributors.length;
+         for (uint256 i = 0; i < count; i++) {
+             address account = contributors[i];
++            // A contract can refuse the ether and block the loop, so only plain accounts are
++            // refunded.
++            if (account.code.length != 0) continue;
+             uint256 amount = contributionOf[account];
+             if (amount == 0) continue;
+             contributionOf[account] = 0;

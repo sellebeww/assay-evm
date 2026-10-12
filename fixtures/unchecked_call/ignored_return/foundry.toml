@@ -1,0 +1,8 @@
+# Fixture configuration for plain Foundry. forge-std and the shared harness (imported as
+# `assay/AssayExploit.sol`) come from the runner environment, not from this directory.
+[profile.default]
+src = "src"
+test = "test"
+libs = []
+solc = "0.8.36"
+ffi = false

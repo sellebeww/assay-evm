@@ -1,0 +1,13 @@
+version: 2
+updates:
+  # Python dependencies; the uv ecosystem updates both pyproject.toml and uv.lock.
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Covers the workflows and the Actions used by the composite action.yml at the root.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

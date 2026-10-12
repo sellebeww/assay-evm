@@ -1,0 +1,18 @@
+--- a/src/Treasury.sol
++++ b/src/Treasury.sol
+@@ -25,6 +25,7 @@
+     error FeeTooHigh(uint16 feeBps);
+     error InsufficientFunds(uint256 requested, uint256 available);
+     error TransferFailed();
++    error AlreadyInitialized();
+ 
+     modifier onlyOwner() {
+         if (msg.sender != owner) revert NotOwner(msg.sender);
+@@ -33,6 +34,7 @@
+ 
+     /// @notice Sets the owner. The fee stays as it is.
+     function initialize(address owner_) external {
++        if (owner != address(0)) revert AlreadyInitialized();
+         if (owner_ == address(0)) revert ZeroAddress();
+         owner = owner_;
+         emit Initialized(owner_, feeBps);

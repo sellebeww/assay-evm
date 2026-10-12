@@ -1,0 +1,51 @@
+{
+  "fixture": "access_control/missing_modifier",
+  "label": "regressing",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "layout_changed",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "layout_changed"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "layout_changed"
+      ]
+    }
+  ],
+  "base_tree_sha256": "5f9c5df78b9c690b1522d000b6002b4dca0d7fb0db3ea4a5fd56158f4988d34f",
+  "poc_tree_sha256": "0b37190ae0d15061cb7129614025763584e1bb57fcce3d6c12eb2f17409518e4",
+  "patch_sha256": "31231f41c73517d1f6b8d4dbdfc1d6e96768a7dd9a8e1bf0049961817c2b2a46",
+  "seconds": 322.7,
+  "error": null
+}

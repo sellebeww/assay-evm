@@ -1,0 +1,27 @@
+{
+  "endpoint_host": "synthetic.invalid",
+  "format": 1,
+  "key": "028ec1304309fbe7c3f1f54c5cf7fb2552ebde7734666bb04e95d423c829a4db",
+  "note": "SYNTHETIC: written by hand to test replay. No model produced this answer.",
+  "request": {
+    "messages": [
+      {
+        "content": "You answer one short question. Reply with only a JSON object of the form {\"answer\": \"<your answer, at most 500 characters>\"} and nothing else.",
+        "role": "system"
+      },
+      {
+        "content": "Name one planet of the solar system.",
+        "role": "user"
+      }
+    ],
+    "temperature": 0.0
+  },
+  "response": {
+    "completion_tokens": 6,
+    "content": "{\"answer\": \"Mars\"}",
+    "finish_reason": "stop",
+    "model": "synthetic-model-0",
+    "prompt_tokens": 40
+  },
+  "synthetic": true
+}

@@ -1,0 +1,18 @@
+--- a/src/StrategyHub.sol
++++ b/src/StrategyHub.sol
+@@ -35,6 +35,7 @@
+ 
+     error NotOwner(address caller);
+     error NoStrategy(address account);
++    error NotApproved(address strategy);
+     error StrategyFailed(address strategy);
+     error ZeroAmount();
+     error InsufficientFunds(uint256 requested, uint256 available);
+@@ -59,6 +60,7 @@
+ 
+     /// @notice Registers `strategy` for the sender.
+     function setStrategy(address strategy) external {
++        if (!approved[strategy]) revert NotApproved(strategy);
+         strategyOf[msg.sender] = strategy;
+         emit StrategySet(msg.sender, strategy);
+     }

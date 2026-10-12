@@ -1,0 +1,25 @@
+--- a/src/Crowdfund.sol
++++ b/src/Crowdfund.sol
+@@ -25,6 +25,7 @@
+     event Contributed(address indexed account, uint256 amount);
+     event Cancelled();
+     event Refunded(address indexed account, uint256 amount);
++    event RefundFailed(address indexed account, uint256 amount);
+     event Claimed(uint256 amount);
+ 
+     error ZeroAmount();
+@@ -74,7 +75,13 @@
+             contributionOf[account] = 0;
+             totalRaised -= amount;
+             (bool sent,) = payable(account).call{value: amount}("");
+-            if (!sent) revert TransferFailed(account);
++            if (!sent) {
++                // A contributor that refuses its refund keeps it owed; the others are still paid.
++                contributionOf[account] = amount;
++                totalRaised += amount;
++                emit RefundFailed(account, amount);
++                continue;
++            }
+             emit Refunded(account, amount);
+         }
+     }

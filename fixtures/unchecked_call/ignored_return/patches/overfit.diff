@@ -1,0 +1,20 @@
+--- a/src/Payroll.sol
++++ b/src/Payroll.sol
+@@ -22,6 +22,7 @@
+     error ZeroAddress();
+     error Underfunded(uint256 needed, uint256 available);
+     error NothingOwed(address payee);
++    error PaymentFailed(address payee);
+ 
+     constructor() {
+         employer = msg.sender;
+@@ -51,7 +52,8 @@
+         if (amount == 0) revert NothingOwed(payee);
+         owed[payee] = 0;
+         totalOwed -= amount;
+-        payable(payee).call{value: amount}("");
++        (bool sent,) = payable(payee).call{value: amount}("");
++        if (!sent) revert PaymentFailed(payee);
+         emit Paid(payee, amount);
+     }
+ 

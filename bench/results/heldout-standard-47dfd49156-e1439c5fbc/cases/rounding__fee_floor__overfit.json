@@ -1,0 +1,51 @@
+{
+  "fixture": "rounding/fee_floor",
+  "label": "overfit",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "variant_found",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "variant_found"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "variant_found"
+      ]
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "59252004bf0f96106b1fd7f7f8cf7e5039e020a086e6ce9766d1a1aa7448a49a",
+  "poc_tree_sha256": "ef5a0c6bb3cc4f75206e9faaf4779625eb1e39c9d4b08de5d66d62693e890036",
+  "patch_sha256": "7276097271ee4aeb27244c11c4e9c311544752972292b3513c083824c9900473",
+  "seconds": 29.4,
+  "error": null
+}

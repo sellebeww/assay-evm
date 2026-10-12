@@ -1,0 +1,27 @@
+--- a/src/Presale.sol
++++ b/src/Presale.sol
+@@ -7,6 +7,9 @@
+ ///         presale, which sends everything that was pledged to the beneficiary. Until the target
+ ///         is reached, a pledger can take its pledge back.
+ contract Presale {
++    /// @dev Ether above the pledges that `finalize` tolerates, in wei.
++    uint256 private constant DUST_ALLOWANCE = 10;
++
+     /// @notice The account that receives the pledges when the presale is finalized.
+     address public immutable beneficiary;
+     /// @notice Ether the pledges must reach before the presale can be finalized, in wei.
+@@ -65,10 +68,10 @@
+     function finalize() external {
+         if (finalized) revert AlreadyFinalized();
+         if (totalPledged < target) revert TargetNotReached(totalPledged, target);
+-        // The presale must hold exactly what was pledged: any difference means that the
+-        // accounting is wrong, and nothing is sent.
+-        if (address(this).balance != totalPledged) {
+-            revert BalanceMismatch(address(this).balance, totalPledged);
++        // The presale must hold what was pledged, give or take a little dust.
++        uint256 balance = address(this).balance;
++        if (balance < totalPledged || balance - totalPledged > DUST_ALLOWANCE) {
++            revert BalanceMismatch(balance, totalPledged);
+         }
+         finalized = true;
+         (bool sent,) = beneficiary.call{value: totalPledged}("");

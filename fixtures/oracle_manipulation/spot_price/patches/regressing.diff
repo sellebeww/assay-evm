@@ -1,0 +1,139 @@
+--- a/src/Lender.sol
++++ b/src/Lender.sol
+@@ -7,10 +7,13 @@
+ 
+ /// @title Lender
+ /// @notice Lends the pool's quote token against its base token as collateral. Collateral is
+-///         valued at the pool price, and an account may borrow up to 75 percent of its value.
++///         valued at the pool price averaged over time, and an account may borrow up to 75
++///         percent of its value.
+ contract Lender {
+     uint256 private constant BPS = 10_000;
+     uint256 private constant PRICE_SCALE = 1e18;
++    /// @dev Shortest window over which the pool price is averaged.
++    uint256 private constant PRICE_WINDOW = 30 minutes;
+     /// @notice Share of the collateral value that may be borrowed, in basis points.
+     uint256 public constant LOAN_TO_VALUE_BPS = 7_500;
+ 
+@@ -25,10 +28,15 @@
+     mapping(address account => uint256 amount) public collateralOf;
+     /// @notice Debt tokens owed by each account.
+     mapping(address account => uint256 amount) public debtOf;
++    /// @dev Average pool price over the last completed window, scaled by 1e18.
++    uint256 private averagePrice;
++    /// @dev The pool's cumulative price and the time at the start of the current window.
++    uint256 private windowCumulative;
++    uint256 private windowStart;
+ 
+     event CollateralDeposited(address indexed account, uint256 amount);
+     event CollateralWithdrawn(address indexed account, uint256 amount);
+-    event Borrowed(address indexed account, uint256 amount);
++    event Borrowed(address indexed account, uint256 amount, uint256 price);
+     event Repaid(address indexed account, uint256 amount);
+ 
+     error ZeroAmount();
+@@ -40,11 +48,18 @@
+         pool = pool_;
+         collateralToken = pool_.base();
+         debtToken = pool_.quote();
++        windowCumulative = pool_.currentCumulativePrice();
++        windowStart = block.timestamp;
++        if (pool_.baseReserve() != 0) averagePrice = pool_.spotPrice();
+     }
+ 
+-    /// @notice Price of one whole collateral token in debt tokens, scaled by 1e18.
++    /// @notice Price of one whole collateral token in debt tokens, scaled by 1e18: the pool
++    ///         price averaged over time, so that trades in the current block do not move it.
++    ///         Until the current window is long enough, the average of the last one applies.
+     function price() public view returns (uint256) {
+-        return pool.spotPrice();
++        uint256 elapsed = block.timestamp - windowStart;
++        if (elapsed < PRICE_WINDOW) return averagePrice;
++        return (pool.currentCumulativePrice() - windowCumulative) / elapsed;
+     }
+ 
+     /// @notice Value of the collateral of `account`, in debt tokens.
+@@ -66,6 +81,7 @@
+ 
+     function withdrawCollateral(uint256 amount) external {
+         if (amount == 0) revert ZeroAmount();
++        _updatePrice();
+         uint256 available = collateralOf[msg.sender];
+         if (amount > available) revert ExceedsCollateral(amount, available);
+         collateralOf[msg.sender] = available - amount;
+@@ -76,11 +92,12 @@
+ 
+     function borrow(uint256 amount) external {
+         if (amount == 0) revert ZeroAmount();
++        _updatePrice();
+         uint256 debt = debtOf[msg.sender] + amount;
+         _checkLimit(msg.sender, debt);
+         debtOf[msg.sender] = debt;
+         debtToken.transfer(msg.sender, amount);
+-        emit Borrowed(msg.sender, amount);
++        emit Borrowed(msg.sender, amount, price());
+     }
+ 
+     function repay(uint256 amount) external {
+@@ -92,6 +109,14 @@
+         emit Repaid(msg.sender, amount);
+     }
+ 
++    /// @dev Closes the current window once it is long enough and starts the next one.
++    function _updatePrice() private {
++        if (block.timestamp - windowStart < PRICE_WINDOW) return;
++        averagePrice = price();
++        windowCumulative = pool.currentCumulativePrice();
++        windowStart = block.timestamp;
++    }
++
+     function _checkLimit(address account, uint256 debt) private view {
+         uint256 limit = borrowLimit(account);
+         if (debt > limit) revert BorrowLimitExceeded(debt, limit);
+--- a/src/MiniPool.sol
++++ b/src/MiniPool.sol
+@@ -20,6 +20,10 @@
+     uint256 public baseReserve;
+     /// @notice Quote tokens held by the pool.
+     uint256 public quoteReserve;
++    /// @notice Sum over time of the spot price times the seconds it was in force.
++    uint256 public priceCumulative;
++    /// @notice When `priceCumulative` was last brought up to date.
++    uint256 public priceUpdatedAt;
+ 
+     event LiquidityAdded(address indexed provider, uint256 baseAmount, uint256 quoteAmount);
+     event Swapped(address indexed trader, bool baseIn, uint256 amountIn, uint256 amountOut);
+@@ -40,6 +44,7 @@
+         if (baseReserve != 0 && baseAmount * quoteReserve != quoteAmount * baseReserve) {
+             revert UnbalancedLiquidity();
+         }
++        _accumulate();
+         base.transferFrom(msg.sender, address(this), baseAmount);
+         quote.transferFrom(msg.sender, address(this), quoteAmount);
+         baseReserve += baseAmount;
+@@ -56,6 +61,7 @@
+         if (reserveIn == 0) revert EmptyPool();
+         amountOut = getAmountOut(amountIn, reserveIn, reserveOut);
+         if (amountOut < minOut) revert Slippage(amountOut, minOut);
++        _accumulate();
+ 
+         tokenIn.transferFrom(msg.sender, address(this), amountIn);
+         tokenOut.transfer(msg.sender, amountOut);
+@@ -81,4 +87,17 @@
+         if (baseReserve == 0) revert EmptyPool();
+         return quoteReserve * PRICE_SCALE / baseReserve;
+     }
++
++    /// @notice `priceCumulative` brought up to the current block at the price in force since the
++    ///         last update. Trades in the current block do not change it.
++    function currentCumulativePrice() public view returns (uint256) {
++        if (baseReserve == 0) return priceCumulative;
++        return priceCumulative + spotPrice() * (block.timestamp - priceUpdatedAt);
++    }
++
++    /// @dev Called before the reserves change, so that the old price is counted until now.
++    function _accumulate() private {
++        priceCumulative = currentCumulativePrice();
++        priceUpdatedAt = block.timestamp;
++    }
+ }

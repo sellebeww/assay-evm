@@ -1,0 +1,36 @@
+--- a/src/Vault.sol
++++ b/src/Vault.sol
+@@ -5,6 +5,8 @@
+ /// @title Vault
+ /// @notice Keeps ether for its depositors. Each depositor can take back what they put in.
+ contract Vault {
++    bool private locked;
++
+     /// @notice Ether credited to each depositor, in wei.
+     mapping(address account => uint256 amount) public balanceOf;
+     /// @notice Sum of all credited ether, in wei.
+@@ -16,7 +18,15 @@
+     error ZeroAmount();
+     error InsufficientBalance(uint256 requested, uint256 available);
+     error TransferFailed();
++    error Reentrancy();
+ 
++    modifier nonReentrant() {
++        if (locked) revert Reentrancy();
++        locked = true;
++        _;
++        locked = false;
++    }
++
+     /// @notice Credits the ether sent with the call to the sender.
+     function deposit() external payable {
+         if (msg.value == 0) revert ZeroAmount();
+@@ -26,7 +36,7 @@
+     }
+ 
+     /// @notice Sends `amount` wei of the sender's credit back to the sender.
+-    function withdraw(uint256 amount) external {
++    function withdraw(uint256 amount) external nonReentrant {
+         if (amount == 0) revert ZeroAmount();
+         uint256 available = balanceOf[msg.sender];
+         if (amount > available) revert InsufficientBalance(amount, available);

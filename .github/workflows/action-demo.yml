@@ -1,0 +1,51 @@
+name: Action demo
+
+# Tries the Assay Action (uses: ./) on examples/demo-project. It runs on pull requests that change
+# the example, with the code of the pull request, and holds no secret. For a pull request from a
+# fork the token is read-only and the Action only writes the job summary and uploads the artifact.
+# Do not change this trigger to pull_request_target: see docs/github-action.md.
+on:
+  pull_request:
+    paths:
+      - "examples/**"
+
+permissions: {}
+
+concurrency:
+  group: action-demo-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: verify the demo project
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      pull-requests: write # the Action's comment step only, for pull requests of this repository
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify the patch of the pull request
+        id: assay
+        uses: ./
+        with:
+          project-dir: examples/demo-project
+          poc-dir: examples/demo-project/poc
+          scope: src
+          profile: quick
+          fail-on: inconclusive
+          comment: "true"
+
+      - name: Show the outputs
+        if: ${{ !cancelled() }}
+        env:
+          VERDICT: ${{ steps.assay.outputs.verdict }}
+          EXIT_CODE: ${{ steps.assay.outputs.exit-code }}
+        run: |
+          echo "verdict: $VERDICT"
+          echo "exit code: $EXIT_CODE"

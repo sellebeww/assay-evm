@@ -1,0 +1,51 @@
+{
+  "fixture": "oracle_manipulation/spot_price",
+  "label": "overfit",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "variant_found",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "variant_found"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "variant_found"
+      ]
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "f4215a195703e636697e193411e76cbb1cb0bb71e5503214e7816805ed640bbd",
+  "poc_tree_sha256": "9b5fbede8305d0ed9be43d6800382c00728271977baf1897694d426c16f7cb76",
+  "patch_sha256": "0909dfc6741febcd12532276d9da1a7f44423acc63cbdbaae0ac1a948bef55ff",
+  "seconds": 93.8,
+  "error": null
+}

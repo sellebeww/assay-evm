@@ -1,0 +1,51 @@
+{
+  "fixture": "oracle_manipulation/donation_price",
+  "label": "regressing",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "abi_changed",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "abi_changed"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "abi_changed"
+      ]
+    }
+  ],
+  "base_tree_sha256": "9f178e7dd679dd359a398857b5425472a1d700153e6d566a6df1436c61101438",
+  "poc_tree_sha256": "a3f001443a80549cb840957ab8c82c2b89e901620eef106f5150d6b88de493af",
+  "patch_sha256": "9f6ed7778c167214dcfadcf8f42b01da18c10c3da3c6fcf4f613fd780a5bec06",
+  "seconds": 31.9,
+  "error": null
+}

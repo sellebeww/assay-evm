@@ -1,0 +1,39 @@
+--- a/src/Treasury.sol
++++ b/src/Treasury.sol
+@@ -7,10 +7,10 @@
+ ///         proxy: it is set up by an initializer after deployment. There are two initializers, the
+ ///         plain one and one that also sets a handling fee.
+ contract Treasury {
++    /// @notice Handling fee in basis points, quoted by `feeFor`.
++    uint16 public feeBps;
+     /// @notice The account that may sweep the treasury and change the fee.
+     address public owner;
+-    /// @notice Handling fee in basis points, quoted by `feeFor`.
+-    uint16 public feeBps;
+     /// @notice Sum of all ether received through `fund`, in wei.
+     uint256 public totalReceived;
+ 
+@@ -25,6 +25,7 @@
+     error FeeTooHigh(uint16 feeBps);
+     error InsufficientFunds(uint256 requested, uint256 available);
+     error TransferFailed();
++    error AlreadyInitialized();
+ 
+     modifier onlyOwner() {
+         if (msg.sender != owner) revert NotOwner(msg.sender);
+@@ -33,6 +34,7 @@
+ 
+     /// @notice Sets the owner. The fee stays as it is.
+     function initialize(address owner_) external {
++        if (owner != address(0)) revert AlreadyInitialized();
+         if (owner_ == address(0)) revert ZeroAddress();
+         owner = owner_;
+         emit Initialized(owner_, feeBps);
+@@ -40,6 +42,7 @@
+ 
+     /// @notice Sets the owner and the handling fee.
+     function initializeWithFee(address owner_, uint16 feeBps_) external {
++        if (owner != address(0)) revert AlreadyInitialized();
+         if (owner_ == address(0)) revert ZeroAddress();
+         if (feeBps_ > 1_000) revert FeeTooHigh(feeBps_);
+         owner = owner_;

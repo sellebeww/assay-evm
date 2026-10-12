@@ -1,0 +1,19 @@
+--- a/src/DepositPool.sol
++++ b/src/DepositPool.sol
+@@ -21,6 +21,7 @@
+     error ZeroAmount();
+     error InsufficientCredit(uint256 requested, uint256 available);
+     error TransferFailed();
++    error WithdrawalsPaused();
+ 
+     constructor(SoftToken token_) {
+         token = token_;
+@@ -54,7 +55,6 @@
+         if (amount > available) revert InsufficientCredit(amount, available);
+         creditOf[msg.sender] = available - amount;
+         totalCredit -= amount;
+-        if (!token.transfer(msg.sender, amount)) revert TransferFailed();
+-        emit Withdrawn(msg.sender, amount);
++        revert WithdrawalsPaused();
+     }
+ }

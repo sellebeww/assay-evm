@@ -1,0 +1,26 @@
+{
+  "errors": [
+    {
+      "sourceLocation": {
+        "file": "test/Broken.t.sol",
+        "start": 196,
+        "end": 203
+      },
+      "type": "DeclarationError",
+      "component": "general",
+      "severity": "error",
+      "errorCode": "7576",
+      "message": "Undeclared identifier.",
+      "formattedMessage": "DeclarationError: Undeclared identifier.\n --> test/Broken.t.sol:7:16:\n  |\n7 |         return missing;\n  |                ^^^^^^^\n\n"
+    }
+  ],
+  "sources": {},
+  "contracts": {},
+  "build_infos": [
+    {
+      "id": "0c6f4b6aa4a651c5",
+      "source_id_to_path": {},
+      "language": "Solidity"
+    }
+  ]
+}

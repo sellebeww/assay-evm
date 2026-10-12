@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "name": "heldout",
+  "root": "bench/heldout",
+  "fixtures": [
+    "reentrancy/cross_function",
+    "access_control/reinitializable",
+    "unchecked_call/token_return",
+    "signature_replay/cross_chain",
+    "delegatecall/strategy_registry",
+    "oracle_manipulation/donation_price",
+    "dos/forced_ether",
+    "rounding/fee_floor"
+  ]
+}

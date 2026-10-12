@@ -1,0 +1,1290 @@
+{
+  "$defs": {
+    "Bounds": {
+      "additionalProperties": false,
+      "description": "What ran, as numbers. Deterministic: the same inputs give the same bounds.",
+      "properties": {
+        "exploit_replays_per_revision": {
+          "title": "Exploit Replays Per Revision",
+          "type": "integer"
+        },
+        "fuzz_runs": {
+          "title": "Fuzz Runs",
+          "type": "integer"
+        },
+        "fuzz_seed": {
+          "title": "Fuzz Seed",
+          "type": "string"
+        },
+        "interface_contracts": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Interface Contracts",
+          "type": "array"
+        },
+        "oracles_not_run": {
+          "items": {
+            "$ref": "#/$defs/OracleName"
+          },
+          "title": "Oracles Not Run",
+          "type": "array"
+        },
+        "oracles_run": {
+          "items": {
+            "$ref": "#/$defs/OracleName"
+          },
+          "title": "Oracles Run",
+          "type": "array"
+        },
+        "profile": {
+          "enum": [
+            "quick",
+            "standard",
+            "thorough"
+          ],
+          "title": "Profile",
+          "type": "string"
+        },
+        "symbolic": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SymbolicBounds"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "variant": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VariantBounds"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "exploit_replays_per_revision",
+        "profile",
+        "fuzz_seed",
+        "fuzz_runs",
+        "interface_contracts",
+        "oracles_run",
+        "oracles_not_run",
+        "variant"
+      ],
+      "title": "Bounds",
+      "type": "object"
+    },
+    "CampaignTime": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "enum": [
+            "fuzz",
+            "invariant",
+            "confirmation"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "revision": {
+          "$ref": "#/$defs/RevisionKind"
+        },
+        "seconds": {
+          "title": "Seconds",
+          "type": "number"
+        },
+        "seed_index": {
+          "title": "Seed Index",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "revision",
+        "mode",
+        "seed_index",
+        "seconds"
+      ],
+      "title": "CampaignTime",
+      "type": "object"
+    },
+    "CheckBounds": {
+      "additionalProperties": false,
+      "description": "What Halmos reported for one property on one revision. Deterministic.",
+      "properties": {
+        "bounded_loops": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Bounded Loops"
+        },
+        "calldata_bytes": {
+          "title": "Calldata Bytes",
+          "type": "integer"
+        },
+        "contract": {
+          "title": "Contract",
+          "type": "string"
+        },
+        "halmos_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Halmos Code"
+        },
+        "kind": {
+          "enum": [
+            "variant",
+            "equivalence"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "no_counterexample",
+            "counterexample",
+            "unknown",
+            "not_reported"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "paths": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Paths"
+        },
+        "revision": {
+          "$ref": "#/$defs/RevisionKind"
+        },
+        "signature": {
+          "title": "Signature",
+          "type": "string"
+        }
+      },
+      "required": [
+        "revision",
+        "contract",
+        "signature",
+        "kind",
+        "outcome",
+        "halmos_code",
+        "calldata_bytes",
+        "paths",
+        "bounded_loops"
+      ],
+      "title": "CheckBounds",
+      "type": "object"
+    },
+    "FinalVerdict": {
+      "description": "Final verdict of a verification (table `verification`).",
+      "enum": [
+        "VERIFIED_WITHIN_BOUNDS",
+        "REJECTED",
+        "INCONCLUSIVE"
+      ],
+      "title": "FinalVerdict",
+      "type": "string"
+    },
+    "FixHistory": {
+      "additionalProperties": false,
+      "description": "`fix/history.json` of the bundle of a fix loop.\n\nIt holds the diff hashes, the verdict of every oracle with its reasons, the limits and the\nbounds. It holds no prompt, no model reply, no credential, no timestamp and no host path.",
+      "properties": {
+        "attempts": {
+          "items": {
+            "$ref": "#/$defs/HistoryAttempt"
+          },
+          "title": "Attempts",
+          "type": "array"
+        },
+        "final": {
+          "$ref": "#/$defs/HistoryFinal"
+        },
+        "format": {
+          "const": "assay-fix-history",
+          "default": "assay-fix-history",
+          "title": "Format",
+          "type": "string"
+        },
+        "held_out_bounds": {
+          "$ref": "#/$defs/HistoryBounds"
+        },
+        "limits": {
+          "$ref": "#/$defs/HistoryLimits"
+        },
+        "loop_bounds": {
+          "$ref": "#/$defs/HistoryBounds"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "vuln_class": {
+          "title": "Vuln Class",
+          "type": "string"
+        }
+      },
+      "required": [
+        "vuln_class",
+        "limits",
+        "loop_bounds",
+        "held_out_bounds",
+        "attempts",
+        "final"
+      ],
+      "title": "FixHistory",
+      "type": "object"
+    },
+    "HistoryAttempt": {
+      "additionalProperties": false,
+      "properties": {
+        "diff_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Diff Sha256"
+        },
+        "in_loop_verdict": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FinalVerdict"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "integrity_violation": {
+          "default": false,
+          "title": "Integrity Violation",
+          "type": "boolean"
+        },
+        "number": {
+          "title": "Number",
+          "type": "integer"
+        },
+        "oracles": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/HistoryOracle"
+          },
+          "title": "Oracles",
+          "type": "array"
+        },
+        "outcome": {
+          "enum": [
+            "evaluated",
+            "model_output_invalid"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "problems": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Reason"
+          },
+          "title": "Problems",
+          "type": "array"
+        }
+      },
+      "required": [
+        "number",
+        "outcome",
+        "diff_sha256",
+        "in_loop_verdict"
+      ],
+      "title": "HistoryAttempt",
+      "type": "object"
+    },
+    "HistoryBounds": {
+      "additionalProperties": false,
+      "properties": {
+        "fuzz_runs": {
+          "title": "Fuzz Runs",
+          "type": "integer"
+        },
+        "fuzz_seed": {
+          "title": "Fuzz Seed",
+          "type": "string"
+        },
+        "profile": {
+          "title": "Profile",
+          "type": "string"
+        },
+        "symbolic": {
+          "title": "Symbolic",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "profile",
+        "fuzz_seed",
+        "fuzz_runs",
+        "symbolic"
+      ],
+      "title": "HistoryBounds",
+      "type": "object"
+    },
+    "HistoryFinal": {
+      "additionalProperties": false,
+      "properties": {
+        "attempts_used": {
+          "title": "Attempts Used",
+          "type": "integer"
+        },
+        "decision": {
+          "enum": [
+            "held_out_run",
+            "last_attempt",
+            "none"
+          ],
+          "title": "Decision",
+          "type": "string"
+        },
+        "decisive_attempt": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Decisive Attempt"
+        },
+        "diff_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Diff Sha256"
+        },
+        "differs_from_in_loop": {
+          "title": "Differs From In Loop",
+          "type": "boolean"
+        },
+        "in_loop_verdict": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FinalVerdict"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reasons",
+          "type": "array"
+        },
+        "statement": {
+          "maxLength": 1000,
+          "title": "Statement",
+          "type": "string"
+        },
+        "stopped": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Stopped"
+        },
+        "verdict": {
+          "$ref": "#/$defs/FinalVerdict"
+        }
+      },
+      "required": [
+        "decision",
+        "verdict",
+        "in_loop_verdict",
+        "differs_from_in_loop",
+        "decisive_attempt",
+        "diff_sha256",
+        "reasons",
+        "stopped",
+        "attempts_used",
+        "statement"
+      ],
+      "title": "HistoryFinal",
+      "type": "object"
+    },
+    "HistoryLimits": {
+      "additionalProperties": false,
+      "properties": {
+        "max_attempts": {
+          "title": "Max Attempts",
+          "type": "integer"
+        },
+        "max_changed_lines": {
+          "title": "Max Changed Lines",
+          "type": "integer"
+        },
+        "max_diff_bytes": {
+          "title": "Max Diff Bytes",
+          "type": "integer"
+        },
+        "max_files": {
+          "title": "Max Files",
+          "type": "integer"
+        },
+        "scope": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Scope",
+          "type": "array"
+        }
+      },
+      "required": [
+        "max_attempts",
+        "max_changed_lines",
+        "max_files",
+        "max_diff_bytes",
+        "scope"
+      ],
+      "title": "HistoryLimits",
+      "type": "object"
+    },
+    "HistoryOracle": {
+      "additionalProperties": false,
+      "properties": {
+        "oracle": {
+          "title": "Oracle",
+          "type": "string"
+        },
+        "reasons": {
+          "items": {
+            "$ref": "#/$defs/Reason"
+          },
+          "title": "Reasons",
+          "type": "array"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "verdict": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Verdict"
+        }
+      },
+      "required": [
+        "oracle",
+        "status",
+        "verdict",
+        "reasons"
+      ],
+      "title": "HistoryOracle",
+      "type": "object"
+    },
+    "Inputs": {
+      "additionalProperties": false,
+      "properties": {
+        "base_tree_sha256": {
+          "title": "Base Tree Sha256",
+          "type": "string"
+        },
+        "harness_sha256": {
+          "title": "Harness Sha256",
+          "type": "string"
+        },
+        "patch_sha256": {
+          "title": "Patch Sha256",
+          "type": "string"
+        },
+        "patched_tree_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Patched Tree Sha256"
+        },
+        "poc_tree_sha256": {
+          "title": "Poc Tree Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "base_tree_sha256",
+        "poc_tree_sha256",
+        "patch_sha256",
+        "patched_tree_sha256",
+        "harness_sha256"
+      ],
+      "title": "Inputs",
+      "type": "object"
+    },
+    "ModeBounds": {
+      "additionalProperties": false,
+      "description": "What one search mode ran on one revision.",
+      "properties": {
+        "available": {
+          "title": "Available",
+          "type": "boolean"
+        },
+        "calls": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Calls"
+        },
+        "found_at_seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Found At Seed"
+        },
+        "mode": {
+          "enum": [
+            "fuzz",
+            "invariant"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "revision": {
+          "$ref": "#/$defs/RevisionKind"
+        },
+        "runs": {
+          "title": "Runs",
+          "type": "integer"
+        },
+        "seeds_run": {
+          "title": "Seeds Run",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "revision",
+        "mode",
+        "available",
+        "seeds_run",
+        "found_at_seed",
+        "runs",
+        "calls"
+      ],
+      "title": "ModeBounds",
+      "type": "object"
+    },
+    "OracleName": {
+      "enum": [
+        "integrity",
+        "exploit",
+        "variant",
+        "behavior",
+        "regression",
+        "symbolic"
+      ],
+      "title": "OracleName",
+      "type": "string"
+    },
+    "OracleRow": {
+      "additionalProperties": false,
+      "properties": {
+        "oracle": {
+          "$ref": "#/$defs/OracleName"
+        },
+        "reasons": {
+          "items": {
+            "$ref": "#/$defs/Reason"
+          },
+          "title": "Reasons",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "ran",
+            "skipped",
+            "missing"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "verdict": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Verdict"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "warnings": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Reason"
+          },
+          "title": "Warnings",
+          "type": "array"
+        }
+      },
+      "required": [
+        "oracle",
+        "status",
+        "verdict",
+        "reasons",
+        "summary"
+      ],
+      "title": "OracleRow",
+      "type": "object"
+    },
+    "Reason": {
+      "additionalProperties": false,
+      "description": "A structured reason: a stable code, a human-readable detail and an optional location.\n\n`detail` may quote untrusted text (file names, identifiers, revert reasons); it is data and\nmust be escaped before it is printed.",
+      "properties": {
+        "code": {
+          "pattern": "^[a-z][a-z0-9_]{0,63}$",
+          "title": "Code",
+          "type": "string"
+        },
+        "detail": {
+          "maxLength": 500,
+          "title": "Detail",
+          "type": "string"
+        },
+        "line": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Line"
+        },
+        "path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Path"
+        }
+      },
+      "required": [
+        "code",
+        "detail"
+      ],
+      "title": "Reason",
+      "type": "object"
+    },
+    "RevisionKind": {
+      "enum": [
+        "vulnerable",
+        "patched"
+      ],
+      "title": "RevisionKind",
+      "type": "string"
+    },
+    "RunBounds": {
+      "additionalProperties": false,
+      "description": "One Halmos run; `problem` says how a run without a usable report ended.",
+      "properties": {
+        "prefix": {
+          "title": "Prefix",
+          "type": "string"
+        },
+        "problem": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Problem"
+        },
+        "revision": {
+          "$ref": "#/$defs/RevisionKind"
+        }
+      },
+      "required": [
+        "revision",
+        "prefix",
+        "problem"
+      ],
+      "title": "RunBounds",
+      "type": "object"
+    },
+    "RunTime": {
+      "additionalProperties": false,
+      "properties": {
+        "revision": {
+          "$ref": "#/$defs/RevisionKind"
+        },
+        "seconds": {
+          "title": "Seconds",
+          "type": "number"
+        },
+        "what": {
+          "enum": [
+            "halmos",
+            "confirmation"
+          ],
+          "title": "What",
+          "type": "string"
+        }
+      },
+      "required": [
+        "revision",
+        "what",
+        "seconds"
+      ],
+      "title": "RunTime",
+      "type": "object"
+    },
+    "SymbolicBounds": {
+      "additionalProperties": false,
+      "description": "The bounds of the symbolic oracle, as numbers and names. Deterministic: no durations.",
+      "properties": {
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/CheckBounds"
+          },
+          "title": "Checks",
+          "type": "array"
+        },
+        "confirmation_replays": {
+          "title": "Confirmation Replays",
+          "type": "integer"
+        },
+        "confirmed_property": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Confirmed Property"
+        },
+        "equivalence": {
+          "enum": [
+            "no_difference",
+            "difference",
+            "unknown",
+            "none",
+            "not_run"
+          ],
+          "title": "Equivalence",
+          "type": "string"
+        },
+        "halmos_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Halmos Version"
+        },
+        "loop_bound": {
+          "title": "Loop Bound",
+          "type": "integer"
+        },
+        "max_calls_per_property": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Max Calls Per Property"
+        },
+        "memory_mib": {
+          "title": "Memory Mib",
+          "type": "integer"
+        },
+        "replays_reproduced": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Replays Reproduced"
+        },
+        "runs": {
+          "items": {
+            "$ref": "#/$defs/RunBounds"
+          },
+          "title": "Runs",
+          "type": "array"
+        },
+        "solver": {
+          "title": "Solver",
+          "type": "string"
+        },
+        "solver_timeout_s": {
+          "title": "Solver Timeout S",
+          "type": "integer"
+        },
+        "timeout_s": {
+          "title": "Timeout S",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "halmos_version",
+        "solver",
+        "loop_bound",
+        "solver_timeout_s",
+        "timeout_s",
+        "memory_mib",
+        "max_calls_per_property",
+        "runs",
+        "checks",
+        "confirmed_property",
+        "confirmation_replays",
+        "replays_reproduced",
+        "equivalence"
+      ],
+      "title": "SymbolicBounds",
+      "type": "object"
+    },
+    "SymbolicTiming": {
+      "additionalProperties": false,
+      "description": "Wall-clock durations of the symbolic oracle, rounded to 0.1 s; they vary between runs.",
+      "properties": {
+        "runs": {
+          "items": {
+            "$ref": "#/$defs/RunTime"
+          },
+          "title": "Runs",
+          "type": "array"
+        },
+        "total_s": {
+          "title": "Total S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "total_s",
+        "runs"
+      ],
+      "title": "SymbolicTiming",
+      "type": "object"
+    },
+    "Timing": {
+      "additionalProperties": false,
+      "description": "Wall-clock durations in seconds, rounded to 0.1 s. Unlike everything else in a report,\nthey differ between two runs of the same inputs.",
+      "properties": {
+        "oracles": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "propertyNames": {
+            "$ref": "#/$defs/OracleName"
+          },
+          "title": "Oracles",
+          "type": "object"
+        },
+        "symbolic": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SymbolicTiming"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "total_s": {
+          "title": "Total S",
+          "type": "number"
+        },
+        "variant": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VariantTiming"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "total_s",
+        "oracles",
+        "variant"
+      ],
+      "title": "Timing",
+      "type": "object"
+    },
+    "VariantBounds": {
+      "additionalProperties": false,
+      "description": "The bounds of a variant search, as numbers. Deterministic: no durations.",
+      "properties": {
+        "base_seed": {
+          "title": "Base Seed",
+          "type": "string"
+        },
+        "campaign_timeout_s": {
+          "title": "Campaign Timeout S",
+          "type": "integer"
+        },
+        "confirmation_replays": {
+          "title": "Confirmation Replays",
+          "type": "integer"
+        },
+        "invariant_depth": {
+          "title": "Invariant Depth",
+          "type": "integer"
+        },
+        "invariant_runs": {
+          "title": "Invariant Runs",
+          "type": "integer"
+        },
+        "profile": {
+          "enum": [
+            "quick",
+            "standard",
+            "thorough"
+          ],
+          "title": "Profile",
+          "type": "string"
+        },
+        "replays_reproduced": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Replays Reproduced"
+        },
+        "runs_per_seed": {
+          "title": "Runs Per Seed",
+          "type": "integer"
+        },
+        "searches": {
+          "items": {
+            "$ref": "#/$defs/ModeBounds"
+          },
+          "title": "Searches",
+          "type": "array"
+        },
+        "seeds": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Seeds",
+          "type": "array"
+        }
+      },
+      "required": [
+        "profile",
+        "base_seed",
+        "seeds",
+        "runs_per_seed",
+        "invariant_runs",
+        "invariant_depth",
+        "campaign_timeout_s",
+        "searches",
+        "confirmation_replays",
+        "replays_reproduced"
+      ],
+      "title": "VariantBounds",
+      "type": "object"
+    },
+    "VariantTiming": {
+      "additionalProperties": false,
+      "description": "Wall-clock durations of a variant search, rounded to 0.1 s. They vary between runs.",
+      "properties": {
+        "campaigns": {
+          "items": {
+            "$ref": "#/$defs/CampaignTime"
+          },
+          "title": "Campaigns",
+          "type": "array"
+        },
+        "total_s": {
+          "title": "Total S",
+          "type": "number"
+        }
+      },
+      "required": [
+        "total_s",
+        "campaigns"
+      ],
+      "title": "VariantTiming",
+      "type": "object"
+    },
+    "Verdict": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "INCONCLUSIVE"
+      ],
+      "title": "Verdict",
+      "type": "string"
+    },
+    "VerifyReport": {
+      "additionalProperties": false,
+      "description": "The result of `assay verify`. It holds no timestamps, host paths or ledger ids; apart\nfrom `timing`, the same inputs give the same report.",
+      "properties": {
+        "annotations": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Annotations",
+          "type": "array"
+        },
+        "bounds": {
+          "$ref": "#/$defs/Bounds"
+        },
+        "bounds_statement": {
+          "title": "Bounds Statement",
+          "type": "string"
+        },
+        "evidence_level": {
+          "anyOf": [
+            {
+              "enum": [
+                "E0",
+                "E1",
+                "E2",
+                "E3"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Level"
+        },
+        "final_verdict": {
+          "$ref": "#/$defs/FinalVerdict"
+        },
+        "inputs": {
+          "$ref": "#/$defs/Inputs"
+        },
+        "integrity_violation": {
+          "title": "Integrity Violation",
+          "type": "boolean"
+        },
+        "oracles": {
+          "items": {
+            "$ref": "#/$defs/OracleRow"
+          },
+          "title": "Oracles",
+          "type": "array"
+        },
+        "reasons": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reasons",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": 3,
+          "default": 3,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "timing": {
+          "$ref": "#/$defs/Timing"
+        }
+      },
+      "required": [
+        "inputs",
+        "oracles",
+        "final_verdict",
+        "reasons",
+        "integrity_violation",
+        "bounds",
+        "bounds_statement",
+        "timing"
+      ],
+      "title": "VerifyReport",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "`assay fix --json` and `assay run --json`; `format` tells them apart.",
+  "properties": {
+    "bundle_manifest_sha256": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Bundle Manifest Sha256"
+    },
+    "evidence_level": {
+      "enum": [
+        "E0",
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "title": "Evidence Level",
+      "type": "string"
+    },
+    "final_verdict": {
+      "enum": [
+        "VERIFIED_WITHIN_BOUNDS",
+        "REJECTED",
+        "INCONCLUSIVE"
+      ],
+      "title": "Final Verdict",
+      "type": "string"
+    },
+    "finding": {
+      "title": "Finding",
+      "type": "integer"
+    },
+    "finding_state": {
+      "title": "Finding State",
+      "type": "string"
+    },
+    "format": {
+      "enum": [
+        "assay-fix/1",
+        "assay-run/1"
+      ],
+      "title": "Format",
+      "type": "string"
+    },
+    "history": {
+      "$ref": "#/$defs/FixHistory"
+    },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    },
+    "reasons": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Reasons",
+      "type": "array"
+    },
+    "report": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/VerifyReport"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "vuln_class": {
+      "title": "Vuln Class",
+      "type": "string"
+    }
+  },
+  "required": [
+    "format",
+    "finding",
+    "vuln_class",
+    "final_verdict",
+    "reasons",
+    "finding_state",
+    "evidence_level",
+    "history",
+    "report",
+    "bundle_manifest_sha256",
+    "notes"
+  ],
+  "title": "FixDocument",
+  "type": "object"
+}

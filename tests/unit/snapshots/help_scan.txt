@@ -1,0 +1,40 @@
+                                                                                                    
+ Usage: assay scan [OPTIONS] {project}                                                              
+                                                                                                    
+ Run Slither and Aderyn on PROJECT and record their results as candidate findings.                  
+                                                                                                    
+ The project is snapshotted under the ingest rules, both analyzers run in the sandbox (no           
+ network, read-only project), and their results are normalized: each gets a class (one of           
+ the eight vulnerability classes or `other`), a stable id, the severity exactly as the tool         
+ reported it, and the state CANDIDATE at evidence level E0. Results of both tools at the same       
+ place are merged. Findings, scans and raw outputs go to the ledger; repeating a scan of the        
+ same input adds nothing and prints the same JSON. Every finding is a candidate                     
+ (unverified): a hint, not a reproduced exploit.                                                    
+                                                                                                    
+                                                                                                    
+ Examples:                                                                                          
+   assay scan fixtures/reentrancy/single_function                                                   
+   assay scan . --format sarif --out assay.sarif                                                    
+   assay scan . --json --fail-on high                                                               
+                                                                                                    
+ Exit codes: 0 scan finished (findings or not); 1 --fail-on met; 2 usage error;                     
+ 3 incomplete scan (an analyzer failed, timed out or wrote unusable output);                        
+ 4 infrastructure problem (Docker, runner image, ledger, out of memory);                            
+ 5 the project was rejected at ingest.                                                              
+                                                                                                    
+╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────╮
+│ *    project      <directory>  Foundry project directory to scan. [required]                     │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────╮
+│ --format         <table|json|sarif>                      Output format. [default: table]         │
+│ --json                                                   Same as --format json (stable machine   │
+│                                                          output).                                │
+│ --out            <path>                                  Write the output to this file instead   │
+│                                                          of standard output.                     │
+│ --fail-on        <optimization|informational|low|medium  Exit with 1 when a finding has a        │
+│                  |high>                                  reported severity at or above this one. │
+│ --ledger         <file>                                  Ledger database; created if missing.    │
+│                                                          [default: .assay/ledger.db]             │
+│ --help                                                   Show this message and exit.             │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+

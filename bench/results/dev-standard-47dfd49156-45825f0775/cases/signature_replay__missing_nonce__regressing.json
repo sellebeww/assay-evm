@@ -1,0 +1,51 @@
+{
+  "fixture": "signature_replay/missing_nonce",
+  "label": "regressing",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "event_changed",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "event_changed"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "event_changed"
+      ]
+    }
+  ],
+  "base_tree_sha256": "f8fb71aa48f16fe016450fc96cca3bee5be7d93728e64fc051d79895bfd7ddc4",
+  "poc_tree_sha256": "9f7d1b99479db604b637f3000a0220f748e9effca15fe907b1a17d553b9f7fad",
+  "patch_sha256": "7e1fcc34526953715a49a967d754bd2c4bc134cdb5ce2c444dda994b721fabdf",
+  "seconds": 24.4,
+  "error": null
+}

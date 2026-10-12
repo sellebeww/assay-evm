@@ -1,0 +1,11 @@
+--- a/src/DepositPool.sol
++++ b/src/DepositPool.sol
+@@ -29,7 +29,7 @@
+     /// @notice Pulls `amount` tokens from the sender and credits them to the sender.
+     function deposit(uint256 amount) external {
+         if (amount == 0) revert ZeroAmount();
+-        token.transferFrom(msg.sender, address(this), amount);
++        if (!token.transferFrom(msg.sender, address(this), amount)) revert TransferFailed();
+         creditOf[msg.sender] += amount;
+         totalCredit += amount;
+         emit Deposited(msg.sender, amount);

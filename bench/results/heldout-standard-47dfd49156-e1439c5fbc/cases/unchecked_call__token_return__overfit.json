@@ -1,0 +1,51 @@
+{
+  "fixture": "unchecked_call/token_return",
+  "label": "overfit",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "variant_found",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "variant_found"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "variant_found"
+      ]
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "c1641418577a25fdf284ef92b857b7b7067a64059a0e365429b888b86d56c406",
+  "poc_tree_sha256": "d8c3b5c8d12c65908c3be4513f7d8d3a5ff394f7e28045e40005e062572b98ee",
+  "patch_sha256": "14eba42ab25f9482b78ad2909df4d7b798bb88d0aba568e14b1ba57317b106c8",
+  "seconds": 41.8,
+  "error": null
+}

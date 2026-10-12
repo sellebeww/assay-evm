@@ -1,0 +1,37 @@
+--- a/src/CreditVault.sol
++++ b/src/CreditVault.sol
+@@ -10,6 +10,8 @@
+     mapping(address account => uint256 amount) public creditOf;
+     /// @notice Sum of all credit, in wei.
+     uint256 public totalCredit;
++    /// @dev Set while `cashOut` pays.
++    bool private cashingOut;
+ 
+     event Deposited(address indexed account, uint256 amount);
+     event CreditMoved(address indexed from, address indexed to, uint256 amount);
+@@ -19,6 +21,7 @@
+     error ZeroAddress();
+     error InsufficientCredit(uint256 requested, uint256 available);
+     error TransferFailed();
++    error Locked();
+ 
+     /// @notice Credits the ether sent with the call to the sender.
+     function deposit() external payable {
+@@ -30,6 +33,7 @@
+ 
+     /// @notice Hands `amount` of the sender's credit to `to`.
+     function moveCredit(address to, uint256 amount) external {
++        if (cashingOut) revert Locked();
+         if (to == address(0)) revert ZeroAddress();
+         if (amount == 0) revert ZeroAmount();
+         uint256 available = creditOf[msg.sender];
+@@ -54,7 +58,9 @@
+         uint256 amount = creditOf[msg.sender];
+         if (amount == 0) revert ZeroAmount();
+ 
++        cashingOut = true;
+         (bool sent,) = msg.sender.call{value: amount}("");
++        cashingOut = false;
+         if (!sent) revert TransferFailed();
+ 
+         creditOf[msg.sender] = 0;

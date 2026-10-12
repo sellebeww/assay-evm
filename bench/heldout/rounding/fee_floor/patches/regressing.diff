@@ -1,0 +1,27 @@
+--- a/src/FeePool.sol
++++ b/src/FeePool.sol
+@@ -41,13 +41,13 @@
+         emit Deposited(msg.sender, msg.value);
+     }
+ 
+-    /// @notice The fee charged on a withdrawal of `amount` wei.
++    /// @notice The fee charged on a withdrawal of `amount` wei, rounded up.
+     function feeOn(uint256 amount) public pure returns (uint256) {
+-        return amount * FEE_BPS / BPS;
++        return (amount * FEE_BPS + BPS - 1) / BPS;
+     }
+ 
+     /// @notice Pays `amount` wei of the sender's balance to the sender, minus the fee.
+-    function withdraw(uint256 amount) external {
++    function withdraw(uint256 amount) external returns (uint256 received) {
+         if (amount == 0) revert ZeroAmount();
+         uint256 available = balanceOf[msg.sender];
+         if (amount > available) revert InsufficientBalance(amount, available);
+@@ -59,6 +59,7 @@
+         (bool sent,) = msg.sender.call{value: amount - fee}("");
+         if (!sent) revert TransferFailed();
+         emit Withdrawn(msg.sender, amount, fee);
++        return amount - fee;
+     }
+ 
+     /// @notice Sends the fees that were charged to the treasury.

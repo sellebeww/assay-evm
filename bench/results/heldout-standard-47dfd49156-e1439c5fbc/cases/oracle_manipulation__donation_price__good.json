@@ -1,0 +1,47 @@
+{
+  "fixture": "oracle_manipulation/donation_price",
+  "label": "good",
+  "expected_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "expected_reason": null,
+  "exit_code": 0,
+  "final_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "reasons": [],
+  "evidence_level": "E3",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "9f178e7dd679dd359a398857b5425472a1d700153e6d566a6df1436c61101438",
+  "poc_tree_sha256": "a3f001443a80549cb840957ab8c82c2b89e901620eef106f5150d6b88de493af",
+  "patch_sha256": "f205adfcdff4eacc237344ca59affeb0513ffa3398444a37dc3226b524b0be6b",
+  "seconds": 31.8,
+  "error": null
+}

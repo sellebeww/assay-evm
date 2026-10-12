@@ -1,0 +1,134 @@
+# Mapping from analyzer detectors to the vulnerability classes of docs/fixture-spec.md, section 3,
+# and from reported severities to SARIF levels. This file is the only place where these mappings
+# live; the normalizer reads it and contains no detector names of its own.
+#
+# Rule for a class: a detector maps to a class only when the defect the detector is documented to
+# look for is the defect that defines the class. Anything else maps to "other", and so does every
+# detector that is not listed here (for example one added by a later tool version). Entries that
+# map to "other" are listed only where the choice may surprise a reader; the reason is given.
+#
+# The table was written from the detector documentation of the pinned tool versions (Slither
+# 0.11.6, Aderyn v0.6.8), before any coverage run, and is not adjusted to make a coverage number
+# look better. A change needs a reason in the change log.
+
+schema_version = 1
+
+classes = [
+    "reentrancy",
+    "access_control",
+    "unchecked_call",
+    "signature_replay",
+    "delegatecall",
+    "oracle_manipulation",
+    "dos",
+    "rounding",
+]
+
+[severity]
+# Severities are kept exactly as the tools report them. The first word of a reported severity
+# (Slither: "High (confidence Medium)" gives "high"; Aderyn: "High" or "Low") selects the SARIF
+# level of a result and its place in the order used by `assay scan --fail-on`. The order is the
+# tools' own (Slither documents High > Medium > Low > Informational > Optimization). A first word
+# that is not listed gets the SARIF level "warning" and meets every `--fail-on` threshold.
+order = ["optimization", "informational", "low", "medium", "high"]
+
+[severity.sarif_level]
+high = "error"
+medium = "warning"
+low = "note"
+informational = "note"
+optimization = "note"
+
+[detectors.slither]
+# reentrancy: an external call happens before state is updated, so the callee can re-enter.
+reentrancy-eth = "reentrancy"
+reentrancy-no-eth = "reentrancy"
+reentrancy-benign = "reentrancy"
+reentrancy-events = "reentrancy"
+reentrancy-balance = "reentrancy"
+reentrancy-unlimited-gas = "reentrancy"
+token-reentrancy = "reentrancy"
+
+# access_control: a privileged action lacks a permission check.
+arbitrary-send-eth = "access_control"           # anyone can make the contract send ether anywhere
+arbitrary-send-erc20 = "access_control"         # transferFrom with a caller-chosen `from`
+arbitrary-send-erc20-permit = "access_control"  # the same, through permit
+suicidal = "access_control"                     # anyone can destroy the contract
+unprotected-upgrade = "access_control"          # unprotected initializer of an upgradeable contract
+protected-vars = "access_control"               # a variable written without its declared guard
+tx-origin = "access_control"                    # tx.origin used for authorization
+events-access = "other"                         # a missing event, not a missing check
+missing-zero-check = "other"                    # input validation, not a permission check
+
+# unchecked_call: the result of a call is ignored, so accounting diverges when the call fails.
+unchecked-lowlevel = "unchecked_call"
+unchecked-send = "unchecked_call"
+unchecked-transfer = "unchecked_call"
+unused-return = "unchecked_call"
+low-level-calls = "other"                       # flags every low-level call, checked or not
+
+# signature_replay: no Slither 0.11.6 detector looks for missing nonces or domain separation.
+encode-packed-collision = "other"               # hash collisions of packed encodings, not reuse
+
+# delegatecall: delegatecall to a target the caller controls.
+controlled-delegatecall = "delegatecall"
+delegatecall-loop = "delegatecall"
+
+# oracle_manipulation: no Slither 0.11.6 detector looks for prices that a trade can move. The
+# oracle detectors below check how a feed is consumed (staleness, confidence), a different defect.
+pyth-unchecked-confidence = "other"
+pyth-unchecked-publishtime = "other"
+pyth-deprecated-functions = "other"
+chronicle-unchecked-price = "other"
+chainlink-feed-registry = "other"
+
+# dos: one failing or expensive callee blocks an operation for everyone.
+calls-loop = "dos"                              # external calls inside a loop
+return-bomb = "dos"                             # a callee can consume the caller's gas
+costly-loop = "other"                           # gas cost of storage writes in loops, not blocking
+incorrect-equality = "other"                    # strict equality; may lock funds, defect differs
+msg-value-loop = "other"                        # msg.value reused in a loop, an accounting defect
+
+# rounding: arithmetic that loses precision in a way that can be exploited.
+divide-before-multiply = "rounding"
+
+[detectors.aderyn]
+# reentrancy
+reentrancy-state-change = "reentrancy"
+non-reentrant-not-first = "reentrancy"          # other modifiers run before the reentrancy guard
+
+# access_control
+eth-send-unchecked-address = "access_control"   # ether sent to an address without caller checks
+arbitrary-transfer-from = "access_control"      # transferFrom with a caller-chosen `from`
+unprotected-initializer = "access_control"
+tx-origin-used-for-auth = "access_control"
+centralization-risk = "other"                   # owner privileges exist; not a missing check
+state-no-address-check = "other"                # input validation, not a permission check
+
+# unchecked_call
+unchecked-low-level-call = "unchecked_call"
+unchecked-return = "unchecked_call"
+unchecked-send = "unchecked_call"
+unsafe-erc20-operation = "other"                # flags raw ERC20 calls whether checked or not
+
+# signature_replay: ecrecover is flagged for signature malleability, which lets one signed
+# message be accepted a second time under a different signature.
+ecrecover = "signature_replay"
+abi-encode-packed-hash-collision = "other"      # hash collisions of packed encodings, not reuse
+
+# delegatecall
+delegate-call-unchecked-address = "delegatecall"
+delegatecall-in-loop = "delegatecall"
+
+# oracle_manipulation: no Aderyn v0.6.8 detector looks for prices that a trade can move.
+
+# dos
+require-revert-in-loop = "dos"                  # one bad item reverts the whole loop
+return-bomb = "dos"
+costly-loop = "other"                           # gas cost, not blocking
+msg-value-in-loop = "other"
+strict-equality-contract-balance = "other"
+
+# rounding
+division-before-multiplication = "rounding"
+unsafe-casting = "other"                        # truncation by a cast, not rounding of a division

@@ -1,0 +1,115 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "assay-evm"
+dynamic = ["version"]
+description = "Verification-first checking of Solidity patches: deterministic oracles decide whether a patch closes an exploit, within recorded bounds."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["solidity", "foundry", "evm", "smart-contracts", "verification"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Software Development :: Testing",
+    "Typing :: Typed",
+]
+dependencies = [
+    "typer>=0.12",
+    "pydantic>=2",
+    "rich>=13",
+    "httpx>=0.27",
+]
+
+[project.scripts]
+assay = "assay.cli.main:app"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-cov>=5",
+    "hypothesis>=6",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pip-audit>=2.7",
+    # Tests only: validates the SARIF export against the official SARIF 2.1.0 schema.
+    "jsonschema>=4.23",
+    # Development only: `make lint-actions` wraps action.yml for actionlint, and the tests read
+    # the workflows.
+    "pyyaml>=6",
+    "types-pyyaml>=6",
+]
+
+[tool.hatch.version]
+path = "src/assay/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/assay"]
+
+# The wheel carries the shared Solidity harness and the pinned tool versions, which `assay verify`
+# and `assay doctor` read; a source checkout reads them from `solidity/` and `docker/runner/`.
+[tool.hatch.build.targets.wheel.force-include]
+"solidity" = "assay/_data/solidity"
+"docker/runner/versions.lock" = "assay/_data/versions.lock"
+
+[tool.hatch.build.targets.sdist]
+# Explicit allowlist: only these paths are published in the source distribution.
+only-include = [
+    "src/assay",
+    "tests",
+    "tools",
+    "fixtures",
+    "solidity",
+    "docker/runner",
+    "demo",
+    "docs",
+    "Makefile",
+    ".python-version",
+    "uv.lock",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "CODE_OF_CONDUCT.md",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests", "tools"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP", "SIM", "C4", "PT", "RUF"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+# Lets unit tests import the scripts in tools/ (for example fixture_check).
+pythonpath = ["tools"]
+addopts = ["-ra", "--strict-markers", "--strict-config"]
+xfail_strict = true
+markers = [
+    "integration: needs Docker and the runner image",
+    "matrix: long classification matrix run, needs Docker",
+]
+
+[tool.coverage.run]
+source = ["assay"]
+branch = true

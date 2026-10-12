@@ -1,0 +1,17 @@
+--- a/src/CreditVault.sol
++++ b/src/CreditVault.sol
+@@ -54,11 +54,12 @@
+         uint256 amount = creditOf[msg.sender];
+         if (amount == 0) revert ZeroAmount();
+ 
++        creditOf[msg.sender] = 0;
++        totalCredit -= amount;
++
+         (bool sent,) = msg.sender.call{value: amount}("");
+         if (!sent) revert TransferFailed();
+ 
+-        creditOf[msg.sender] = 0;
+-        totalCredit -= amount;
+         emit CashedOut(msg.sender, amount);
+     }
+ }

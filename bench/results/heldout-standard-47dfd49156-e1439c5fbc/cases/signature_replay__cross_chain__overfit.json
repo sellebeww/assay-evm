@@ -1,0 +1,51 @@
+{
+  "fixture": "signature_replay/cross_chain",
+  "label": "overfit",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "variant_found",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "variant_found"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "variant_found"
+      ]
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "49271763f9978b5b4c4816a5f37be869cc99a278005c71b42a372e06b81021a8",
+  "poc_tree_sha256": "4a3af9b9325af3f85af9af95764cd1b4e96797a9e6c0fb1dff88235fb0b5b3fe",
+  "patch_sha256": "8ecf84a1b5050fd45132e192d753dd680d87e39196b2ba2ddc62aec19bbeb975",
+  "seconds": 28.9,
+  "error": null
+}

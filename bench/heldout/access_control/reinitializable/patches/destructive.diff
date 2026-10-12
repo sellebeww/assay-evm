@@ -1,0 +1,20 @@
+--- a/src/Treasury.sol
++++ b/src/Treasury.sol
+@@ -25,6 +25,7 @@
+     error FeeTooHigh(uint16 feeBps);
+     error InsufficientFunds(uint256 requested, uint256 available);
+     error TransferFailed();
++    error SweepsPaused();
+ 
+     modifier onlyOwner() {
+         if (msg.sender != owner) revert NotOwner(msg.sender);
+@@ -72,8 +73,6 @@
+         if (amount == 0) revert ZeroAmount();
+         uint256 available = address(this).balance;
+         if (amount > available) revert InsufficientFunds(amount, available);
+-        (bool sent,) = to.call{value: amount}("");
+-        if (!sent) revert TransferFailed();
+-        emit Swept(to, amount);
++        revert SweepsPaused();
+     }
+ }

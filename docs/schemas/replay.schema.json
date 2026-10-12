@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "`assay replay --json`.",
+  "properties": {
+    "bundle_final_verdict": {
+      "enum": [
+        "VERIFIED_WITHIN_BOUNDS",
+        "REJECTED",
+        "INCONCLUSIVE"
+      ],
+      "title": "Bundle Final Verdict",
+      "type": "string"
+    },
+    "differences": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Differences",
+      "type": "array"
+    },
+    "format": {
+      "const": "assay-replay/1",
+      "default": "assay-replay/1",
+      "title": "Format",
+      "type": "string"
+    },
+    "match": {
+      "title": "Match",
+      "type": "boolean"
+    },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    },
+    "replay_final_verdict": {
+      "enum": [
+        "VERIFIED_WITHIN_BOUNDS",
+        "REJECTED",
+        "INCONCLUSIVE"
+      ],
+      "title": "Replay Final Verdict",
+      "type": "string"
+    }
+  },
+  "required": [
+    "match",
+    "differences",
+    "notes",
+    "bundle_final_verdict",
+    "replay_final_verdict"
+  ],
+  "title": "ReplayDocument",
+  "type": "object"
+}

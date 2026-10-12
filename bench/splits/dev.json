@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "name": "dev",
+  "root": "fixtures",
+  "fixtures": [
+    "reentrancy/single_function",
+    "access_control/missing_modifier",
+    "unchecked_call/ignored_return",
+    "signature_replay/missing_nonce",
+    "delegatecall/user_controlled_target",
+    "oracle_manipulation/spot_price",
+    "dos/payout_loop",
+    "rounding/share_inflation"
+  ]
+}

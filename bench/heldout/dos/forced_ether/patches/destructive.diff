@@ -1,0 +1,21 @@
+--- a/src/Presale.sol
++++ b/src/Presale.sol
+@@ -30,6 +30,7 @@
+     error BalanceMismatch(uint256 balance, uint256 pledged);
+     error NothingPledged(address account);
+     error TransferFailed();
++    error FinalizationPaused();
+ 
+     constructor(address beneficiary_, uint256 target_) {
+         if (beneficiary_ == address(0)) revert ZeroAddress();
+@@ -70,9 +71,6 @@
+         if (address(this).balance != totalPledged) {
+             revert BalanceMismatch(address(this).balance, totalPledged);
+         }
+-        finalized = true;
+-        (bool sent,) = beneficiary.call{value: totalPledged}("");
+-        if (!sent) revert TransferFailed();
+-        emit Finalized(beneficiary, totalPledged);
++        revert FinalizationPaused();
+     }
+ }

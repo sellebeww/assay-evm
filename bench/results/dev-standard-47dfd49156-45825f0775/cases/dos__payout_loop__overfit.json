@@ -1,0 +1,51 @@
+{
+  "fixture": "dos/payout_loop",
+  "label": "overfit",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "variant_found",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "variant_found"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "variant_found"
+      ]
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "d4e304218a88bbe6d1d065af179ad53a1dfccf12721610420ff496579e79924a",
+  "poc_tree_sha256": "56710fd6ca92c002ad85485239af0ff3a08f1d67acb42d6dfdf64db59f5b9c17",
+  "patch_sha256": "93d428d66cba1fcdcf0c2009783a2f59c117e1702e1225ecc4f67fc8caf04b01",
+  "seconds": 170.9,
+  "error": null
+}

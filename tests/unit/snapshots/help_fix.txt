@@ -1,0 +1,77 @@
+                                                                                                    
+ Usage: assay fix [OPTIONS] {project}                                                               
+                                                                                                    
+ Ask a model for a patch for a REPRODUCED finding and verify it, within bounds.                     
+                                                                                                    
+ Each attempt runs the IntegrityOracle first (a patch that touches a protected path, leaves the     
+ scope, is too large or special-cases the PoC never runs), then the whole verification:             
+ integrity, exploit, variant, behavior and regression, plus symbolic with --symbolic. A patch       
+ that fails gives the model structured, redacted feedback, quoted as data. At most                  
+ --max-attempts attempts (3 by default, 5 at most). A patch that passes is verified once more       
+ with a held-out seed that no attempt and no prompt has seen; that final run decides, and the       
+ output says when it differs from the loop. The model only proposes; the oracles decide.            
+ Modes `record` and `live` send redacted code to the configured endpoint and need --allow-llm       
+ (see docs/llm.md and docs/fix-loop.md).                                                            
+                                                                                                    
+                                                                                                    
+ Example:                                                                                           
+   assay fix fixtures/reentrancy/single_function --finding 1 --max-attempts 3 \                     
+     --bundle-out out/fix                                                                           
+                                                                                                    
+ Exit codes: 0 VERIFIED_WITHIN_BOUNDS; 1 REJECTED; 2 usage error; 3 INCONCLUSIVE (also: no          
+ patch could be judged, or a budget limit); 4 infrastructure problem (Docker, runner image,         
+ ledger, no cassette, endpoint failure); 5 an integrity violation (the deciding patch touched       
+ a protected or out-of-scope path, or used traversal, a symlink or a binary file; or the            
+ inputs or a cassette were rejected).                                                               
+                                                                                                    
+╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────╮
+│ *    project      <directory>  Foundry project directory. [required]                             │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────╮
+│ *  --finding                  <int>                      Ledger id of a REPRODUCED finding       │
+│                                                          (`assay prove`).                        │
+│                                                          [required]                              │
+│    --mode                     <replay|record|live>       replay (default), record or live.       │
+│                                                          [default: replay]                       │
+│    --allow-llm                                           Allow sending redacted code to the      │
+│                                                          endpoint.                               │
+│    --llm-dry-run                                         Print size and hash of the first        │
+│                                                          payload; send nothing.                  │
+│    --max-attempts             <int>                      Patch attempts, 1 to 5. [default: 3]    │
+│    --profile                  <quick|standard|thorough>  Campaign profile of the variant search  │
+│                                                          (see docs/oracles.md).                  │
+│                                                          [default: standard]                     │
+│    --symbolic                                            Also run the symbolic oracle (Halmos)   │
+│                                                          per attempt.                            │
+│    --bundle-out               <path>                     Write the evidence bundle of the final  │
+│                                                          verification, with the attempt history, │
+│                                                          into this directory, which must be      │
+│                                                          empty or absent.                        │
+│    --poc-dir                  <directory>                Directory of the PoC that reproduced    │
+│                                                          the finding (default: where `assay      │
+│                                                          prove` wrote it).                       │
+│    --seed                     <str>                      Base seed of the loop (0x and 1 to 16   │
+│                                                          hex digits). The seed of the final      │
+│                                                          decision is derived from it in a        │
+│                                                          different family and is never shown to  │
+│                                                          the model.                              │
+│                                                          [default: 0x1]                          │
+│    --max-changed-lines        <int>                      Most added plus removed lines of a      │
+│                                                          patch.                                  │
+│                                                          [default: 200]                          │
+│    --max-files                <int>                      Most files a patch may change.          │
+│                                                          [default: 5]                            │
+│    --max-diff-bytes           <int>                      Largest patch, in bytes.                │
+│                                                          [default: 49152]                        │
+│    --cassette-dir             <directory>                Directory of the cassettes.             │
+│                                                          [default: tests/data/cassettes]         │
+│    --budget-calls             <int>                      Most requests. [default: 12]            │
+│    --budget-tokens            <int>                      Most tokens (in plus out).              │
+│                                                          [default: 200000]                       │
+│    --json                                                Print the result as JSON instead of     │
+│                                                          text.                                   │
+│    --ledger                   <file>                     Ledger database.                        │
+│                                                          [default: .assay/ledger.db]             │
+│    --help                                                Show this message and exit.             │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+

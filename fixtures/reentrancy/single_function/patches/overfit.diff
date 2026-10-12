@@ -1,0 +1,12 @@
+--- a/src/Vault.sol
++++ b/src/Vault.sol
+@@ -34,6 +34,9 @@
+         (bool sent,) = msg.sender.call{value: amount}("");
+         if (!sent) revert TransferFailed();
+ 
++        // The balance may have changed during the transfer, so check it again.
++        uint256 current = balanceOf[msg.sender];
++        if (amount > current) revert InsufficientBalance(amount, current);
+         balanceOf[msg.sender] = available - amount;
+         totalDeposits -= amount;
+         emit Withdrawn(msg.sender, amount);

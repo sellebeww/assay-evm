@@ -1,0 +1,51 @@
+--- a/src/Crowdfund.sol
++++ b/src/Crowdfund.sol
+@@ -7,6 +7,10 @@
+ ///         If the organizer cancels the campaign instead, anyone may trigger the refund of every
+ ///         contributor in one call.
+ contract Crowdfund {
++    /// @dev Gas forwarded with each refund. A contributor that needs more keeps its refund owed
++    ///      for a later run, and cannot use up the gas meant for the others.
++    uint256 private constant REFUND_GAS = 50_000;
++
+     /// @notice The account that runs the campaign.
+     address public immutable organizer;
+     /// @notice Ether the campaign must raise before the organizer may take it, in wei.
+@@ -25,6 +29,7 @@
+     event Contributed(address indexed account, uint256 amount);
+     event Cancelled();
+     event Refunded(address indexed account, uint256 amount);
++    event RefundFailed(address indexed account, uint256 amount);
+     event Claimed(uint256 amount);
+ 
+     error ZeroAmount();
+@@ -63,8 +68,9 @@
+     }
+ 
+     /// @notice Sends every contributor its contribution back. Anyone may call it once the
+-    ///         campaign is cancelled.
+-    function refundAll() external {
++    ///         campaign is cancelled. A refund that fails stays owed and is retried by the next
++    ///         call; the number of failed refunds is returned.
++    function refundAll() external returns (uint256 failed) {
+         if (!cancelled) revert NotCancelled();
+         uint256 count = contributors.length;
+         for (uint256 i = 0; i < count; i++) {
+@@ -73,8 +79,15 @@
+             if (amount == 0) continue;
+             contributionOf[account] = 0;
+             totalRaised -= amount;
+-            (bool sent,) = payable(account).call{value: amount}("");
+-            if (!sent) revert TransferFailed(account);
++            (bool sent,) = payable(account).call{value: amount, gas: REFUND_GAS}("");
++            if (!sent) {
++                // Keep the refund owed for a later run and go on with the other contributors.
++                contributionOf[account] = amount;
++                totalRaised += amount;
++                emit RefundFailed(account, amount);
++                failed += 1;
++                continue;
++            }
+             emit Refunded(account, amount);
+         }
+     }

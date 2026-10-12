@@ -1,0 +1,51 @@
+{
+  "fixture": "unchecked_call/token_return",
+  "label": "regressing",
+  "expected_verdict": "REJECTED",
+  "expected_reason": "abi_changed",
+  "exit_code": 1,
+  "final_verdict": "REJECTED",
+  "reasons": [
+    "abi_changed"
+  ],
+  "evidence_level": "E1",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "FAIL",
+      "codes": [
+        "abi_changed"
+      ]
+    }
+  ],
+  "base_tree_sha256": "c1641418577a25fdf284ef92b857b7b7067a64059a0e365429b888b86d56c406",
+  "poc_tree_sha256": "d8c3b5c8d12c65908c3be4513f7d8d3a5ff394f7e28045e40005e062572b98ee",
+  "patch_sha256": "f2bb8f1b9a025efb1c0c471575fdbc7a904d6e77de7358403efb5f96323eff20",
+  "seconds": 29.0,
+  "error": null
+}

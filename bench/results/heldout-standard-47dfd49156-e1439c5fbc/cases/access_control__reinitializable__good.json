@@ -1,0 +1,47 @@
+{
+  "fixture": "access_control/reinitializable",
+  "label": "good",
+  "expected_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "expected_reason": null,
+  "exit_code": 0,
+  "final_verdict": "VERIFIED_WITHIN_BOUNDS",
+  "reasons": [],
+  "evidence_level": "E3",
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "exploit",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "variant",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "behavior",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    },
+    {
+      "oracle": "regression",
+      "status": "ran",
+      "verdict": "PASS",
+      "codes": []
+    }
+  ],
+  "base_tree_sha256": "77a9f154105e8dc5df890358268d76f2a89ba09e194bde784c66f3fd38fc5c10",
+  "poc_tree_sha256": "592247511834c1090ae3b6a5f3114388f58960a34ca1d861a14ecb8ac5e49aa3",
+  "patch_sha256": "204cea92bbe7613de5d9c0a8df6d99b84410943344b973861c6c60960951af05",
+  "seconds": 46.4,
+  "error": null
+}

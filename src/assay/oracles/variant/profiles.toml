@@ -1,0 +1,43 @@
+# Campaign profiles of the VariantOracle, chosen with `assay verify --profile` (default
+# `standard`). This file is the only place where the values live; reports and bundles record the
+# profile that ran together with every value below.
+#
+# A campaign is one `forge test` run of one search mode on one revision with one seed:
+#
+#   seeds               number of seeds; each seed gives one fuzz campaign and, when the PoC
+#                       directory has an invariant, one invariant campaign per revision. The seeds
+#                       are derived from the recorded base seed (`--seed`, default 0x1), so a
+#                       campaign can be repeated exactly.
+#   runs_per_seed       runs of `testFuzz_variants` in one fuzz campaign.
+#   invariant_runs      call sequences in one invariant campaign.
+#   invariant_depth     calls per sequence in one invariant campaign.
+#   campaign_timeout_s  wall-clock limit of one campaign, compilation included. A campaign that
+#                       reaches it is INCONCLUSIVE (timeout), never a pass.
+#
+# On each revision and in each mode the seeds run in order and the search stops at the first
+# seed that finds something; a search that finds nothing runs every seed. `quick` is meant for a
+# first look and can miss variants that `standard` or `thorough` find.
+
+schema_version = 1
+default = "standard"
+
+[profiles.quick]
+seeds = 1
+runs_per_seed = 64
+invariant_runs = 32
+invariant_depth = 15
+campaign_timeout_s = 180
+
+[profiles.standard]
+seeds = 3
+runs_per_seed = 256
+invariant_runs = 64
+invariant_depth = 25
+campaign_timeout_s = 300
+
+[profiles.thorough]
+seeds = 8
+runs_per_seed = 1024
+invariant_runs = 256
+invariant_depth = 50
+campaign_timeout_s = 900

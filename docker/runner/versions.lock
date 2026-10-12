@@ -1,0 +1,63 @@
+# Pinned inputs of the assay-runner image.
+#
+# Format: KEY=VALUE, one per line; lines starting with '#' are comments.
+# The Makefile passes every key below to `docker build` as a build argument,
+# so this file is the single source of truth for the image contents.
+# Changes require an ADR (see docs/adr/0001-record-architecture-decisions.md).
+
+# Dockerfile frontend (BuildKit syntax image). The `# syntax=` line of the
+# Dockerfile cannot read build arguments; it must match this value.
+DOCKERFILE_FRONTEND=docker/dockerfile:1.27.1@sha256:4edf897a3ffa55b89f906fc8cc78afdb3f1834cc9c7083565e611a8a7d5fe99e
+
+# Base image: Debian 13 (trixie) slim, pinned by multi-platform index digest.
+BASE_IMAGE=debian:trixie-slim@sha256:a99cfc517144bc59b1978475ec53b46ecabec7e43635402ee5b77cc54cd1b20a
+# Platform manifests contained in the index above (recorded for reference).
+BASE_IMAGE_MANIFEST_LINUX_AMD64=sha256:7792b1f7702a86946cd518db72b6a407302c3e9bc1635634368b878189e8221c
+BASE_IMAGE_MANIFEST_LINUX_ARM64=sha256:da496358bd6934d2bd6a563a33176a2e50eff5490c54b4ac6fb051b69fef4071
+
+# Foundry stable release (only `forge` is installed).
+# Source: https://github.com/foundry-rs/foundry/releases/tag/v1.8.4
+FOUNDRY_VERSION=v1.8.4
+FOUNDRY_SHA256_LINUX_AMD64=699e2207a6a9b27ca17c48c81e56f1677ed9c58b623b59128b4e15ec9da0625e
+FOUNDRY_SHA256_LINUX_ARM64=d998f88314c057dc37c1de9a2044f49b273505965ff94bea5c3c5aefa9d1debd
+
+# solc, official static builds from binaries.soliditylang.org.
+# Version choice and reason: docs/fixture-spec.md, section 7.
+SOLC_VERSION=0.8.36
+SOLC_BUILD=v0.8.36+commit.8a079791
+SOLC_SHA256_LINUX_AMD64=c8d35afdddc3cd2743ee88b8f25e0fecd16e2bdd5f2120f37e52cd9cc45ae0e6
+SOLC_SHA256_LINUX_ARM64=3907c0ad4e33650ced040473d7bd7d9837a7675bd40628236f9d97f9ab3657c5
+
+# forge-std, pinned to the commit of tag v1.17.0 (GitHub source archive).
+FORGE_STD_VERSION=v1.17.0
+FORGE_STD_COMMIT=f3dae6e6ee381f25eb6a246f7da9b85c91a68219
+FORGE_STD_SHA256=e1eab5f0891018e368a0417bfe266d93f8b9af9484e5a15b15f87f1f4b7c50aa
+
+# Python for Slither: python-build-standalone, a relocatable CPython build that needs only glibc
+# from the base image. Release archives with checksums (SHA256SUMS of the release).
+# Source: https://github.com/astral-sh/python-build-standalone/releases/tag/20261001
+PYTHON_VERSION=3.12.15
+PYTHON_BUILD_RELEASE=20261001
+PYTHON_SHA256_LINUX_AMD64=7bb1659e3235077b7f63d5b6eb6ce653c6fcd6c5041e9d5f73b42ce10421464d
+PYTHON_SHA256_LINUX_ARM64=0b35f4dc08d58534eb82e024989e2db9873885dccd4f2a316ff55c0cec146123
+
+# Slither and its Python dependencies, every distribution pinned by sha256 in
+# docker/runner/slither-requirements.txt (wheels only). solc-select is left out; ADR 0015.
+# Source: https://pypi.org/project/slither-analyzer/0.11.6/
+SLITHER_VERSION=0.11.6
+SLITHER_REQUIREMENTS_SHA256=f386ddc3f0100e6e7e1dd190a2ec9c94c0d89dabb26559adf7eb625714897295
+
+# Aderyn, official release archives (the checksums equal the release's .sha256 files).
+# Source: https://github.com/Cyfrin/aderyn/releases/tag/aderyn-v0.6.8
+ADERYN_VERSION=v0.6.8
+ADERYN_SHA256_LINUX_AMD64=ffd6ca658962e211a3ac821c646f69c8e14bf1b1001cbfe091bcd4535a691e46
+ADERYN_SHA256_LINUX_ARM64=961070bf5ee4ed0f82f67a261c616e1525ec1b036bae60cdaec94d087eb5e405
+
+# Halmos (symbolic execution) and its dependencies, every distribution pinned by sha256 in
+# docker/runner/halmos-requirements.txt (wheels only). Only in the symbolic image, which is built
+# for linux/amd64 only: Halmos pins z3-solver 4.12.6.0, which publishes no linux/arm64 wheel
+# (ADR 0018). The solver is z3 from that wheel (binding and binary); yices-solver is left out.
+# Source: https://pypi.org/project/halmos/0.3.3/
+HALMOS_VERSION=0.3.3
+HALMOS_REQUIREMENTS_SHA256=a53001f7a1cfa2c8165dd4042a0d754156e9008a13a2a197b01908593de2d0bc
+Z3_SOLVER_VERSION=4.12.6.0
