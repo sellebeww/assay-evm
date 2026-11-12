@@ -85,7 +85,7 @@ The default for `fail-on` is `inconclusive` because an unknown result must not l
 |---|---|
 | `verdict` | `VERIFIED_WITHIN_BOUNDS`, `REJECTED`, `INCONCLUSIVE`, `ERROR` or `NO_CHANGES_IN_SCOPE`. |
 | `exit-code` | The exit code of `assay ci verify` ([exit codes](cli.md#exit-codes)). |
-| `bundle-path` | Directory on the runner with the bundles, `summary.md` and `result.json`. |
+| `bundle-path` | Directory on the runner with the bundles, `summary.md`, `result.json` and `verify.sarif`. |
 
 ## What happens
 
@@ -114,8 +114,9 @@ at most one comment per pull request, finds it by a hidden marker and an author 
   `manifest.json`; re-check one with `assay replay`), `summary.md` (the Markdown shown in the job
   summary) and `result.json` (verdicts and exit codes). The bundle holds the base tree, the PoC,
   the patch and the oracle evidence, so treat it like the repository's source.
-- With `upload-sarif: "true"`: the SARIF of `assay scan` to code scanning, category `assay`. It
-  is skipped, with a notice in the log, for pull requests from forks and for private repositories
+- With `upload-sarif: "true"`: the SARIF of `assay scan` to code scanning, category `assay`, and
+  the SARIF of the verification (`verify.sarif`, one alert per oracle that did not pass, on the
+  changed files), category `assay-verify`. Both are skipped, with a notice in the log, for pull requests from forks and for private repositories
   on which code scanning is not available (it needs GitHub Advanced Security) or cannot be read
   with the job's token. The job needs `security-events: write`.
 

@@ -127,6 +127,8 @@ class CiRun:
     results: tuple[PocResult, ...]
     poc_changed: bool = False
     """The pull request changed files under the PoC directory."""
+    path_prefix: str = ""
+    """The project directory relative to the repository root (`""` or ending in `/`)."""
 
 
 def result_verdict(result: PocResult) -> str:

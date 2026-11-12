@@ -9,6 +9,7 @@ from typing import Annotated, Final, NoReturn
 
 import typer
 
+from assay import __version__
 from assay.analyzers.foundry import ForgeOutOfMemory
 from assay.cli.exit_codes import ExitCode
 from assay.cli.text import printable
@@ -33,6 +34,8 @@ from assay.report.bundle import (
     environment,
     read_versions_lock,
 )
+from assay.report.sarif import dumps as sarif_dumps
+from assay.report.sarif import verify_to_sarif
 from assay.sandbox import SandboxError, SandboxRunner
 
 DEFAULT_LEDGER: Final = Path(".assay") / "ledger.db"
@@ -231,6 +234,15 @@ def verify_command(
     json_output: Annotated[
         bool, typer.Option("--json", help="Print the report as JSON instead of a table.")
     ] = False,
+    sarif_out: Annotated[
+        Path | None,
+        typer.Option(
+            "--sarif",
+            help="Also write the result as SARIF 2.1.0 to this file (for GitHub Code Scanning): "
+            "one result per oracle that did not pass; none for VERIFIED_WITHIN_BOUNDS.",
+            dir_okay=False,
+        ),
+    ] = None,
     ledger_path: Annotated[
         Path,
         typer.Option("--ledger", help="Ledger database; created if missing.", dir_okay=False),
@@ -324,6 +336,15 @@ def verify_command(
         _fail(ExitCode.INFRASTRUCTURE, f"error: {exc}")
 
     report = outcome.report
+    if sarif_out is not None:
+        try:
+            sarif_out.parent.mkdir(parents=True, exist_ok=True)
+            sarif_out.write_text(
+                sarif_dumps(verify_to_sarif([(poc.name, report)], assay_version=__version__)),
+                encoding="utf-8",
+            )
+        except OSError as exc:
+            _fail(ExitCode.INFRASTRUCTURE, f"error: cannot write the SARIF file: {exc}")
     if json_output:
         typer.echo(json.dumps(report.model_dump(mode="json"), indent=2, sort_keys=True))
     else:
