@@ -49,3 +49,11 @@ on the owner account.
 A release does not change the verdict rules or the measured results. Regenerate the result pages
 (`make bench-report` and the other `make` targets of the `docs/` pages) only when the oracles or
 `versions.lock` changed, and say so in the changelog.
+
+## GitHub Pages
+
+The documentation site is deployed by `.github/workflows/docs.yml` from `main`. Once, in the
+repository settings, set Pages, Source to "GitHub Actions". Build it locally with `make docs-site`
+(output in `build/site/`, ignored by Git). Material for MkDocs announced its end of life for
+5 May 2027, with critical fixes until then; its maintained successor is Zensical, which reads the
+same `mkdocs.yml`. Plan the move before that date.

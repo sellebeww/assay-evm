@@ -69,6 +69,11 @@ dev = [
     "types-pyyaml>=6",
 ]
 
+docs = [
+    # The documentation site (`make docs-site`), built with MkDocs Material.
+    "mkdocs-material>=9.5",
+]
+
 [tool.hatch.version]
 path = "src/assay/__init__.py"
 

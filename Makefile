@@ -75,7 +75,7 @@ symbolic_run = $(DOCKER) run $(subst size=64m,size=256m,$(RUNNER_RUN_FLAGS)) \
 	--volume "$$scratch:/work/scratch" \
 	--workdir /work/project $(SYMBOLIC_IMAGE)
 
-.PHONY: help install lint typecheck test test-integration test-security check fmt clean image \
+.PHONY: docs-site help install lint typecheck test test-integration test-security check fmt clean image \
 	image-check fixtures-check bench-oracles bench-freeze bench-report matrix static-coverage variant-power symbolic-report schemas \
 	demo demo-overfit demo-cassettes docs-check lint-actions claims-check third-party-notices
 
@@ -200,6 +200,10 @@ schemas:
 	$(UV) run python tools/export_schemas.py
 
 # Relative links in README.md and docs/, and the words the project never uses for a result.
+# The documentation site (MkDocs Material); strict mode fails on a broken link.
+docs-site:
+	NO_MKDOCS_2_WARNING=1 $(UV) run --group docs mkdocs build --strict
+
 docs-check:
 	$(UV) run python tools/docs_check.py
 

@@ -61,7 +61,7 @@ they use.
 
 The project needs a `foundry.toml`, a `src/` directory, benign tests in `test/` and a PoC directory
 (see [the fixture specification](fixture-spec.md) for the PoC format). Copy
-[`examples/demo-project`](../examples/demo-project/README.md) to start.
+[`examples/demo-project`](https://github.com/sellebeww/assay-evm/blob/main/examples/demo-project/README.md) to start.
 
 ### Inputs
 
@@ -153,7 +153,7 @@ scope` and exits 0.
 
 ## Try it in this repository
 
-The workflow [`action-demo.yml`](../.github/workflows/action-demo.yml) runs the Action on
-[`examples/demo-project`](../examples/demo-project/README.md) for pull requests that change
+The workflow [`action-demo.yml`](https://github.com/sellebeww/assay-evm/blob/main/.github/workflows/action-demo.yml) runs the Action on
+[`examples/demo-project`](https://github.com/sellebeww/assay-evm/blob/main/examples/demo-project/README.md) for pull requests that change
 `examples/**`. `make lint-actions` runs a pinned actionlint over the workflows and `action.yml`;
 the command is described in [the command line reference](cli.md#assay-ci-verify).

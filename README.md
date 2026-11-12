@@ -299,6 +299,11 @@ The [changelog](CHANGELOG.md) lists changes.
 
 ## Documentation
 
+The pages below are also built as a site with MkDocs Material (`make docs-site`; the Pages
+workflow is in `.github/workflows/docs.yml`).
+
+- [Quickstart](docs/quickstart.md), [concepts](docs/concepts.md) and [case studies](docs/case-studies.md)
+- [Report viewer](docs/viewer.md) and [Hardhat support (design)](docs/hardhat-design.md)
 - [Demo](docs/demo.md)
 - [Command line reference, exit codes and JSON schemas](docs/cli.md)
 - [GitHub Action and `assay ci verify`](docs/github-action.md)
