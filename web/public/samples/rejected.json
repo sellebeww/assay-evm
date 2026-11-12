@@ -1,0 +1,99 @@
+{
+  "annotations": [],
+  "bounds": {
+    "exploit_replays_per_revision": 3,
+    "fuzz_runs": 16,
+    "fuzz_seed": "0x1",
+    "interface_contracts": [
+      "src/Vault.sol:Vault"
+    ],
+    "oracles_not_run": [],
+    "oracles_run": [
+      "integrity",
+      "exploit",
+      "variant",
+      "behavior",
+      "regression"
+    ],
+    "profile": "quick",
+    "symbolic": null,
+    "variant": null
+  },
+  "bounds_statement": "exploit: 3 replays per revision; variant: profile quick",
+  "evidence_level": "E1",
+  "final_verdict": "REJECTED",
+  "inputs": {
+    "base_tree_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+    "harness_sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+    "patch_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+    "patched_tree_sha256": "4444444444444444444444444444444444444444444444444444444444444444",
+    "poc_tree_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "integrity_violation": false,
+  "oracles": [
+    {
+      "oracle": "integrity",
+      "reasons": [],
+      "status": "ran",
+      "summary": "integrity finished",
+      "verdict": "PASS",
+      "warnings": []
+    },
+    {
+      "oracle": "exploit",
+      "reasons": [],
+      "status": "ran",
+      "summary": "exploit finished",
+      "verdict": "PASS",
+      "warnings": []
+    },
+    {
+      "oracle": "variant",
+      "reasons": [
+        {
+          "code": "variant_found",
+          "detail": "a variant of the exploit reproduced on the patched revision",
+          "line": 7,
+          "path": "src/Vault.sol"
+        }
+      ],
+      "status": "ran",
+      "summary": "variant finished",
+      "verdict": "FAIL",
+      "warnings": []
+    },
+    {
+      "oracle": "behavior",
+      "reasons": [],
+      "status": "ran",
+      "summary": "behavior finished",
+      "verdict": "PASS",
+      "warnings": []
+    },
+    {
+      "oracle": "regression",
+      "reasons": [],
+      "status": "ran",
+      "summary": "regression finished",
+      "verdict": "PASS",
+      "warnings": [
+        {
+          "code": "function_added",
+          "detail": "a new function",
+          "line": null,
+          "path": null
+        }
+      ]
+    }
+  ],
+  "reasons": [
+    "variant_found"
+  ],
+  "schema_version": 3,
+  "timing": {
+    "oracles": {},
+    "symbolic": null,
+    "total_s": 1.5,
+    "variant": null
+  }
+}
