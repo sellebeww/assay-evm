@@ -1,14 +1,23 @@
 """Fixtures shared by the integration and security tests (they need Docker and the runner image)."""
 
+import os
 import sys
 from collections.abc import Callable
 from pathlib import Path
 
-import pytest
+# Typer decides at import time whether to force a terminal (with color and its own width) when it
+# sees GITHUB_ACTIONS, FORCE_COLOR or PY_COLORS. The help snapshots must not depend on the machine
+# that runs them, so this disables that before typer is imported (the `--help` tests set the width
+# themselves through COLUMNS).
+os.environ["_TYPER_FORCE_DISABLE_TERMINAL"] = "1"
+for _name in ("FORCE_COLOR", "PY_COLORS", "TERMINAL_WIDTH"):
+    os.environ.pop(_name, None)
 
-from assay.ingest import Snapshot, create_snapshot
-from assay.oracles.symbolic import symbolic_runner as make_symbolic_runner
-from assay.sandbox import SandboxRunner, SandboxUnavailable
+import pytest  # noqa: E402
+
+from assay.ingest import Snapshot, create_snapshot  # noqa: E402
+from assay.oracles.symbolic import symbolic_runner as make_symbolic_runner  # noqa: E402
+from assay.sandbox import SandboxRunner, SandboxUnavailable  # noqa: E402
 
 DATA = Path(__file__).resolve().parent / "data"
 
