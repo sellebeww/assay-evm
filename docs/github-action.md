@@ -61,7 +61,7 @@ they use.
 
 The project needs a `foundry.toml`, a `src/` directory, benign tests in `test/` and a PoC directory
 (see [the fixture specification](fixture-spec.md) for the PoC format). Copy
-[`examples/demo-project`](../examples/demo-project/README.md) to start.
+[`examples/demo-project`](https://github.com/sellebeww/assay-evm/blob/main/examples/demo-project/README.md) to start.
 
 ### Inputs
 
@@ -85,7 +85,7 @@ The default for `fail-on` is `inconclusive` because an unknown result must not l
 |---|---|
 | `verdict` | `VERIFIED_WITHIN_BOUNDS`, `REJECTED`, `INCONCLUSIVE`, `ERROR` or `NO_CHANGES_IN_SCOPE`. |
 | `exit-code` | The exit code of `assay ci verify` ([exit codes](cli.md#exit-codes)). |
-| `bundle-path` | Directory on the runner with the bundles, `summary.md` and `result.json`. |
+| `bundle-path` | Directory on the runner with the bundles, `summary.md`, `result.json` and `verify.sarif`. |
 
 ## What happens
 
@@ -114,8 +114,9 @@ at most one comment per pull request, finds it by a hidden marker and an author 
   `manifest.json`; re-check one with `assay replay`), `summary.md` (the Markdown shown in the job
   summary) and `result.json` (verdicts and exit codes). The bundle holds the base tree, the PoC,
   the patch and the oracle evidence, so treat it like the repository's source.
-- With `upload-sarif: "true"`: the SARIF of `assay scan` to code scanning, category `assay`. It
-  is skipped, with a notice in the log, for pull requests from forks and for private repositories
+- With `upload-sarif: "true"`: the SARIF of `assay scan` to code scanning, category `assay`, and
+  the SARIF of the verification (`verify.sarif`, one alert per oracle that did not pass, on the
+  changed files), category `assay-verify`. Both are skipped, with a notice in the log, for pull requests from forks and for private repositories
   on which code scanning is not available (it needs GitHub Advanced Security) or cannot be read
   with the job's token. The job needs `security-events: write`.
 
@@ -152,7 +153,7 @@ scope` and exits 0.
 
 ## Try it in this repository
 
-The workflow [`action-demo.yml`](../.github/workflows/action-demo.yml) runs the Action on
-[`examples/demo-project`](../examples/demo-project/README.md) for pull requests that change
+The workflow [`action-demo.yml`](https://github.com/sellebeww/assay-evm/blob/main/.github/workflows/action-demo.yml) runs the Action on
+[`examples/demo-project`](https://github.com/sellebeww/assay-evm/blob/main/examples/demo-project/README.md) for pull requests that change
 `examples/**`. `make lint-actions` runs a pinned actionlint over the workflows and `action.yml`;
 the command is described in [the command line reference](cli.md#assay-ci-verify).

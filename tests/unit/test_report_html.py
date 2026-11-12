@@ -7,6 +7,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 import pytest
+from identity_support import forbidden_user_names, install_synthetic_user
 from report_support import build_bundle, rewrite_manifest_files
 from typer.testing import CliRunner
 
@@ -119,11 +120,15 @@ def test_the_same_bundle_gives_the_same_bytes_wherever_it_lies(tmp_path: Path) -
     assert os.path.expanduser("~") not in page
 
 
-def test_the_page_holds_no_time_and_no_user_name(tmp_path: Path) -> None:
+def test_the_page_holds_no_time_and_no_user_name(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    install_synthetic_user(monkeypatch)
     page = render(tmp_path, fix_loop=True)
     assert not re.search(r"\b20\d\d-\d\d-\d\d\b", page)
     assert not re.search(r"\d\d:\d\d:\d\d", page)
-    assert os.environ.get("USER", "\0") not in page
+    for name in forbidden_user_names():
+        assert name not in page, name
 
 
 # -- structure ----------------------------------------------------------------------------------

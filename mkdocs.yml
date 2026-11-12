@@ -1,0 +1,77 @@
+site_name: Assay
+site_description: Checks whether a patch for a Solidity vulnerability closes it, with deterministic oracles and recorded bounds.
+site_url: https://sellebeww.github.io/assay-evm/
+repo_url: https://github.com/sellebeww/assay-evm
+repo_name: sellebeww/assay-evm
+edit_uri: edit/main/docs/
+docs_dir: docs
+site_dir: build/site
+copyright: Copyright (c) 2026 Vassel Goleyu. MIT License.
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+# These pages are working documents of the repository, not part of the site's navigation.
+not_in_nav: |
+  /IMPROVEMENT-PLAN.md
+  /adr/*.md
+
+nav:
+  - Home: index.md
+  - Get started:
+      - Quickstart: quickstart.md
+      - Demo: demo.md
+      - GitHub Action: github-action.md
+  - Concepts:
+      - Concepts: concepts.md
+      - Oracles and evidence bundles: oracles.md
+      - Design: design.md
+      - Threat model: threat-model.md
+      - Limitations: limitations.md
+  - Case studies: case-studies.md
+  - Reference:
+      - Command line, exit codes, JSON, SARIF: cli.md
+      - Static analysis (scan): scan.md
+      - The LLM layer (prove): llm.md
+      - The fix loop (fix, run): fix-loop.md
+      - Runner sandbox: sandbox.md
+      - Symbolic checks: symbolic.md
+      - Fixture specification: fixture-spec.md
+      - Hardhat support (design): hardhat-design.md
+      - Report viewer: viewer.md
+      - Releasing: releasing.md
+  - Results:
+      - Benchmark results: results.md
+      - Classification matrix: classification-matrix.md
+      - Variant search power: variant-power.md
+      - Static coverage: static-coverage.md
+      - Claims and evidence: claims.md
+      - Self-audit: audit.md
+      - Roadmap: roadmap.md

@@ -2,7 +2,7 @@
 
 This page describes how Assay is built and why: the components, how data flows between them, where
 trust changes, which invariants the ledger enforces, and the decisions behind them. Each decision
-links to its [ADR](adr/). The threats are in [the threat model](threat-model.md) and the limits in
+links to its [ADR](adr/0001-record-architecture-decisions.md). The threats are in [the threat model](threat-model.md) and the limits in
 [limitations](limitations.md).
 
 ## The idea

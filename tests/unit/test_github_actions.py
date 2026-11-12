@@ -178,8 +178,18 @@ def test_every_workflow_has_permissions_and_timeouts(path: Path) -> None:
             assert step["with"]["persist-credentials"] is False
 
 
+# The only write permissions in the repository, each with its reason: the demo's comment step,
+# trusted publishing to PyPI (an OIDC token, no secret) and the GitHub Pages deployment.
+ALLOWED_WRITES = {
+    ("action-demo.yml", "pull-requests"),
+    ("release.yml", "id-token"),
+    ("docs.yml", "pages"),
+    ("docs.yml", "id-token"),
+}
+
+
 @pytest.mark.parametrize("path", WORKFLOWS, ids=lambda path: path.name)
-def test_no_workflow_grants_write_permissions_beyond_the_demo_comment(path: Path) -> None:
+def test_no_workflow_grants_write_permissions_beyond_the_known_ones(path: Path) -> None:
     workflow = load(path)
     granted = [workflow.get("permissions") or {}]
     granted += [job.get("permissions") or {} for job in workflow["jobs"].values()]
@@ -187,7 +197,7 @@ def test_no_workflow_grants_write_permissions_beyond_the_demo_comment(path: Path
         assert isinstance(permissions, dict)
         for scope, level in permissions.items():
             if level == "write":
-                assert (path.name, scope) == ("action-demo.yml", "pull-requests")
+                assert (path.name, scope) in ALLOWED_WRITES
             else:
                 assert (scope, level) == ("contents", "read")
 

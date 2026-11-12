@@ -59,7 +59,7 @@ This is not fixed in place for two reasons. A blanket static flag on reading the
 environment would wrongly reject a legitimate good patch: the `oracle_manipulation/spot_price`
 good patch reads `block.timestamp` to compute a time-weighted price. The correct fix is to
 randomize the block environment in the variant search, which changes the frozen oracle tree and
-the shared harness; under the [benchmark freeze](../bench/PROTOCOL.md) an oracle change after the
+the shared harness; under the [benchmark freeze](https://github.com/sellebeww/assay-evm/blob/main/bench/PROTOCOL.md) an oracle change after the
 freeze is recorded as a finding and made in a new result version (v2), re-running both splits.
 Until then the gap is stated in [the limitations](limitations.md) and as the claim
 `environment-variants` in [the claims table](claims.md), and no output suggests the variant
@@ -102,7 +102,7 @@ are template expansions of `github.action_path` in `action.yml`, which is the pa
 own code, not pull-request input; they are documented in `action.yml` and are not a finding.
 
 The licenses of every bundled tool were read from their own license files or packaging metadata
-at the pinned version and are summarized in [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md).
+at the pinned version and are summarized in [`THIRD_PARTY_NOTICES.md`](https://github.com/sellebeww/assay-evm/blob/main/THIRD_PARTY_NOTICES.md).
 
 **Finding D1 (informational, recorded).** Several tools in the image are copyleft: Slither,
 crytic-compile and Halmos are AGPL-3.0, solc and Aderyn are GPL-3.0, and certifi is MPL-2.0.

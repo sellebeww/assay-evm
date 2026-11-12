@@ -24,10 +24,15 @@ def test_the_version_has_one_source() -> None:
 def test_the_metadata_is_complete() -> None:
     project = PYPROJECT["project"]
     assert project["name"] == "assay-evm"
-    for key in ("description", "readme", "license", "keywords", "classifiers", "requires-python"):
+    for key in ("description", "license", "keywords", "classifiers", "requires-python", "urls"):
         assert project[key], key
     assert project["scripts"] == {"assay": "assay.cli.main:app"}
-    assert (ROOT / project["readme"]).is_file()
+    # The long description is built from README.md, with its relative links made absolute.
+    assert "readme" in project["dynamic"]
+    hook = PYPROJECT["tool"]["hatch"]["metadata"]["hooks"]["fancy-pypi-readme"]
+    assert hook["content-type"] == "text/markdown"
+    assert [item["path"] for item in hook["fragments"]] == ["README.md"]
+    assert (ROOT / "README.md").is_file()
     for pattern in project["license-files"]:
         assert (ROOT / pattern).is_file()
 

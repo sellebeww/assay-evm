@@ -13,6 +13,7 @@ from typing import Annotated, Final, NoReturn
 
 import typer
 
+from assay import __version__
 from assay.analyzers.foundry import ForgeOutOfMemory
 from assay.ci.gitdiff import DiffError, ScopedDiff, changed_under, export_tree, scoped_diff
 from assay.ci.pocs import Poc, PocDirError, discover
@@ -49,11 +50,14 @@ from assay.report.bundle import (
     environment,
     read_versions_lock,
 )
+from assay.report.sarif import dumps as sarif_dumps
+from assay.report.sarif import verify_to_sarif
 from assay.sandbox import SandboxError, SandboxRunner
 
 RESULT_FORMAT: Final = "assay-ci-verify/1"
 SUMMARY_FILE: Final = "summary.md"
 RESULT_FILE: Final = "result.json"
+SARIF_FILE: Final = "verify.sarif"
 BUNDLES_DIR: Final = "bundles"
 LEDGER_FILE: Final = "ledger.db"
 
@@ -93,6 +97,19 @@ def _write(out: Path, run: CiRun, verdict: str, code: ExitCode, summary_file: Pa
     }
     (out / RESULT_FILE).write_text(
         json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    entries = [(item.name, item.report) for item in run.results if item.report is not None]
+    first = run.changes[0].path if run.changes else None
+    (out / SARIF_FILE).write_text(
+        sarif_dumps(
+            verify_to_sarif(
+                entries,
+                assay_version=__version__,
+                fallback_path=first,
+                path_prefix=run.path_prefix,
+            )
+        ),
+        encoding="utf-8",
     )
     if summary_file is not None:
         summary_file.parent.mkdir(parents=True, exist_ok=True)
@@ -349,6 +366,7 @@ def ci_verify_command(
         changes=diff.changes,
         results=tuple(results),
         poc_changed=poc_changed,
+        path_prefix=diff.prefix,
     )
     final = policy_exit_code([item.code for item in results], fail_on)
     verdict = overall_verdict(results)

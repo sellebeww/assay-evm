@@ -75,7 +75,7 @@ symbolic_run = $(DOCKER) run $(subst size=64m,size=256m,$(RUNNER_RUN_FLAGS)) \
 	--volume "$$scratch:/work/scratch" \
 	--workdir /work/project $(SYMBOLIC_IMAGE)
 
-.PHONY: help install lint typecheck test test-integration test-security check fmt clean image \
+.PHONY: demo-capture docs-site help install lint typecheck test test-integration test-security check fmt clean image \
 	image-check fixtures-check bench-oracles bench-freeze bench-report matrix static-coverage variant-power symbolic-report schemas \
 	demo demo-overfit demo-cassettes docs-check lint-actions claims-check third-party-notices
 
@@ -200,6 +200,10 @@ schemas:
 	$(UV) run python tools/export_schemas.py
 
 # Relative links in README.md and docs/, and the words the project never uses for a result.
+# The documentation site (MkDocs Material); strict mode fails on a broken link.
+docs-site:
+	NO_MKDOCS_2_WARNING=1 $(UV) run --group docs mkdocs build --strict
+
 docs-check:
 	$(UV) run python tools/docs_check.py
 
@@ -245,6 +249,11 @@ demo:
 # The overfit patch passes the tests that existed and blocks the original PoC, but the variant
 # search finds a close variant: REJECTED with variant_found. `assay verify` exits with 1 then,
 # which is the expected result of this demo.
+# Runs the example end to end and keeps every output (transcripts, JSON, SARIF, bundles, reports)
+# in $(DEMO_OUT)/capture for the documentation. Needs Docker and the runner image.
+demo-capture:
+	tools/demo_capture.sh $(DEMO_OUT)/capture
+
 demo-overfit:
 	@rm -rf $(DEMO_OUT)/overfit
 	@mkdir -p $(DEMO_OUT)/overfit

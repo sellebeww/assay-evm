@@ -10,6 +10,22 @@ by Python packaging.
 
 ### Added
 
+- `assay verify --sarif FILE` and `verify.sarif` from `assay ci verify`: the decisions of the
+  oracles about a patch as SARIF 2.1.0 (one result per oracle that did not pass), validated
+  against the official schema. The GitHub Action uploads it under the category `assay-verify`
+  with `upload-sarif`.
+- `assay image build`: builds the runner images from the Dockerfile and `versions.lock` that the
+  wheel now carries, so an installed package needs neither a clone nor Make.
+- Release preparation: PyPI metadata (authors, URLs, keywords), a long description whose relative
+  links point at the repository, `.github/workflows/release.yml` (trusted publishing, not run),
+  Marketplace branding in `action.yml` and `docs/releasing.md`.
+
+### Fixed
+
+- `Ledger.findings` mixed numbered SQLite placeholders with a sequence of parameters, which warns
+  on Python 3.12 and raises `sqlite3.ProgrammingError` on 3.14. The test suite now fails on a
+  deprecation warning that comes from the `assay` package.
+
 - A self-audit (`docs/audit.md`) and a claims table (`docs/claims.md`) with `make claims-check`
   (`tools/claims_check.py`), which is part of `make check`: every claim in the README and the
   docs cites an evidence path that must exist, and every claim area the README marks must have a

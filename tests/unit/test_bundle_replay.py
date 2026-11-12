@@ -1,6 +1,5 @@
 """Evidence bundles and `assay replay` with a stand-in runner (no Docker)."""
 
-import getpass
 import hashlib
 import json
 import os
@@ -10,6 +9,7 @@ from pathlib import Path
 
 import pytest
 from fake_forge import IMAGE_ID, FakeForge
+from identity_support import forbidden_user_names, install_synthetic_user
 from schema_support import assert_valid
 from typer.testing import CliRunner, Result
 from vault_scenario import FIXTURE, ROOT, vault_forge
@@ -190,8 +190,9 @@ def test_the_base_snapshot_leaves_out_vcs_data_and_build_output(
 
 
 def test_the_manifest_has_no_host_paths_user_names_or_timestamps(
-    tmp_path: Path, forge: FakeForge
+    tmp_path: Path, forge: FakeForge, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    install_synthetic_user(monkeypatch)
     bundle = tmp_path / "bundle"
     assert verify(tmp_path, "overfit", bundle).exit_code == 1
     text = (bundle / "manifest.json").read_text()
@@ -201,7 +202,8 @@ def test_the_manifest_has_no_host_paths_user_names_or_timestamps(
     for value in (str(tmp_path), os.path.realpath(tmp_path), str(ROOT), str(Path.home())):
         assert value not in text
         assert value not in evidence
-    assert re.search(rf"\b{re.escape(getpass.getuser())}\b", text) is None
+    for name in forbidden_user_names():
+        assert re.search(rf"\b{re.escape(name)}\b", text) is None, name
     assert re.search(r"\b20\d\d-\d\d-\d\d", text) is None
     assert_clean(text)
 

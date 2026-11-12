@@ -79,4 +79,4 @@ The full list is in [the sandbox page](sandbox.md#what-the-sandbox-does-not-cove
 5. **Unknown bugs in Assay.** The repository's tests are the only evidence of the properties
    above; no independent audit has been done.
 
-Report a problem in any of these as described in [SECURITY.md](../SECURITY.md).
+Report a problem in any of these as described in [SECURITY.md](https://github.com/sellebeww/assay-evm/blob/main/SECURITY.md).

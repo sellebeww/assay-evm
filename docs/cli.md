@@ -103,6 +103,21 @@ that does not match is refused (exit code 5) and no report is written. The repor
   `</style><script>` and `javascript:` appear only as text.
 - A file larger than 256 KiB is cut at that size, with a note that says so.
 
+## SARIF
+
+`assay scan --format sarif` writes the static-analysis candidates (evidence level E0). `assay
+verify --sarif FILE` and `assay ci verify` (as `verify.sarif`) write the decisions of the oracles
+about a patch as SARIF 2.1.0, for GitHub Code Scanning and other SARIF viewers:
+
+- one result per oracle that did not pass: level `error` for a FAIL, `warning` for INCONCLUSIVE;
+  a VERIFIED_WITHIN_BOUNDS patch gives a run with no results, which is not a proof of absence;
+- `ruleId` is `assay/<oracle>/<reason code>`; the location is the path and line of the reason, or
+  the first changed file of the patch, relative to the repository root;
+- `partialFingerprints` (`assayVerifyResult/v1`) makes the same problem the same alert on the next
+  run, and every result carries the bounds statement in its properties.
+
+The files are validated against the official SARIF 2.1.0 schema in the unit tests.
+
 ## assay doctor
 
 ```
@@ -145,7 +160,7 @@ machine with Docker and the runner image. It uses no model and reads no secret.
 | `--scope DIR` | The directory of the project whose changes are the patch (default `src`). |
 | `--profile`, `--symbolic` | As for `assay verify`. |
 | `--fail-on rejected\|inconclusive\|never` | Which results give a non-zero exit code (default `inconclusive`). |
-| `--out DIR` | Output directory, empty or absent (default `assay-out`): `bundles/<poc>/`, `summary.md`, `result.json`. |
+| `--out DIR` | Output directory, empty or absent (default `assay-out`): `bundles/<poc>/`, `summary.md`, `result.json` and `verify.sarif` ([SARIF](#sarif)). |
 | `--summary-file FILE` | Also append the Markdown summary to FILE, for example `$GITHUB_STEP_SUMMARY`. |
 
 The diff is text only. A binary file, a symlink, a submodule, a type change, a rename across the

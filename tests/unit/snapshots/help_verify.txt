@@ -53,6 +53,10 @@
 │    --bundle-out        <path>                       Write an evidence bundle into this           │
 │                                                     directory, which must be empty or absent.    │
 │    --json                                           Print the report as JSON instead of a table. │
+│    --sarif             <file>                       Also write the result as SARIF 2.1.0 to this │
+│                                                     file (for GitHub Code Scanning): one result  │
+│                                                     per oracle that did not pass; none for       │
+│                                                     VERIFIED_WITHIN_BOUNDS.                      │
 │    --ledger            <file>                       Ledger database; created if missing.         │
 │                                                     [default: .assay/ledger.db]                  │
 │    --help                                           Show this message and exit.                  │

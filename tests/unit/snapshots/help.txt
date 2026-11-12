@@ -13,6 +13,7 @@
    assay ci verify --project DIR --poc-dir DIR --base REF --head REF                                
                                        verify a pull request without a model or secrets             
    assay doctor                        check Docker, the runner image and the disk                  
+   assay image build                   build the runner images (once, needs Docker and network)     
                                                                                                     
  Output is plain text without color when it is not a terminal or NO_COLOR is set. scan, verify,     
  prove, fix, run, replay and doctor print stable JSON with --json. Exit codes are listed in         
@@ -34,5 +35,6 @@
 │ doctor   Check that this machine can run Assay.                                                  │
 │ version  Print the Assay version (the same as `assay --version`).                                │
 │ ci       Continuous integration: verify the patch of a pull request without a model or secrets.  │
+│ image    Build the runner images that the oracles run in.                                        │
 ╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
 

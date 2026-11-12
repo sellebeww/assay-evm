@@ -1,6 +1,5 @@
 """The bundle of a fix loop: attempt history, determinism, and a replay that needs no model."""
 
-import getpass
 import hashlib
 import json
 import re
@@ -9,6 +8,7 @@ from pathlib import Path
 
 import pytest
 from fix_support import FixRun, diff_reply, patch_text, reproduce
+from identity_support import forbidden_user_names, install_synthetic_user
 from llm_support import no_network
 from prove_support import REENTRANCY
 from typer.testing import CliRunner
@@ -90,14 +90,18 @@ def test_the_bundle_holds_the_final_patch_the_poc_the_history_and_the_bounds(
     assert run.outcome is not None
 
 
-def test_the_bundle_holds_no_prompt_no_key_no_path_and_no_forbidden_word(tmp_path: Path) -> None:
+def test_the_bundle_holds_no_prompt_no_key_no_path_and_no_forbidden_word(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    install_synthetic_user(monkeypatch)
     run, bundle = fixed(tmp_path, [diff_reply(OVERFIT), diff_reply(GOOD)])
     prompt_text = run.prompt_text()
     system = json.loads(run.endpoint.requests[0].content)["messages"][0]["content"]
     for path, data in files_of(bundle).items():
         text = data.decode("utf-8", errors="replace")
         assert str(tmp_path) not in text, path
-        assert getpass.getuser() not in text or len(getpass.getuser()) < 4, path
+        for name in forbidden_user_names():
+            assert name not in text, (path, name)
         assert system not in text, path
         assert "untrusted_data" not in text, path
         assert "synthetic-not-a-key" not in text, path

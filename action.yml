@@ -4,6 +4,11 @@ description: >-
   deterministic oracles and without a model or any secret. A verdict is valid within recorded
   bounds only.
 
+# Shown on the GitHub Marketplace listing.
+branding:
+  icon: shield
+  color: blue
+
 inputs:
   project-dir:
     description: Directory of the Foundry project, inside the checked-out repository.
@@ -46,8 +51,8 @@ inputs:
     default: "false"
   upload-sarif:
     description: >-
-      Also scan the project with the static analyzers and upload SARIF to code scanning (true or
-      false). Skipped with a message for forks and for private repositories without code
+      Also scan the project with the static analyzers and upload SARIF (the scan, and the
+      oracle results of the patch) to code scanning (true or false). Skipped with a message for forks and for private repositories without code
       scanning; the job needs security-events write permission.
     required: false
     default: "false"
@@ -273,6 +278,15 @@ runs:
       with:
         sarif_file: ${{ steps.verify.outputs.bundle-path }}/scan.sarif
         category: assay
+
+    # The oracle results of the patch, as code scanning alerts on the changed files. It runs under
+    # the same conditions as the scan upload, and only when the verification wrote its file.
+    - name: Upload the verification SARIF
+      if: ${{ !cancelled() && steps.sarif.outputs.run == 'true' && steps.verify.outputs.bundle-path != '' }}
+      uses: github/codeql-action/upload-sarif@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
+      with:
+        sarif_file: ${{ steps.verify.outputs.bundle-path }}/verify.sarif
+        category: assay-verify
 
     - name: Upload the evidence bundles
       if: ${{ !cancelled() && steps.verify.outputs.bundle-path != '' }}
