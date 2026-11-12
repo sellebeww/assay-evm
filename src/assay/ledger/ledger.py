@@ -1248,9 +1248,9 @@ class Ledger:
     ) -> tuple[Finding, ...]:
         """Findings in creation order, optionally of one class and one state."""
         rows = self._conn.execute(
-            "SELECT id FROM finding WHERE (?1 IS NULL OR class = ?1) "
-            "AND (?2 IS NULL OR state = ?2) ORDER BY id",
-            (vuln_class, None if state is None else state.value),
+            "SELECT id FROM finding WHERE (:vuln_class IS NULL OR class = :vuln_class) "
+            "AND (:state IS NULL OR state = :state) ORDER BY id",
+            {"vuln_class": vuln_class, "state": None if state is None else state.value},
         ).fetchall()
         return tuple(self.get_finding(FindingId(row[0])) for row in rows)
 

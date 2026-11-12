@@ -105,6 +105,9 @@ testpaths = ["tests"]
 pythonpath = ["tools"]
 addopts = ["-ra", "--strict-markers", "--strict-config"]
 xfail_strict = true
+# A deprecation inside Assay fails the run (the sqlite3 placeholder style once did, and would have
+# become an error on Python 3.14).
+filterwarnings = ["error::DeprecationWarning:assay"]
 markers = [
     "integration: needs Docker and the runner image",
     "matrix: long classification matrix run, needs Docker",
