@@ -12,6 +12,7 @@ from assay.cli.bench import bench_app
 from assay.cli.ci import ci_app
 from assay.cli.doctor import doctor_command
 from assay.cli.fix import fix_command
+from assay.cli.image import image_app
 from assay.cli.prove import prove_command
 from assay.cli.replay import replay_command
 from assay.cli.report import report_command
@@ -32,6 +33,7 @@ Typical flow:
   assay ci verify --project DIR --poc-dir DIR --base REF --head REF
                                       verify a pull request without a model or secrets
   assay doctor                        check Docker, the runner image and the disk
+  assay image build                   build the runner images (once, needs Docker and network)
 
 Output is plain text without color when it is not a terminal or NO_COLOR is set. scan, verify,
 prove, fix, run, replay and doctor print stable JSON with --json. Exit codes are listed in
@@ -47,6 +49,7 @@ app = typer.Typer(
 )
 app.add_typer(dev.app, name="dev", hidden=True)
 app.add_typer(ci_app, name="ci")
+app.add_typer(image_app, name="image")
 app.add_typer(bench_app, name="bench", hidden=True)
 
 

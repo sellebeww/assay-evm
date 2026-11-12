@@ -1,16 +1,26 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-fancy-pypi-readme>=24.1"]
 build-backend = "hatchling.build"
 
 [project]
 name = "assay-evm"
-dynamic = ["version"]
+dynamic = ["version", "readme"]
 description = "Verification-first checking of Solidity patches: deterministic oracles decide whether a patch closes an exploit, within recorded bounds."
-readme = "README.md"
 requires-python = ">=3.12"
 license = "MIT"
 license-files = ["LICENSE"]
-keywords = ["solidity", "foundry", "evm", "smart-contracts", "verification"]
+authors = [{ name = "Vassel Goleyu" }]
+maintainers = [{ name = "Vassel Goleyu" }]
+keywords = [
+    "solidity",
+    "foundry",
+    "evm",
+    "smart-contracts",
+    "verification",
+    "security",
+    "patch-verification",
+    "sarif",
+]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Environment :: Console",
@@ -31,6 +41,14 @@ dependencies = [
     "rich>=13",
     "httpx>=0.27",
 ]
+
+[project.urls]
+Homepage = "https://github.com/sellebeww/assay-evm"
+Documentation = "https://github.com/sellebeww/assay-evm/tree/main/docs"
+Source = "https://github.com/sellebeww/assay-evm"
+Changelog = "https://github.com/sellebeww/assay-evm/blob/main/CHANGELOG.md"
+Issues = "https://github.com/sellebeww/assay-evm/issues"
+"Security policy" = "https://github.com/sellebeww/assay-evm/blob/main/SECURITY.md"
 
 [project.scripts]
 assay = "assay.cli.main:app"
@@ -54,6 +72,22 @@ dev = [
 [tool.hatch.version]
 path = "src/assay/__init__.py"
 
+# The README uses relative links; PyPI cannot resolve them, so the published description points
+# them at the repository. Images first (raw file), then every other relative link.
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "README.md"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '(!\[[^\]]*\]\()(?!https?://|#)([^)]+\))'
+replacement = '\1https://raw.githubusercontent.com/sellebeww/assay-evm/main/\2'
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '(?<!!)(\[[^\]]*\]\()(?!https?://|#|mailto:)([^)]+\))'
+replacement = '\1https://github.com/sellebeww/assay-evm/blob/main/\2'
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/assay"]
 
@@ -62,6 +96,7 @@ packages = ["src/assay"]
 [tool.hatch.build.targets.wheel.force-include]
 "solidity" = "assay/_data/solidity"
 "docker/runner/versions.lock" = "assay/_data/versions.lock"
+"docker/runner" = "assay/_data/runner"
 
 [tool.hatch.build.targets.sdist]
 # Explicit allowlist: only these paths are published in the source distribution.

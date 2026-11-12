@@ -52,9 +52,9 @@ answers instead of a model: the first patch is rejected, the second ends in
 
 ## Install
 
-Requirements: [uv](https://docs.astral.sh/uv/) (Python 3.12 is installed from `.python-version`),
-GNU Make and Docker (Docker Desktop or Docker Engine). There is no release yet, so install from a
-clone:
+Requirements: Python 3.12 or newer and Docker (Docker Desktop or Docker Engine). There is no
+release on PyPI yet, so for now install from a clone ([uv](https://docs.astral.sh/uv/) and GNU
+Make are needed for that path):
 
 ```sh
 git clone https://github.com/sellebeww/assay-evm.git assay && cd assay
@@ -62,6 +62,17 @@ make install      # uv sync: the project and the development tools
 make image        # build the runner image from docker/runner/versions.lock (needs network, once)
 uv run assay doctor
 ```
+
+Once a release is published, the package alone is enough (the wheel carries the Dockerfile and
+the pinned versions, so no clone and no Make are needed):
+
+```sh
+pipx install assay-evm     # or: uv tool install assay-evm
+assay image build          # build the runner images, once (needs Docker and network)
+assay doctor
+```
+
+The release procedure is in [docs/releasing.md](docs/releasing.md).
 
 `assay doctor` checks the Docker daemon, the runner image and the tool versions it declares
 against `versions.lock`, the platform (native or emulated), disk space, and whether the model

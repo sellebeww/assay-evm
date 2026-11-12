@@ -1,0 +1,86 @@
+name: Release
+
+# Publishes the package to PyPI with trusted publishing (OpenID Connect): there is no API token and
+# no secret. It runs only for a tag `vX.Y.Z` and only after the maintainer created the `pypi`
+# environment and registered this workflow as a trusted publisher on PyPI (docs/releasing.md).
+# Nothing here has been run; see docs/releasing.md for the checklist before the first tag.
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Build and check the distributions, but do not publish.
+        type: boolean
+        default: true
+
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: build and publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment:
+      name: pypi
+      url: https://pypi.org/project/assay-evm/
+    permissions:
+      contents: read
+      id-token: write # trusted publishing: PyPI exchanges this OIDC token for a short-lived upload token
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+
+      - name: Check that the tag matches the package version
+        if: ${{ github.ref_type == 'tag' }}
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          version=$(python3 -I -c 'import re, pathlib; print(re.search(r"__version__ = \"([^\"]+)\"", pathlib.Path("src/assay/__init__.py").read_text()).group(1))')
+          if [ "v$version" != "$TAG" ]; then
+            echo "::error::tag $TAG does not match src/assay/__init__.py version $version"
+            exit 1
+          fi
+
+      - name: Install dependencies and run the checks
+        run: |
+          uv sync --locked
+          make check
+
+      - name: Build the distributions
+        run: uv build --no-sources
+
+      - name: Check the distributions
+        run: |
+          set -euo pipefail
+          uvx twine check dist/*
+          python3 -I - <<'PY'
+          import glob, zipfile
+          (wheel,) = glob.glob("dist/*.whl")
+          names = zipfile.ZipFile(wheel).namelist()
+          for needed in ("assay/_data/versions.lock", "assay/_data/runner/Dockerfile", "assay/py.typed"):
+              assert needed in names, f"missing from the wheel: {needed}"
+          PY
+
+      - name: Install the wheel in a clean environment
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/pip" install --quiet dist/*.whl
+          "$RUNNER_TEMP/venv/bin/assay" --version
+          "$RUNNER_TEMP/venv/bin/assay" image build --dry-run > /dev/null
+
+      - name: Publish to PyPI
+        if: ${{ github.ref_type == 'tag' || inputs.dry-run == false }}
+        run: uv publish --trusted-publishing always dist/*

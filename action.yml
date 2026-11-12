@@ -4,6 +4,11 @@ description: >-
   deterministic oracles and without a model or any secret. A verdict is valid within recorded
   bounds only.
 
+# Shown on the GitHub Marketplace listing.
+branding:
+  icon: shield
+  color: blue
+
 inputs:
   project-dir:
     description: Directory of the Foundry project, inside the checked-out repository.
