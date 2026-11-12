@@ -43,8 +43,8 @@ Measured by running the tools, not assumed:
 | 1 | Fix the SQLite placeholder bug, guard against Assay deprecations | done |
 | 2 | Verification SARIF (`--sarif`, `verify.sarif`, Action upload) | done |
 | 3 | Release preparation: metadata, wheel contents, `assay image build`, release workflow, branding | done |
-| 4 | Hardhat design and seam | see commits |
-| 5 | MkDocs Material site and Pages workflow | see commits |
-| 6 | Report viewer in `web/` with tests and a CI job | see commits |
-| 7 | One-command demo script | see commits |
+| 4 | Hardhat design (`docs/hardhat-design.md`); no code seam yet | design only |
+| 5 | MkDocs Material site and Pages workflow | done |
+| 6 | Report viewer in `web/` with tests and a CI job | done |
+| 7 | One-command demo script (`make demo-capture`) | written; not run here (no runner image) |
 | 8 | Final verification and the pull request | last |

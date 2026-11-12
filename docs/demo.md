@@ -100,3 +100,13 @@ and oracles against a scripted endpoint and marks them synthetic; the integratio
   cassette.
 - The other fixtures work the same way with `assay verify` and their `patches/*.diff`; see the
   [classification matrix](classification-matrix.md).
+
+## `make demo-capture`: keep every output for the documentation
+
+`make demo-capture` (`tools/demo_capture.sh`) runs the example end to end for the `good` and the
+`overfit` patch of the reentrancy fixture, the scan and the offline full flow, and keeps every
+output under `demo-out/capture/`: a transcript per step, `report-*.json` (openable in the
+[report viewer](viewer.md)), `verify-*.sarif`, the evidence bundles, the HTML reports and
+`STEPS.txt` with the exit code of each step against the expected one (0 for `good`, 1 for
+`overfit`). It exits 4 when Docker is not available. Use its files, not retyped output, when you
+quote a result in documentation.
